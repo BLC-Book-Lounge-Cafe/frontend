@@ -1,7 +1,7 @@
+import { HeroSection } from "./ui/sections/hero-section";
+
 export function HomePage() {
   return (
-    <section>
-      <h1>Главная страница</h1>
-    </section>
+    <HeroSection />
   )
 }

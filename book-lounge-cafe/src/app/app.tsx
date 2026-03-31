@@ -1,8 +1,14 @@
+import { BreakpointsProvider } from "shared/lib/breakpoints"
 import { RouterProvider } from "./providers/router-provider"
+import { ToastContainer } from "shared/ui/toast"
+import "./styles/main.css"
 
 function App() {
   return (
-    <RouterProvider />
+    <BreakpointsProvider>
+      <RouterProvider />
+      <ToastContainer />
+    </BreakpointsProvider>
   )
 }
 
