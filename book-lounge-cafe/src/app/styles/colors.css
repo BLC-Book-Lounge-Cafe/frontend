@@ -1,28 +1,50 @@
+/*
+  default
+  accent
+  canvas
+  surface
+  primary
+  secondary
+  material
+  muted
+  subtle
+*/
+
 :root {
-  --color-base-0: #ffffff;
-  --color-base-50: #f8f5f2;
-  --color-base-100: #efe7df;
-  --color-base-200: #e2d4c6;
-  --color-base-300: #cdb8a3;
-  --color-base-400: #a98f78;
-  --color-base-500: #846a55;
-  --color-base-600: #66503f;
-  --color-base-700: #4b3b2f;
-  --color-base-800: #31261f;
-  --color-base-900: #1f1814;
+  /* colors */
+  --color-white: 255, 255, 255;
+  --color-black: 0, 0, 0;
+  --color-accent: 74, 59, 44;
+  --color-positive: 67, 190, 116;
+  --color-warning: 227, 175, 40;
+  --color-negative: 206, 75, 75;
 
-  --color-text-primary: var(--color-base-800);
-  --color-text-secondary: var(--color-base-600);
-  --color-text-inverse: var(--color-base-0);
+  /* text */
+  --text-default: 27, 33, 78;
 
-  --color-surface-primary: var(--color-base-0);
-  --color-surface-secondary: var(--color-base-50);
-  --color-surface-accent: var(--color-base-100);
+  /* background */
+  --bg-canvas: 217, 217, 217;
+  --bg-surface-accent: 217, 180, 143;
+  --bg-surface-primary: 255, 255, 255;
+  --bg-surface-secondary: 222, 231, 251;
+  --bg-surface-tertiary: 241, 245, 253;
 
-  --color-border-soft: var(--color-base-200);
-  --color-border-strong: var(--color-base-400);
+  /* border */
+  --border-default: var(--color-accent);
+}
 
-  --color-action-primary: var(--color-base-500);
-  --color-action-primary-hover: var(--color-base-600);
-  --color-action-primary-active: var(--color-base-700);
+:root[data-theme='dark'] {
+  /* colors */
+  --color-accent: 158, 187, 244;
+
+  /* text */
+  --text-default: 241, 245, 253;
+
+  /* background */
+  --bg-canvas: 13, 15, 17;
+  --bg-surface-accent: 158, 187, 244;
+  --bg-surface-primary: 25, 29, 35;
+  --bg-surface-secondary: 38, 44, 54;
+  --bg-surface-tertiary: 13, 15, 17;
+  --bg-surface-quaternary: 50, 58, 71;
 }

@@ -1,0 +1,31 @@
+/* Стилизация всего скроллбара */
+::-webkit-scrollbar {
+  @apply !w-[20px] !h-[20px] !cursor-pointer;
+}
+
+/* Стилизация углов скроллбара */
+::-webkit-scrollbar-corner {
+  @apply !bg-transparent;
+}
+/* Стилизация бегунка скроллбара */
+::-webkit-scrollbar-thumb {
+  @apply !h-[60px] !bg-accent !border-[7px] !border-solid !border-transparent !bg-clip-content !rounded-full;
+}
+
+/* Стилизация бегунка скроллбара при наведении */
+::-webkit-scrollbar-thumb:hover {
+  @apply !border-[5px] !bg-accent;
+}
+
+/* Стилизация области скроллбара */
+::-webkit-scrollbar-track {
+  @apply !m-[2px] !bg-accent/10 !border-[7px] !border-solid !border-transparent !bg-clip-content !rounded-full;
+}
+
+/* Стилизация скроллбара для Mozilla */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-accent)) transparent;
+  }
+}

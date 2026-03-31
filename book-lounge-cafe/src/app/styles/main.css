@@ -1,3 +1,8 @@
+@import './tailwind.css';
 @import './reset.css';
 @import './colors.css';
-@import 'tailwindcss';
+@import './scrollbar.css';
+
+body {
+  @apply bg-canvas text-primary text-body !font-sans;
+}
