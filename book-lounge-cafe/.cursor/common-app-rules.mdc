@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+---
+
+При использовании цветов в CSS/Tailwind классах или стилях, используй ТОЛЬКО цвета из файла `app/styles/colors.css`.
+
+Запрещено:
+
+- Хардкодить HEX цвета (#fff, #000000, #3b82f6)
+- Использовать RGB/RGBA напрямую (rgb(255,255,255))
+- Использовать названия цветов (red, blue, green)
+
+Разрешено:
+
+- Tailwind классы, основанные на CSS-переменных (bg-primary, text-secondary)
+- Токены из colors.cs
+
+Пример правильного использования:
+
+<div className="bg-surface-accent text-secondary/20">
+
+Примеры неправильного использования:
+
+<div className="bg-blue-500 text-gray-900">
+<div style={{ color: '#ff0000' }}>
+<div className="bg-[#3b82f6]">
+
+Все цвета должны соответствовать переменным из colors.css и меняться только их opacity
