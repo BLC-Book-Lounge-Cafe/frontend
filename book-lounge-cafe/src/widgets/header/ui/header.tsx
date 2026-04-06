@@ -10,19 +10,25 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
 
   return (
-    <header className="bg-surface-accent relative">
-      <Container UNSAFE_className="flex items-center justify-between gap-4 py-3">
-        <Icon name="logo" size={16} />
+    <header className="bg-surface-accent/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+      <Container UNSAFE_className="flex items-center justify-between gap-6 py-4 md:justify-between">
+        <a href="#hero">
+          <Icon name="logo" size={16} UNSAFE_className="transition-transform hover:scale-105 shrink-0" />
+        </a>
 
-        <nav className="hidden md:flex">
+        <nav className="hidden md:flex flex-1 justify-center">
           <HeaderMenu />
         </nav>
 
-        <div className="hidden md:flex">
-          <Button>Забронировать</Button>
-        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex-end md:hidden lg:flex shrink-0">
+            <Button variant="filled" rounded size="md">
+              Забронировать
+            </Button>
+          </div>
 
-        <HeaderBurgerButton onClick={() => setIsMobileMenuOpen(v => !v)} isOpen={isMobileMenuOpen} />
+          <HeaderBurgerButton onClick={() => setIsMobileMenuOpen(v => !v)} isOpen={isMobileMenuOpen} UNSAFE_className="lg:hidden" />
+        </div>
       </Container>
 
       {isMobileMenuOpen && (

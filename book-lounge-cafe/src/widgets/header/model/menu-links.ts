@@ -1,25 +1,23 @@
-import { ROUTER_PATHS } from "shared/model/router-paths"
-
 const menuLinks = [
   {
     label: "Главная",
-    href: ROUTER_PATHS.HOME,
+    href: "#hero",
   },
   {
     label: "Кафе",
-    href: ROUTER_PATHS.CAFE,
+    href: "#cafe",
   },
   {
     label: "Библиотека",
-    href: ROUTER_PATHS.LIBRARY,
+    href: "#library",
   },
   {
     label: "Атмосфера",
-    href: ROUTER_PATHS.ATMOSPHERE,
+    href: "#atmosphere",
   },
   {
     label: "Контакты",
-    href: ROUTER_PATHS.CONTACTS,
+    href: "#contacts",
   },
 ]
 

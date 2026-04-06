@@ -3,6 +3,19 @@
 @import './colors.css';
 @import './scrollbar.css';
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
 body {
   @apply bg-canvas text-primary text-body !font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }

@@ -4,7 +4,7 @@ import { Group, composeRenderProps, Provider } from "react-aria-components"
 // shared
 import { type UnsafeStyles } from "shared/model/types/unsafe-styles"
 import { classes } from "shared/lib/classes"
-import { Icon } from "shared/ui/Icon"
+import Icon from "shared/ui/Icon"
 
 export type AppFieldGroupProps = (
   Omit<GroupProps, "className" | "style">

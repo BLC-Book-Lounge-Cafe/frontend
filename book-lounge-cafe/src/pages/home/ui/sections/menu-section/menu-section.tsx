@@ -1,87 +1,36 @@
-import { CardMenu } from "entities/menu"
+import { useState } from "react"
 import { Container } from "shared/ui/container"
-import imgCoffee from "./assets/hot-coffee-cup.png"
-import imgSoup from "./assets/mushroom-cream-soup.png"
-import imgDessert from "./assets/chocolate-cupcakes.png"
-import imgMain from "./assets/pasta-chanterelles.png"
 import { Button } from "shared/ui/button"
-import { useToggleMenu } from "./lib/use-toggle-menu"
-
-type MenuCategory = {
-  image: string
-  imageAlt: string
-  title: string
-  itemLabel: string
-}
-
-const categories: MenuCategory[] = [
-  {
-    image: imgCoffee,
-    imageAlt: "Чашка горячего кофе",
-    title: "Кофейня",
-    itemLabel: "Кофе",
-  },
-  {
-    image: imgSoup,
-    imageAlt: "Крем-суп с грибами",
-    title: "Супы",
-    itemLabel: "Суп",
-  },
-  {
-    image: imgDessert,
-    imageAlt: "Шоколадные капкейки",
-    title: "Десерты",
-    itemLabel: "Десерт",
-  },
-  {
-    image: imgMain,
-    imageAlt: "Паста с грибами",
-    title: "Горячее",
-    itemLabel: "Паста",
-  },
-]
-
-const PLACEHOLDER_PRICE = "200"
+import { menuCategories } from "./model/menu-data"
+import { MenuCard } from "./ui/menu-card"
 
 export function MenuSection() {
-  const { isMenuOpen, toggleMenu } = useToggleMenu()
+  const [isMenuOpen, setIsMenuOpen] = useState(true)
 
   return (
-    <section className="flex flex-col gap-4">
+    <section id="menu" className="py-section-mobile md:py-section">
       <Container>
-        <h2 className="text-center text-title-1">Все самое вкусное в нашем меню!</h2>
-      </Container>
-      <Button fullWidth onPress={toggleMenu} UNSAFE_className="py-8 text-title-2 rounded-0">
-        {isMenuOpen ? "Скрыть меню" : "Показать меню"}
-      </Button>
-      {isMenuOpen && (
-        <Container>
-          <div className="flex flex-col items-center text-center">
-            <h2
-              id="menu-section-title"
-              className="text-center font-bold text-title-2"
-            >
-              МЕНЮ
-            </h2>
-          </div>
+        <h2 className="text-title-1 text-center mb-8">Наше меню</h2>
 
-          <ul className="mt-10 grid list-none grid-cols-1 gap-10 p-0 md:mt-14 md:grid-cols-2 md:gap-x-10 md:gap-y-12">
-            {categories.map((cat) => (
-              <li key={cat.title}>
-                <CardMenu
-                  image={cat.image}
-                  imageAlt={cat.imageAlt}
-                  title={cat.title}
-                  items={Array.from({ length: 6 }, () => ({
-                    name: cat.itemLabel,
-                    price: PLACEHOLDER_PRICE,
-                  }))}
-                />
-              </li>
+        <div className="flex justify-center mb-8">
+          <Button
+            size="lg"
+            rounded
+            onPress={() => setIsMenuOpen(!isMenuOpen)}
+            UNSAFE_className="min-w-64"
+          >
+            {isMenuOpen ? "Скрыть меню" : "Смотреть всё меню"}
+          </Button>
+        </div>
+
+        {isMenuOpen && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+            {menuCategories.map((category) => (
+              <MenuCard key={category.id} {...category} />
             ))}
-          </ul>
-        </Container>
-      )}
+          </div>
+        )}
+      </Container>
     </section>
   )
 }

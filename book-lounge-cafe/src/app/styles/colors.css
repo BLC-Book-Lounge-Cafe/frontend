@@ -14,20 +14,20 @@
   /* colors */
   --color-white: 255, 255, 255;
   --color-black: 0, 0, 0;
-  --color-accent: 74, 59, 44;
+  --color-accent: 177, 151, 120;
   --color-positive: 67, 190, 116;
   --color-warning: 227, 175, 40;
   --color-negative: 206, 75, 75;
 
   /* text */
-  --text-default: 27, 33, 78;
+  --text-default: 41, 36, 32;
 
   /* background */
-  --bg-canvas: 217, 217, 217;
-  --bg-surface-accent: 217, 180, 143;
+  --bg-canvas: 245, 241, 237;
+  --bg-surface-accent: 250, 243, 235;
   --bg-surface-primary: 255, 255, 255;
-  --bg-surface-secondary: 222, 231, 251;
-  --bg-surface-tertiary: 241, 245, 253;
+  --bg-surface-secondary: 232, 221, 211;
+  --bg-surface-tertiary: 41, 36, 32;
 
   /* border */
   --border-default: var(--color-accent);

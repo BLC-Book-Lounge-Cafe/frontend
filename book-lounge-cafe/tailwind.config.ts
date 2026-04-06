@@ -78,13 +78,17 @@ export default <Config>{
     extend: {
       spacing: {
         ...breakpoints,
+        "section": "5rem",
+        "section-mobile": "3rem",
       },
       fontSize: {
-        "title-1": ["1.5rem", { lineHeight: "1.5", letterSpacing: "0px", fontWeight: "bold" }], // 24px
-        "title-2": ["1.125rem", { lineHeight: "1.3", letterSpacing: "0px", fontWeight: "bold" }], // 18px
-        "body": ["1rem", { lineHeight: "1.25", letterSpacing: "0px", fontWeight: "normal" }], // 16px
-        "body-small": ["0.875rem", { lineHeight: "1.2", letterSpacing: "0px", fontWeight: "normal" }], // 14px
-        "caption": ["0.75rem", { lineHeight: "1.2", letterSpacing: "0px", fontWeight: "normal" }], // 12px
+        "hero": ["3.5rem", { lineHeight: "1.2", letterSpacing: "0px", fontWeight: "bold" }], // 56px
+        "title-1": ["2rem", { lineHeight: "1.4", letterSpacing: "0px", fontWeight: "bold" }], // 32px
+        "title-2": ["1.5rem", { lineHeight: "1.3", letterSpacing: "0px", fontWeight: "bold" }], // 24px
+        "title-3": ["1.25rem", { lineHeight: "1.3", letterSpacing: "0px", fontWeight: "600" }], // 20px
+        "body": ["1rem", { lineHeight: "1.6", letterSpacing: "0px", fontWeight: "normal" }], // 16px
+        "body-small": ["0.875rem", { lineHeight: "1.5", letterSpacing: "0px", fontWeight: "normal" }], // 14px
+        "caption": ["0.75rem", { lineHeight: "1.4", letterSpacing: "0px", fontWeight: "normal" }], // 12px
       },
       ringWidth: {
         DEFAULT: "4px",
@@ -92,6 +96,24 @@ export default <Config>{
       ringColor: ({ theme }) => ({
         DEFAULT: theme("colors.accent/0.5"),
       }),
+      transitionDuration: {
+        DEFAULT: "200ms",
+        "slow": "500ms",
+      },
+      animation: {
+        "fade-in": "fadeIn 0.5s ease-out",
+        "slide-up": "slideUp 0.5s ease-out",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
     },
   },
   plugins: [
