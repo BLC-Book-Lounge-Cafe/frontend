@@ -6,7 +6,7 @@ import { Container } from "shared/ui/container"
 export function HeroSection() {
   return (
     <section
-      className="relative bg-cover bg-center flex flex-col py-8 md:py-16"
+      className="relative bg-cover bg-center flex flex-col py-4 sm:py-8 lg:py-20"
       style={{ backgroundImage: `url(${heroBg})` }}
     >
       <Container>

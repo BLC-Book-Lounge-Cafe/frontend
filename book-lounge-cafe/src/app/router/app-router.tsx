@@ -8,9 +8,10 @@ export function AppRouter() {
   return createBrowserRouter([
     {
       path: "/",
-      element: <Layout topBarSlot={<Header />} contentSlot={<Outlet />} />,
+      element: <Layout topBarSlot={<Header />} contentSlot={<Outlet />}  />,
       children: [
         {
+          index:true,
           path: ROUTER_PATHS.HOME,
           element: <HomePage />,
         },
