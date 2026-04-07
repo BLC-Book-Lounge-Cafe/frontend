@@ -26,3 +26,5 @@ alwaysApply: true
 <div className="bg-[#3b82f6]">
 
 Все цвета должны соответствовать переменным из colors.css и меняться только их opacity
+
+Опирайся при верстке всегда на файл tailwind.config.ts
