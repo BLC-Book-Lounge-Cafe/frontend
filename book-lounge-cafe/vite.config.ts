@@ -6,6 +6,7 @@ import svgr from "vite-plugin-svgr"
 export default defineConfig({
   resolve: {
     alias: {
+      "api": "/src/api",
       "app": "/src/app",
       "entities": "/src/entities",
       "features": "/src/features",
@@ -13,6 +14,15 @@ export default defineConfig({
       "shared": "/src/shared",
       "widgets": "/src/widgets",
     },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: "http://localhost:5251",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    }
   },
   plugins: [
     react(),
