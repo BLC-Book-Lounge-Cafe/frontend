@@ -1,0 +1,378 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "LRMS.Web | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://0.0.0.0:5251"
+    }
+  ],
+  "paths": {
+    "/reservation-requests": {
+      "post": {
+        "tags": [
+          "ReservationRequestRouteGroup"
+        ],
+        "description": "Создает запрос на бронирование стола.",
+        "operationId": "CreateReservationRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReservationRequestCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Запрос на бронирование успешно создан."
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Если номер клиента не соответствует формату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ReservationRequestRouteGroup"
+        ],
+        "description": "Возвращает запросы на бронирование стола.",
+        "operationId": "GetReservationRequests",
+        "responses": {
+          "200": {
+            "description": "Запрос на бронирование успешно удален.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetReservationRequestsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/reservation-requests/{id}": {
+      "delete": {
+        "tags": [
+          "ReservationRequestRouteGroup"
+        ],
+        "description": "Удаляет запрос на бронирование стола.",
+        "operationId": "DeleteReservationRequest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор запроса на бронирование стола.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запрос на бронирование успешно удален."
+          },
+          "404": {
+            "description": "Если запрос на бронирование не найден.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/space-state": {
+      "get": {
+        "tags": [
+          "SpaceStateRouteGroup"
+        ],
+        "description": "Возвращает текущее состояние пространства.",
+        "operationId": "GetSpaceState",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSpaceStateResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateReservationRequestCommand": {
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customerPhone": {
+            "type": "string",
+            "description": "Номер телефона клиента."
+          }
+        },
+        "description": "Команда на создание запроса на бронирование стола."
+      },
+      "CurrentTrackDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Исполнители."
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Url картинки."
+          }
+        },
+        "description": "Данные текущего трека."
+      },
+      "ErrorResponse": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Текстовое сообщение ошибки."
+          }
+        },
+        "description": "Описывает ошибку, возникшую в процессе обработки команды."
+      },
+      "GetReservationRequestsResponse": {
+        "type": "object",
+        "properties": {
+          "reservationRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservationRequestDto"
+            },
+            "description": "Коллекция запросов на бронирование столов."
+          }
+        },
+        "description": "Ответ на запрос запросов на бронирование столов."
+      },
+      "GetSpaceStateResponse": {
+        "type": "object",
+        "properties": {
+          "spaceState": {
+            "description": "Состояние пространства.",
+            "$ref": "#/components/schemas/SpaceStateDto"
+          }
+        },
+        "description": "Ответ на запрос получения состояния пространства."
+      },
+      "ReservationRequestDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор брони.",
+            "format": "int32"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customerPhone": {
+            "type": "string",
+            "description": "Номер телефона клиента."
+          }
+        },
+        "description": "Данные запроса на бронирование стола."
+      },
+      "SpaceStateDto": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "noiseLevel": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Уровень шума в процентах.",
+            "format": "uint8"
+          },
+          "workloadLevel": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Уровень загруженности в процентах.",
+            "format": "uint8"
+          },
+          "description": {
+            "type": "string",
+            "description": "Описание от администратора."
+          },
+          "currentTrack": {
+            "description": "Текущий трек.",
+            "$ref": "#/components/schemas/CurrentTrackDto"
+          }
+        },
+        "description": "Данные о состоянии пространства."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "ReservationRequestRouteGroup"
+    },
+    {
+      "name": "SpaceStateRouteGroup"
+    }
+  ]
+}
