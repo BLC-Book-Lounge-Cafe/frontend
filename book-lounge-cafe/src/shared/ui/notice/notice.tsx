@@ -53,10 +53,10 @@ function Notice(props: NoticeProps, ref: React.ForwardedRef<HTMLDivElement>) {
           "px-3 py-1.5 rounded-1",
           classes.match(tone, {
             neutral: "bg-black/5 dark:bg-white/5",
-            negative: "bg-negative/10",
-            positive: "bg-positive/10",
-            accent: "bg-accent/10",
-            warning: "bg-warning/10",
+            negative: "bg-negative/30",
+            positive: "bg-positive/30",
+            accent: "bg-accent/30",
+            warning: "bg-warning/30",
           }),
         ],
 
@@ -64,10 +64,10 @@ function Notice(props: NoticeProps, ref: React.ForwardedRef<HTMLDivElement>) {
           "flex items-center gap-5 p-1 rounded-r-1 border-l-4 text-current",
           classes.match(tone, {
             neutral: "bg-black/5 dark:bg-white/5 border-black dark:border-white",
-            negative: "bg-negative/10 border-negative",
-            positive: "bg-positive/10 border-positive",
-            accent: "bg-accent/10 border-accent",
-            warning: "bg-warning/10 border-warning",
+            negative: "bg-negative/30 border-negative",
+            positive: "bg-positive/30 border-positive",
+            accent: "bg-accent/30 border-accent",
+            warning: "bg-warning/30 border-warning",
           }),
         ],
 

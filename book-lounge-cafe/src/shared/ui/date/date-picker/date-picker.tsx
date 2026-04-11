@@ -35,6 +35,8 @@ export type AppDatePickerProps<T extends DateValue> = Omit<
 > &
 HelpTextProps & {
   isDisabledDateInput?: boolean
+  isBold?: boolean
+  isRequired?: boolean
   label?: React.ReactNode
   description?: React.ReactNode
   errorMessage?: React.ReactNode
@@ -52,6 +54,8 @@ function AppDatePicker<T extends DateValue>(
 
   const {
     label,
+    isBold,
+    isRequired,
     description,
     errorMessage,
     isDisabledDateInput,
@@ -67,7 +71,7 @@ function AppDatePicker<T extends DateValue>(
     >
       {(dateState) => (
         <>
-          <Field.Label>{label}</Field.Label>
+          <Field.Label isBold={isBold} isRequired={isRequired}>{label}</Field.Label>
 
           <Field.Group UNSAFE_className="pl-0 cursor-auto">
             <Button

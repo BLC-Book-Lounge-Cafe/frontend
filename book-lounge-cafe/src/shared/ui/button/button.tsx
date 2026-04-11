@@ -41,7 +41,7 @@ function AppButton(props: AppButtonProps, ref: React.ForwardedRef<HTMLButtonElem
     tone = "accent",
     size = "lg",
     fullWidth,
-    rounded = false,
+    rounded = true,
     uppercase,
   } = props
 

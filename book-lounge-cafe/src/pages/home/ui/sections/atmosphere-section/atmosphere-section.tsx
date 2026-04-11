@@ -1,72 +1,87 @@
 import { Container } from "shared/ui/container"
 import { Progress } from "shared/ui/progress"
-import { Button } from "shared/ui/button"
+import { Notice } from "shared/ui/notice"
+import { getNoiseLevelLabel, getWorkloadLevelLabel, useAtmosphere } from "entities/atmosphere"
+import { Card } from "shared/ui/card"
 
 export function AtmosphereSection() {
-  const crowdLevel = 70
-  const noiseLevel = 30
-
-  const getCrowdLabel = (value: number) => {
-    if (value < 30) return "Спокойно"
-    if (value < 70) return "Умеренно"
-    return "Оживлённо"
-  }
-
-  const getNoiseLabel = (value: number) => {
-    if (value < 30) return "Тихо, как в библиотеке"
-    if (value < 70) return "Приятный фон"
-    return "Живое общение"
-  }
+  const {data,loading,error} = useAtmosphere()
 
   return (
     <section id="atmosphere" className="py-section-mobile md:py-section bg-surface-secondary">
       <Container>
         <h2 className="text-title-1 text-center mb-8">Атмосфера в кафе</h2>
-
-        <div className="max-w-2xl mx-auto space-y-8">
-          <div className="bg-surface-primary rounded-2 p-6 shadow-md">
-            <div className="space-y-6">
-              <div>
-                <div className="flex justify-between items-center mb-3">
-                  <p className="text-body font-medium">Загруженность</p>
-                  <span className="text-body-small text-accent font-semibold">
-                    {getCrowdLabel(crowdLevel)}
-                  </span>
-                </div>
-                <Progress.Bar value={crowdLevel} tone="accent" size="md" />
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-3">
-                  <p className="text-body font-medium">Уровень шума</p>
-                  <span className="text-body-small text-accent font-semibold">
-                    {getNoiseLabel(noiseLevel)}
-                  </span>
-                </div>
-                <Progress.Bar value={noiseLevel} tone="accent" size="md" />
-              </div>
-            </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <Progress.Circle isIndeterminate />
           </div>
+        ) : error ? (
+          <Notice
+            tone="negative"
+            variant="tinted"
+            UNSAFE_className="mb-6"
+          >
+            {error}
+          </Notice>
+        ) : (
+          <>
+            <p className="text-center mb-8">{data?.description || "Описание не найдено"}</p>
 
-          <div className="bg-surface-primary rounded-2 p-6 shadow-md">
-            <h3 className="text-title-3 mb-4">Музыкальная атмосфера</h3>
-            <p className="text-body-small text-secondary mb-4">Сейчас играет</p>
+            <div className="space-y-8 transition-opacity">
+              <Card rounded={2} UNSAFE_className="p-6">
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <p className="text-body font-medium">Загруженность {typeof data?.crowdLevel === "number" ? `${data.crowdLevel}%` : ""}</p>
+                      <span className="text-body-small text-accent font-semibold">
+                        {typeof data?.crowdLevel === "number" ? getWorkloadLevelLabel(data.crowdLevel) : "Не определена"}
+                      </span>
+                    </div>
+                    <Progress.Bar value={data?.crowdLevel || 0} tone="accent" size="md" />
+                  </div>
 
-            <div className="flex items-center gap-4 mb-4">
-              <Button variant="tinted" size="md" rounded="full" UNSAFE_className="shrink-0">
-                <span className="text-xl">▶</span>
-              </Button>
-              <div className="flex-1 min-w-0">
-                <p className="text-body font-medium truncate">Название трека</p>
-                <p className="text-caption text-secondary truncate">Исполнитель</p>
-              </div>
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <p className="text-body font-medium">Уровень шума {typeof data?.noiseLevel === "number" ? `${data.noiseLevel}%` : ""}</p>
+                      <span className="text-body-small text-accent font-semibold">
+                        {typeof data?.noiseLevel === "number" ? getNoiseLevelLabel(data.noiseLevel) : "Не определена"}
+                      </span>
+                    </div>
+                    <Progress.Bar value={data?.noiseLevel || 0} tone="accent" size="md" />
+                  </div>
+                </div>
+              </Card>
+
+              <Card rounded={2} UNSAFE_className="p-6">
+                <h3 className="text-title-3 mb-4">Музыкальная атмосфера</h3>
+                <p className="text-body-small text-secondary mb-4">Сейчас играет</p>
+
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-xl">▶</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-body font-medium truncate">{data?.trackTitle || "Название трека не определено"}</p>
+                    <p className="text-caption text-secondary truncate">{data?.trackAuthors || "Исполнитель не определен"}</p>
+                  </div>
+                </div>
+
+                {data?.trackImage ? (
+                  <img
+                    src={data.trackImage}
+                    alt={data?.trackTitle || "Название трека не определено"}
+                    className="w-60 object-cover rounded-2"
+                  />
+                ) : (
+                  <Notice
+                    tone="warning"
+                  >
+                    Обложка трека не найдена
+                  </Notice>
+                )}
+              </Card>
             </div>
+          </>
+        )}
 
-            <p className="text-caption text-secondary text-center mt-4">
-              Плейлист из Яндекс.Музыки будет добавлен позже
-            </p>
-          </div>
-        </div>
       </Container>
     </section>
   )

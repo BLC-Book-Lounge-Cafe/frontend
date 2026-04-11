@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react"
 import { fetchSpaceState } from "../api/get-space-state"
-import {
-  ATMOSPHERE_FALLBACK_CROWD,
-  ATMOSPHERE_FALLBACK_NOISE,
-  ATMOSPHERE_FALLBACK_TRACK_AUTHORS,
-  ATMOSPHERE_FALLBACK_TRACK_TITLE,
-} from "../model/constants"
-import { parseAtmosphereFromResponse } from "../model/space-state"
-import { getNoiseLevelLabel, getWorkloadLevelLabel } from "../model/workload-noise-labels"
+import { parseAtmosphereFromResponse, type ParsedAtmospherePatch } from "../model/space-state"
 
 export function useAtmosphere() {
-  const [crowdLevel, setCrowdLevel] = useState(ATMOSPHERE_FALLBACK_CROWD)
-  const [noiseLevel, setNoiseLevel] = useState(ATMOSPHERE_FALLBACK_NOISE)
-  const [trackTitle, setTrackTitle] = useState(ATMOSPHERE_FALLBACK_TRACK_TITLE)
-  const [trackAuthors, setTrackAuthors] = useState(ATMOSPHERE_FALLBACK_TRACK_AUTHORS)
-  const [trackImage, setTrackImage] = useState<string>("")
-  const [description, setDescription] = useState<string>("")
+  const [data, setData] = useState<ParsedAtmospherePatch  | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -28,18 +17,25 @@ export function useAtmosphere() {
 
         const patch = parseAtmosphereFromResponse(data)
         if (!patch) {
+          if (!cancelled) setError(null)
           setLoading(false)
           return
         }
 
-        if (patch.crowdLevel !== undefined) setCrowdLevel(patch.crowdLevel)
-        if (patch.noiseLevel !== undefined) setNoiseLevel(patch.noiseLevel)
-        if (patch.trackTitle !== undefined) setTrackTitle(patch.trackTitle)
-        if (patch.trackAuthors !== undefined) setTrackAuthors(patch.trackAuthors)
-        if (patch.trackImage !== undefined) setTrackImage(patch.trackImage)
-        if (patch.description !== undefined) setDescription(patch.description)
-      } catch {
-        /* значения по умолчанию */
+        if (!cancelled) {
+          setData(patch);
+          setError(null)
+        }
+
+      } catch (err) {
+        if (!cancelled) {
+          setData(null);
+          setError(
+            err instanceof Error && err.message
+              ? err.message
+              : "Не удалось загрузить данные о зале.",
+          )
+        }
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -51,14 +47,8 @@ export function useAtmosphere() {
   }, [])
 
   return {
-    crowdLevel,
-    noiseLevel,
-    crowdLabel: getWorkloadLevelLabel(crowdLevel),
-    noiseLabel: getNoiseLevelLabel(noiseLevel),
-    trackTitle,
-    trackAuthors,
-    trackImage,
-    description,
+    data,
     loading,
+    error,
   }
 }
