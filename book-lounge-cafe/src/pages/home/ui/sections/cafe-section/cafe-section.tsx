@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { VenueAddressLine, WorkingHoursList } from "entities/cafe-venue"
+import { VenueAddressLine, WorkingHoursList, yandexMapWidgetSrc } from "entities/cafe-venue"
 import { Container } from "shared/ui/container"
 import { Button } from "shared/ui/button"
 
 type CafeSectionProps = {
   onOpenReservation?: () => void
 }
+
 
 export function CafeSection(props: CafeSectionProps) {
   const [showMap, setShowMap] = useState(true)
@@ -57,8 +58,18 @@ export function CafeSection(props: CafeSectionProps) {
               <div className="space-y-3 text-body">
                 <VenueAddressLine />
                 <p className="text-body-small text-secondary">
-                  Интерактивная карта будет добавлена позже
+                  Метка на карте — условная точка для демонстрации
                 </p>
+                <div className="overflow-hidden rounded-1 border border-accent/20 bg-surface-secondary">
+                  <iframe
+                    title="Карта — как добраться (Яндекс.Карты)"
+                    src={yandexMapWidgetSrc()}
+                    width="100%"
+                    height="360"
+                    className="block w-full min-h-[280px] border-0 md:min-h-[360px]"
+                    allowFullScreen
+                  />
+                </div>
               </div>
             </div>
           )}
