@@ -2,12 +2,12 @@ import { useState } from "react"
 import { Container } from "shared/ui/container"
 import { Button } from "shared/ui/button"
 
-export function CafeSection() {
-  const [showMap, setShowMap] = useState(true)
+type CafeSectionProps = {
+  onOpenReservation?: () => void
+}
 
-  const handleContact = () => {
-    window.location.href = "mailto:info@cafe-library.ru"
-  }
+export function CafeSection(props: CafeSectionProps) {
+  const [showMap, setShowMap] = useState(true)
 
   return (
     <section id="cafe" className="py-section-mobile md:py-section bg-surface-secondary">
@@ -36,7 +36,7 @@ export function CafeSection() {
               size="lg"
               rounded
               fullWidth
-              onPress={handleContact}
+              onPress={() => props.onOpenReservation?.()}
             >
               Связаться с администратором
             </Button>

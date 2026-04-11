@@ -17,7 +17,7 @@ export function HomePage() {
       <main>
         <HeroSection />
         <MenuSection />
-        <CafeSection />
+        <CafeSection onOpenReservation={open} />
         <LibrarySection />
         <AtmosphereSection />
         <ReservationSection onOpenReservation={open} />
