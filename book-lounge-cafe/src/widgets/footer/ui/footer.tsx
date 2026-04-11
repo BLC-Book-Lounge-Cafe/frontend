@@ -1,3 +1,4 @@
+import { VenueContactsFooter, WorkingHoursList } from "entities/cafe-venue"
 import { ReservationLeaveRequestButton } from "entities/reservation"
 import { Container } from "shared/ui/container"
 
@@ -14,28 +15,13 @@ export function Footer(props: FooterProps) {
         <div className="flex flex-col items-center gap-8 md:justify-between md:flex-row md:items-start">
           <div className="text-center md:text-left">
             <h3 className="text-title-3 mb-4">Контакты</h3>
-            <div className="space-y-2 text-body-small">
-              <p>📍 г. Москва, ул. Примерная, д. 1</p>
-              <p>
-                📞{" "}
-                <a href="tel:+79991234567" className="hover:text-accent transition-colors">
-                  +7 (999) 123-45-67
-                </a>
-              </p>
-              <p>
-                ✉️{" "}
-                <a href="mailto:info@cafe-library.ru" className="hover:text-accent transition-colors">
-                  info@cafe-library.ru
-                </a>
-              </p>
-            </div>
+            <VenueContactsFooter />
           </div>
 
           <div className="text-center md:text-left">
             <h3 className="text-title-3 mb-4">Режим работы</h3>
             <div className="space-y-2 text-body-small">
-              <p>Пн-Пт: 8:00 - 22:00</p>
-              <p>Сб-Вс: 10:00 - 23:00</p>
+              <WorkingHoursList variant="compact" />
             </div>
           </div>
 

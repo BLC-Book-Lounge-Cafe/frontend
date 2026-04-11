@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { VenueAddressLine, WorkingHoursList } from "entities/cafe-venue"
 import { Container } from "shared/ui/container"
 import { Button } from "shared/ui/button"
 
@@ -25,8 +26,7 @@ export function CafeSection(props: CafeSectionProps) {
             <div className="border-t border-accent/20 pt-4">
               <h4 className="text-title-3 mb-3">Режим работы</h4>
               <div className="space-y-2 text-body">
-                <p>Понедельник - Пятница: 8:00 - 22:00</p>
-                <p>Суббота - Воскресенье: 10:00 - 23:00</p>
+                <WorkingHoursList variant="verbose" />
               </div>
             </div>
           </div>
@@ -55,10 +55,7 @@ export function CafeSection(props: CafeSectionProps) {
             <div className="bg-surface-primary rounded-2 p-6 shadow-md animate-fade-in">
               <h4 className="text-title-3 mb-4">Наш адрес</h4>
               <div className="space-y-3 text-body">
-                <p className="flex items-start gap-2">
-                  <span className="text-2xl">📍</span>
-                  <span>г. Москва, ул. Примерная, д. 1, стр. 2</span>
-                </p>
+                <VenueAddressLine />
                 <p className="text-body-small text-secondary">
                   Интерактивная карта будет добавлена позже
                 </p>
