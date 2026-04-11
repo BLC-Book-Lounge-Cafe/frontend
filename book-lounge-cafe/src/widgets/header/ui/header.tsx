@@ -1,12 +1,16 @@
 import React from "react"
 import Icon from "shared/ui/Icon"
+import { ReservationLeaveRequestButton } from "entities/reservation"
 import { Container } from "shared/ui/container"
-import { Button } from "shared/ui/button"
 import { HeaderMenu } from "./header-menu"
 import { HeaderMobileMenu } from "./header-mobile-menu"
 import { HeaderBurgerButton } from "./header-burger-button"
 
-export function Header() {
+type HeaderProps = {
+  onReservationPress?: () => void
+}
+
+export function Header(props: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
 
   return (
@@ -22,9 +26,10 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <div className="flex-end md:hidden lg:flex shrink-0">
-            <Button variant="filled" rounded size="md">
-              Забронировать
-            </Button>
+            <ReservationLeaveRequestButton
+              placement="header"
+              onPress={props.onReservationPress}
+            />
           </div>
 
           <HeaderBurgerButton onClick={() => setIsMobileMenuOpen(v => !v)} isOpen={isMobileMenuOpen} UNSAFE_className="lg:hidden" />
@@ -32,7 +37,10 @@ export function Header() {
       </Container>
 
       {isMobileMenuOpen && (
-        <HeaderMobileMenu onClose={() => setIsMobileMenuOpen(false)} />
+        <HeaderMobileMenu
+          onClose={() => setIsMobileMenuOpen(false)}
+          onReservationPress={props.onReservationPress}
+        />
       )}
     </header>
   )

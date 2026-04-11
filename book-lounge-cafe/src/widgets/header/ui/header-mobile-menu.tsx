@@ -1,9 +1,10 @@
-import { Container } from "shared/ui/container";
-import { HeaderMenu } from "./header-menu";
-import { Button } from "shared/ui/button";
+import { ReservationLeaveRequestButton } from "entities/reservation"
+import { Container } from "shared/ui/container"
+import { HeaderMenu } from "./header-menu"
 
 type HeaderMobileMenuProps = {
   onClose: () => void
+  onReservationPress?: () => void
 }
 
 export function HeaderMobileMenu(props: HeaderMobileMenuProps) {
@@ -17,9 +18,13 @@ export function HeaderMobileMenu(props: HeaderMobileMenuProps) {
           linkClassName="text-primary"
         />
       </nav>
-      <Button fullWidth onPress={props.onClose}>
-        Забронировать
-      </Button>
+      <ReservationLeaveRequestButton
+        placement="mobile"
+        onPress={() => {
+          props.onReservationPress?.()
+          props.onClose()
+        }}
+      />
     </Container>
   </div>
   )

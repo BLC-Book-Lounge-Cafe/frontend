@@ -16,6 +16,10 @@ const menuLinks = [
     href: "#atmosphere",
   },
   {
+    label: "Бронь",
+    href: "#booking",
+  },
+  {
     label: "Контакты",
     href: "#contacts",
   },

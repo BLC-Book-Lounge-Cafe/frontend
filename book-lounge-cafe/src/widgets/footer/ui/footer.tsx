@@ -1,7 +1,11 @@
+import { ReservationLeaveRequestButton } from "entities/reservation"
 import { Container } from "shared/ui/container"
-import { Button } from "shared/ui/button"
 
-export function Footer() {
+type FooterProps = {
+  onReservationPress?: () => void
+}
+
+export function Footer(props: FooterProps) {
   const currentYear = new Date().getFullYear()
 
   return (
@@ -48,9 +52,10 @@ export function Footer() {
                 📷
               </a>
             </div>
-            <Button variant="filled" size="md" rounded>
-              Забронировать
-            </Button>
+            <ReservationLeaveRequestButton
+              placement="footer"
+              onPress={props.onReservationPress}
+            />
           </div>
         </div>
 
