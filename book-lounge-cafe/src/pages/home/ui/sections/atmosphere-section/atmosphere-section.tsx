@@ -31,7 +31,7 @@ export function AtmosphereSection() {
               <Card rounded={2} UNSAFE_className="p-6">
                 <div className="space-y-6">
                   <div>
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex flex-wrap justify-between items-center mb-3">
                       <p className="text-body font-medium">Загруженность {typeof data?.crowdLevel === "number" ? `${data.crowdLevel}%` : ""}</p>
                       <span className="text-body-small text-accent font-semibold">
                         {typeof data?.crowdLevel === "number" ? getWorkloadLevelLabel(data.crowdLevel) : "Не определена"}
@@ -41,7 +41,7 @@ export function AtmosphereSection() {
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex flex-wrap justify-between items-center mb-3">
                       <p className="text-body font-medium">Уровень шума {typeof data?.noiseLevel === "number" ? `${data.noiseLevel}%` : ""}</p>
                       <span className="text-body-small text-accent font-semibold">
                         {typeof data?.noiseLevel === "number" ? getNoiseLevelLabel(data.noiseLevel) : "Не определена"}
