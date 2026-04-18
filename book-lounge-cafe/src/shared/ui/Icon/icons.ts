@@ -6,7 +6,9 @@ import ChevronLeftIcon from "shared/assets/icons/chevronLeft.svg?react"
 import ChevronRightIcon from "shared/assets/icons/chevronRight.svg?react"
 import CalendarIcon from "shared/assets/icons/calendar.svg?react"
 import ArrowSuccessIcon from "shared/assets/icons/successCheckMark.svg?react"
-
+import ChevronRightWithStickIcon from "shared/assets/icons/chevronRightWithStick.svg?react"
+import ChevronLeftWithStickIcon from "shared/assets/icons/chevronLeftWithStick.svg?react"
+import SearchIcon from "shared/assets/icons/search.svg?react"
 
 export const icons = {
   object: ObjectIcon,
@@ -17,4 +19,7 @@ export const icons = {
   chevronRight: ChevronRightIcon,
   calendar: CalendarIcon,
   arrowSuccess: ArrowSuccessIcon,
+  chevronRightWithStick: ChevronRightWithStickIcon,
+  chevronLeftWithStick: ChevronLeftWithStickIcon,
+  search: SearchIcon,
 }
