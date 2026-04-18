@@ -1,6 +1,6 @@
-import type { MenuCategory } from "../model/menu-data"
+import type { MenuViewCategory } from "entities/menu"
 
-type MenuCardProps = MenuCategory
+type MenuCardProps = MenuViewCategory
 
 export function MenuCard(props: MenuCardProps) {
   const { title, items } = props
