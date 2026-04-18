@@ -1,9 +1,11 @@
+import { useState } from "react"
 import { Container } from "shared/ui/container"
 import { Field } from "shared/ui/field"
-import { books } from "./model/books-data"
+import { books, type Book } from "./model/books-data"
 import { useLibraryFilters } from "./lib/use-library-filters"
 import { BookCard } from "./ui/book-card"
 import { Pagination } from "./ui/pagination"
+import { BookingBookModal, useBookingBookModal } from "features/booking/booking-book"
 
 export function LibrarySection() {
   const {
@@ -18,9 +20,18 @@ export function LibrarySection() {
     totalBooks,
   } = useLibraryFilters(books)
 
-  const handleBookClick = (bookId: number) => {
-    // TODO: Open booking modal
-    console.log("Book clicked:", bookId)
+  const bookingModal = useBookingBookModal()
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+
+  const handleBookClick = (book: Book) => {
+    if (!book.available) return
+    setSelectedBook(book)
+    bookingModal.open()
+  }
+
+  const handleBookingModalOpenChange = (open: boolean) => {
+    bookingModal.onOpenChange(open)
+    if (!open) setSelectedBook(null)
   }
 
   return (
@@ -59,9 +70,18 @@ export function LibrarySection() {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
               {paginatedBooks.map((book) => (
-                <BookCard key={book.id} book={book} onClick={() => handleBookClick(book.id)} />
+                <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />
               ))}
             </div>
+
+            {selectedBook ? (
+              <BookingBookModal
+                isOpen={bookingModal.isOpen}
+                onOpenChange={handleBookingModalOpenChange}
+                bookId={selectedBook.id}
+                bookTitle={selectedBook.title}
+              />
+            ) : null}
 
             <Pagination currentPage={currentPage} totalPages={totalPages} onChange={setCurrentPage} />
           </>
@@ -70,6 +90,7 @@ export function LibrarySection() {
             <p className="text-body text-secondary">Книги не найдены</p>
           </div>
         )}
+
       </Container>
     </section>
   )
