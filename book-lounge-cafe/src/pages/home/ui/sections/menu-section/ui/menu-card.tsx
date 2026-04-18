@@ -13,7 +13,7 @@ export function MenuCard(props: MenuCardProps) {
       <ul className="space-y-3">
         {items.map((item, index) => (
           <li key={`${item.name}-${index}`} className="flex justify-between items-end">
-            <span className="text-body flex-1">{item.name}</span>
+            <span className="text-body">{item.name}</span>
             <span className="border-b border-dotted border-accent/30 flex-1 mx-2 mb-1" />
             <span className="text-body font-semibold text-accent">{item.price} ₽</span>
           </li>

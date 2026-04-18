@@ -35,7 +35,7 @@ export function BookingTablesGrid(props: BookingTablesGridProps) {
   }
 
   return (
-    <ul className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-4 list-none p-0 m-0">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 list-none p-0 m-0">
       {props.tables.map((table) => (
         <li key={table.id}>
           <BookingTableCard table={table} onPress={() => props.onTablePress(table)} />

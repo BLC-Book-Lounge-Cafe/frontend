@@ -1,5 +1,6 @@
 import { useTables, tablesImage } from "entities/table"
 import { ReservationLeaveRequestButton } from "entities/reservation"
+import { TABLE_BOOKING_SECTION_ID } from "features/booking/booking-place"
 import { BookingTableModal, BookingTablesGrid, useBookingTableModal } from "features/booking/booking-table"
 import { Container } from "shared/ui/container"
 import { Card } from "shared/ui/card"
@@ -13,7 +14,7 @@ export function ReservationSection(props: ReservationSectionProps) {
   const bookingModal = useBookingTableModal()
 
   return (
-    <section id="booking" className="py-section-mobile md:py-section">
+    <section id={TABLE_BOOKING_SECTION_ID} className="py-section-mobile md:py-section">
       <Container>
         <h2 className="text-title-1 text-center mb-4">Забронировать стол</h2>
         <p className="text-body text-center text-secondary max-w-xl mx-auto mb-8">

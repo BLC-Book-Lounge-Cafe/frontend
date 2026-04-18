@@ -16,7 +16,7 @@ export function BookingTableCard(props: BookingTableCardProps) {
       type="button"
       onClick={props.onPress}
       className={classes(
-        "text-left w-full rounded-2 outline-none",
+        "text-left w-full h-full rounded-2 outline-none",
         "focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary",
       )}
     >
@@ -28,7 +28,7 @@ export function BookingTableCard(props: BookingTableCardProps) {
           "hover:ring-accent/45 hover:shadow-lg hover:shadow-black/10 transition-[box-shadow,transform] duration-200",
         )}
       >
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
           <span className="text-title-3 font-bold">Стол №{table.id}</span>
           <span
             className="inline-flex gap-0.5 shrink-0 pt-1"
