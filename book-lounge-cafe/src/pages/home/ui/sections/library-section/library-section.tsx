@@ -1,27 +1,58 @@
-import { useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
+import { Collection } from "react-aria-components"
 import { Container } from "shared/ui/container"
-import { Field } from "shared/ui/field"
-import { books, type Book } from "./model/books-data"
-import { useLibraryFilters } from "./lib/use-library-filters"
+import { Notice } from "shared/ui/notice"
+import { Pagination } from "shared/ui/pagination"
+import { Select } from "shared/ui/pickers/select"
+import type { Book, BookFilterField, BookSortField } from "entities/book"
+import { useBooksPage, sortOptions, searchFieldOptions } from "entities/book"
 import { BookCard } from "./ui/book-card"
-import { Pagination } from "./ui/pagination"
 import { BookingBookModal, useBookingBookModal } from "features/booking/booking-book"
+import { SearchField } from "shared/ui/search-field"
+import { Progress } from "shared/ui/progress"
+
+const LOADING_EXTRA_DELAY_MS = 150
 
 export function LibrarySection() {
   const {
+    books,
+    loading,
+    error,
     searchQuery,
     setSearchQuery,
+    searchField,
+    setSearchField,
     sortBy,
     setSortBy,
     currentPage,
     setCurrentPage,
     totalPages,
-    paginatedBooks,
     totalBooks,
-  } = useLibraryFilters(books)
+  } = useBooksPage()
 
   const bookingModal = useBookingBookModal()
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+
+  /** Держим спиннер ещё 2 с после того, как `loading` стал `false` (искусственная задержка). */
+  const [lingerSpinner, setLingerSpinner] = useState(false)
+  const hadLoadingRef = useRef(false)
+
+  /* Синхронный setState до paint, иначе на один кадр виден контент при уже `loading === false`. */
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useLayoutEffect(() => {
+    if (loading) {
+      hadLoadingRef.current = true
+      setLingerSpinner(false)
+      return
+    }
+    if (!hadLoadingRef.current) return
+    setLingerSpinner(true)
+    const hideId = window.setTimeout(() => setLingerSpinner(false), LOADING_EXTRA_DELAY_MS)
+    return () => window.clearTimeout(hideId)
+  }, [loading])
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  const loadingWithDelay = loading || lingerSpinner
 
   const handleBookClick = (book: Book) => {
     if (!book.available) return
@@ -40,56 +71,98 @@ export function LibrarySection() {
         <h2 className="text-title-1 text-center mb-8">Библиотека</h2>
 
         <div className="max-w-4xl mx-auto mb-8">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Field.Group>
-                <Field.Input
-                  placeholder="Поиск книги по названию или автору..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </Field.Group>
-            </div>
+          <div className="flex flex-col md:flex-row gap-4 flex-wrap items-end">
+            <SearchField
+              fullWidth
+              type="text"
+              label="Поиск"
+              placeholder="Введите текст для поиска…"
+              value={searchQuery}
+              onChange={(value) => setSearchQuery(value)}
+              UNSAFE_className="min-w-52 flex-1"
+            />
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as "author" | "title")}
-              className="px-4 py-2 rounded-1 border border-accent/30 bg-surface-primary text-primary focus:outline-none focus:ring-2 focus:ring-accent/50"
+            <Select
+              label="Фильтр для поиска"
+              items={searchFieldOptions}
+              isDisabled={loading}
+              value={searchField}
+              onChange={(key) => setSearchField(key as BookFilterField)}
+              UNSAFE_className="min-w-[11rem] w-full md:w-fit"
             >
-              <option value="author">По автору</option>
-              <option value="title">По названию</option>
-            </select>
+              <Collection items={searchFieldOptions}>
+                {(item) => (
+                  <Select.Item id={item.id} textValue={item.label}>
+                    {item.label}
+                  </Select.Item>
+                )}
+              </Collection>
+            </Select>
+
+            <Select
+              label="Сортировка"
+              items={sortOptions}
+              isDisabled={loading}
+              value={sortBy}
+              onChange={(key) => setSortBy(key as BookSortField)}
+              UNSAFE_className="min-w-[11rem] w-full md:w-fit"
+            >
+              <Collection items={sortOptions}>
+                {(item) => (
+                  <Select.Item id={item.id} textValue={item.label}>
+                    {item.label}
+                  </Select.Item>
+                )}
+              </Collection>
+            </Select>
           </div>
 
-          <p className="text-caption text-secondary mt-2 text-center">
-            Найдено книг: {totalBooks}
-          </p>
         </div>
 
-        {paginatedBooks.length > 0 ? (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {paginatedBooks.map((book) => (
-                <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />
-              ))}
+        {loadingWithDelay ? (
+            <div className="flex justify-center items-center py-36">
+              <Progress.Circle isIndeterminate />
             </div>
+          ) : (
+            <>
+              <p className="text-caption text-secondary my-6 text-center">
+                Найдено книг: {totalBooks}
+              </p>
 
-            {selectedBook ? (
-              <BookingBookModal
-                isOpen={bookingModal.isOpen}
-                onOpenChange={handleBookingModalOpenChange}
-                bookId={selectedBook.id}
-                bookTitle={selectedBook.title}
-              />
-            ) : null}
+              {!error && books.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                      {books.map((book) => (
+                        <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />
+                      ))}
+                    </div>
 
-            <Pagination currentPage={currentPage} totalPages={totalPages} onChange={setCurrentPage} />
-          </>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-body text-secondary">Книги не найдены</p>
-          </div>
-        )}
+                    {selectedBook ? (
+                      <BookingBookModal
+                        isOpen={bookingModal.isOpen}
+                        onOpenChange={handleBookingModalOpenChange}
+                        bookId={selectedBook.id}
+                        bookTitle={selectedBook.title}
+                      />
+                    ) : null}
+
+                    <div className="mt-8 flex justify-center">
+                      <Pagination
+                        count={totalPages}
+                        currentPage={currentPage}
+                        onChange={setCurrentPage}
+                      />
+                    </div>
+                  </>
+                ) : null}
+            </>
+          )}
+
+        {error ? (
+          <Notice tone="negative" variant="tinted" UNSAFE_className="max-w-xl mx-auto">
+            {error.message || "Не удалось загрузить книги."}
+          </Notice>
+        ) : null}
 
       </Container>
     </section>

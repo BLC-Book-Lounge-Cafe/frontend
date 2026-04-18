@@ -1,4 +1,4 @@
-import type { Book } from "../model/books-data"
+import type { Book } from "entities/book"
 
 type BookCardProps = {
   book: Book

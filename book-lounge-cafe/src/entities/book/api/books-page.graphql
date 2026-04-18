@@ -1,0 +1,26 @@
+query BooksPage(
+  $skip: Int
+  $take: Int
+  $filter: FilteringSpecificationInput
+  $sorter: SortingSpecificationInput
+) {
+  books(
+    skip: $skip
+    take: $take
+    filter: $filter
+    sorter: $sorter
+  ) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      id
+      name
+      author
+      imageUrl
+      isReserved
+    }
+  }
+}
