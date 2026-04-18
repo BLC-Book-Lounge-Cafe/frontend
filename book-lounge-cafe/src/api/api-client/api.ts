@@ -24,6 +24,29 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
+ * Данные для бронирования книги.
+ */
+export interface BookReservationDto {
+    'bookId'?: BookReservationDtoBookId;
+    /**
+     * Дата бронирования.
+     */
+    'date'?: string;
+    /**
+     * Имя клиента.
+     */
+    'customerName'?: string;
+    /**
+     * Телефон клиента.
+     */
+    'customerPhone'?: string;
+}
+/**
+ * Идентификатор книги.
+ */
+export interface BookReservationDtoBookId {
+}
+/**
  * Команда на создание запроса на бронирование стола.
  */
 export interface CreateReservationRequestCommand {
@@ -63,6 +86,15 @@ export interface ErrorResponse {
     'message': string;
 }
 /**
+ * Ответ на запрос меню.
+ */
+export interface GetMenuResponse {
+    /**
+     * Категории меню.
+     */
+    'menuCategories'?: Array<MenuCategoryDto>;
+}
+/**
  * Ответ на запрос запросов на бронирование столов.
  */
 export interface GetReservationRequestsResponse {
@@ -79,6 +111,74 @@ export interface GetSpaceStateResponse {
      * Состояние пространства.
      */
     'spaceState'?: SpaceStateDto;
+}
+/**
+ * Запрос получения слотов для резервирования стола.
+ */
+export interface GetTableReservationSlotsRequest {
+    'tableId'?: GetTableReservationSlotsRequestTableId;
+    /**
+     * Дата бронирования.
+     */
+    'date'?: string;
+}
+/**
+ * Идентификатор стола.
+ */
+export interface GetTableReservationSlotsRequestTableId {
+}
+/**
+ * Ответ на запрос получения слотов для резервирования стола.
+ */
+export interface GetTableReservationSlotsResponse {
+    /**
+     * Слоты для резервирования стола.
+     */
+    'reservationSlots'?: Array<ReservationSlotDto>;
+}
+/**
+ * Ответ на запрос получения информации о столах.
+ */
+export interface GetTablesResponse {
+    /**
+     * Информация о столах.
+     */
+    'tables'?: Array<TableDto>;
+}
+/**
+ * Категория меню.
+ */
+export interface MenuCategoryDto {
+    'id'?: MenuCategoryDtoId;
+    /**
+     * Название.
+     */
+    'name': string;
+    /**
+     * Элементы категории.
+     */
+    'menuItems'?: Array<MenuItemDto>;
+}
+/**
+ * Идентификатор.
+ */
+export interface MenuCategoryDtoId {
+}
+/**
+ * Элемент меню.
+ */
+export interface MenuItemDto {
+    'id'?: MenuCategoryDtoId;
+    /**
+     * Название.
+     */
+    'name'?: string;
+    'price'?: MenuItemDtoPrice;
+}
+/**
+ * Цена.
+ */
+export interface MenuItemDtoPrice {
 }
 /**
  * Данные запроса на бронирование стола.
@@ -98,6 +198,23 @@ export interface ReservationRequestDto {
  * Идентификатор брони.
  */
 export interface ReservationRequestDtoId {
+}
+/**
+ * Данные слота для резервирования.
+ */
+export interface ReservationSlotDto {
+    /**
+     * Время начала.
+     */
+    'startTime'?: string;
+    /**
+     * Время конца.
+     */
+    'endTime'?: string;
+    /**
+     * true - слот зарезервирован, иначе - false.
+     */
+    'isReserved'?: boolean;
 }
 /**
  * Данные о состоянии пространства.
@@ -124,6 +241,215 @@ export interface SpaceStateDtoNoiseLevel {
  */
 export interface SpaceStateDtoWorkloadLevel {
 }
+/**
+ * Данные о столе.
+ */
+export interface TableDto {
+    'id'?: MenuCategoryDtoId;
+    'seatsCount'?: TableDtoSeatsCount;
+}
+/**
+ * Количество мест.
+ */
+export interface TableDtoSeatsCount {
+}
+export interface TableReservationDto {
+    'tableId'?: TableReservationDtoTableId;
+    'customerName'?: string;
+    'customerPhone'?: string;
+    'startTime'?: string;
+    'endTime'?: string;
+}
+export interface TableReservationDtoTableId {
+}
+
+/**
+ * BookReservationRouteGroupApi - axios parameter creator
+ */
+export const BookReservationRouteGroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Бронирует книгу.
+         * @param {BookReservationDto} bookReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBookReservation: async (bookReservationDto: BookReservationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bookReservationDto' is not null or undefined
+            assertParamExists('createBookReservation', 'bookReservationDto', bookReservationDto)
+            const localVarPath = `/book-reservations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bookReservationDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BookReservationRouteGroupApi - functional programming interface
+ */
+export const BookReservationRouteGroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BookReservationRouteGroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Бронирует книгу.
+         * @param {BookReservationDto} bookReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createBookReservation(bookReservationDto: BookReservationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBookReservation(bookReservationDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BookReservationRouteGroupApi.createBookReservation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BookReservationRouteGroupApi - factory interface
+ */
+export const BookReservationRouteGroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BookReservationRouteGroupApiFp(configuration)
+    return {
+        /**
+         * Бронирует книгу.
+         * @param {BookReservationDto} bookReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBookReservation(bookReservationDto: BookReservationDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.createBookReservation(bookReservationDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BookReservationRouteGroupApi - object-oriented interface
+ */
+export class BookReservationRouteGroupApi extends BaseAPI {
+    /**
+     * Бронирует книгу.
+     * @param {BookReservationDto} bookReservationDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createBookReservation(bookReservationDto: BookReservationDto, options?: RawAxiosRequestConfig) {
+        return BookReservationRouteGroupApiFp(this.configuration).createBookReservation(bookReservationDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MenuRouteGroupApi - axios parameter creator
+ */
+export const MenuRouteGroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Возвращает информацию о меню.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMenu: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/menu`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MenuRouteGroupApi - functional programming interface
+ */
+export const MenuRouteGroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MenuRouteGroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Возвращает информацию о меню.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMenu(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMenuResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMenu(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MenuRouteGroupApi.getMenu']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MenuRouteGroupApi - factory interface
+ */
+export const MenuRouteGroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MenuRouteGroupApiFp(configuration)
+    return {
+        /**
+         * Возвращает информацию о меню.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMenu(options?: RawAxiosRequestConfig): AxiosPromise<GetMenuResponse> {
+            return localVarFp.getMenu(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MenuRouteGroupApi - object-oriented interface
+ */
+export class MenuRouteGroupApi extends BaseAPI {
+    /**
+     * Возвращает информацию о меню.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getMenu(options?: RawAxiosRequestConfig) {
+        return MenuRouteGroupApiFp(this.configuration).getMenu(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * ReservationRequestRouteGroupApi - axios parameter creator
@@ -429,6 +755,259 @@ export class SpaceStateRouteGroupApi extends BaseAPI {
      */
     public getSpaceState(options?: RawAxiosRequestConfig) {
         return SpaceStateRouteGroupApiFp(this.configuration).getSpaceState(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TableReservationRouteGroupApi - axios parameter creator
+ */
+export const TableReservationRouteGroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Бронирует стол.
+         * @param {TableReservationDto} tableReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTableReservation: async (tableReservationDto: TableReservationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'tableReservationDto' is not null or undefined
+            assertParamExists('createTableReservation', 'tableReservationDto', tableReservationDto)
+            const localVarPath = `/table-reservations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(tableReservationDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Возвращает слоты для бронирования стола.
+         * @param {GetTableReservationSlotsRequest} getTableReservationSlotsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTableReservationSlots: async (getTableReservationSlotsRequest: GetTableReservationSlotsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getTableReservationSlotsRequest' is not null or undefined
+            assertParamExists('getTableReservationSlots', 'getTableReservationSlotsRequest', getTableReservationSlotsRequest)
+            const localVarPath = `/table-reservations/slots`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getTableReservationSlotsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TableReservationRouteGroupApi - functional programming interface
+ */
+export const TableReservationRouteGroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TableReservationRouteGroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Бронирует стол.
+         * @param {TableReservationDto} tableReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTableReservation(tableReservationDto: TableReservationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTableReservation(tableReservationDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TableReservationRouteGroupApi.createTableReservation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Возвращает слоты для бронирования стола.
+         * @param {GetTableReservationSlotsRequest} getTableReservationSlotsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTableReservationSlots(getTableReservationSlotsRequest: GetTableReservationSlotsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTableReservationSlotsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTableReservationSlots(getTableReservationSlotsRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TableReservationRouteGroupApi.getTableReservationSlots']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TableReservationRouteGroupApi - factory interface
+ */
+export const TableReservationRouteGroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TableReservationRouteGroupApiFp(configuration)
+    return {
+        /**
+         * Бронирует стол.
+         * @param {TableReservationDto} tableReservationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTableReservation(tableReservationDto: TableReservationDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.createTableReservation(tableReservationDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Возвращает слоты для бронирования стола.
+         * @param {GetTableReservationSlotsRequest} getTableReservationSlotsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTableReservationSlots(getTableReservationSlotsRequest: GetTableReservationSlotsRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetTableReservationSlotsResponse> {
+            return localVarFp.getTableReservationSlots(getTableReservationSlotsRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TableReservationRouteGroupApi - object-oriented interface
+ */
+export class TableReservationRouteGroupApi extends BaseAPI {
+    /**
+     * Бронирует стол.
+     * @param {TableReservationDto} tableReservationDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createTableReservation(tableReservationDto: TableReservationDto, options?: RawAxiosRequestConfig) {
+        return TableReservationRouteGroupApiFp(this.configuration).createTableReservation(tableReservationDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Возвращает слоты для бронирования стола.
+     * @param {GetTableReservationSlotsRequest} getTableReservationSlotsRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getTableReservationSlots(getTableReservationSlotsRequest: GetTableReservationSlotsRequest, options?: RawAxiosRequestConfig) {
+        return TableReservationRouteGroupApiFp(this.configuration).getTableReservationSlots(getTableReservationSlotsRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TableRouteGroupApi - axios parameter creator
+ */
+export const TableRouteGroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Возвращает информацию о столах.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTables: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/tables`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TableRouteGroupApi - functional programming interface
+ */
+export const TableRouteGroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TableRouteGroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Возвращает информацию о столах.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTables(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTablesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTables(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TableRouteGroupApi.getTables']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TableRouteGroupApi - factory interface
+ */
+export const TableRouteGroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TableRouteGroupApiFp(configuration)
+    return {
+        /**
+         * Возвращает информацию о столах.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTables(options?: RawAxiosRequestConfig): AxiosPromise<GetTablesResponse> {
+            return localVarFp.getTables(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TableRouteGroupApi - object-oriented interface
+ */
+export class TableRouteGroupApi extends BaseAPI {
+    /**
+     * Возвращает информацию о столах.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getTables(options?: RawAxiosRequestConfig) {
+        return TableRouteGroupApiFp(this.configuration).getTables(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

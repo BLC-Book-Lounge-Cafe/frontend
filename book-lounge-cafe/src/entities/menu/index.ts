@@ -1,2 +1,2 @@
-export { CardMenu } from "./ui/card-menu"
-export type { CardMenuItem, CardMenuProps } from "./ui/card-menu"
+export { useMenu } from "./lib/use-menu"
+export type { MenuViewCategory, MenuViewItem } from "./model/menu-view"

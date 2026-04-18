@@ -42,7 +42,7 @@
             }
           },
           "409": {
-            "description": "Если номер клиента не соответствует формату.",
+            "description": "Если номер клиента не соответствует формату или имя клиента слишком длинное.",
             "content": {
               "application/json": {
                 "schema": {
@@ -232,10 +232,324 @@
           }
         }
       }
+    },
+    "/table-reservations": {
+      "post": {
+        "tags": [
+          "TableReservationRouteGroup"
+        ],
+        "description": "Бронирует стол.",
+        "operationId": "CreateTableReservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TableReservationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "В случае, если не найден стол по указанному идентификатору.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае, если данные для бронирования указаны неверно или стол уже был забронирован на указанное время.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/table-reservations/slots": {
+      "post": {
+        "tags": [
+          "TableReservationRouteGroup"
+        ],
+        "description": "Возвращает слоты для бронирования стола.",
+        "operationId": "GetTableReservationSlots",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTableReservationSlotsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTableReservationSlotsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не найден стол по указанному идентификатору.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/tables": {
+      "get": {
+        "tags": [
+          "TableRouteGroup"
+        ],
+        "description": "Возвращает информацию о столах.",
+        "operationId": "GetTables",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTablesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/book-reservations": {
+      "post": {
+        "tags": [
+          "BookReservationRouteGroup"
+        ],
+        "description": "Бронирует книгу.",
+        "operationId": "CreateBookReservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookReservationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "В случае, если не найдена книга по указанному идентификатору.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае, если данные для бронирования указаны неверно или книга уже была забронирована на указанную дату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
+    },
+    "/menu": {
+      "get": {
+        "tags": [
+          "MenuRouteGroup"
+        ],
+        "description": "Возвращает информацию о меню.",
+        "operationId": "GetMenu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMenuResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае нарушения доменных правил.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса."
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "BookReservationDto": {
+        "type": "object",
+        "properties": {
+          "bookId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор книги.",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата бронирования.",
+            "format": "date-time"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customerPhone": {
+            "type": "string",
+            "description": "Телефон клиента."
+          }
+        },
+        "description": "Данные для бронирования книги."
+      },
       "CreateReservationRequestCommand": {
         "type": "object",
         "properties": {
@@ -284,6 +598,19 @@
         },
         "description": "Описывает ошибку, возникшую в процессе обработки команды."
       },
+      "GetMenuResponse": {
+        "type": "object",
+        "properties": {
+          "menuCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuCategoryDto"
+            },
+            "description": "Категории меню."
+          }
+        },
+        "description": "Ответ на запрос меню."
+      },
       "GetReservationRequestsResponse": {
         "type": "object",
         "properties": {
@@ -307,6 +634,109 @@
         },
         "description": "Ответ на запрос получения состояния пространства."
       },
+      "GetTableReservationSlotsRequest": {
+        "type": "object",
+        "properties": {
+          "tableId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор стола.",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата бронирования.",
+            "format": "date-time"
+          }
+        },
+        "description": "Запрос получения слотов для резервирования стола."
+      },
+      "GetTableReservationSlotsResponse": {
+        "type": "object",
+        "properties": {
+          "reservationSlots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservationSlotDto"
+            },
+            "description": "Слоты для резервирования стола."
+          }
+        },
+        "description": "Ответ на запрос получения слотов для резервирования стола."
+      },
+      "GetTablesResponse": {
+        "type": "object",
+        "properties": {
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TableDto"
+            },
+            "description": "Информация о столах."
+          }
+        },
+        "description": "Ответ на запрос получения информации о столах."
+      },
+      "MenuCategoryDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "menuItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItemDto"
+            },
+            "description": "Элементы категории."
+          }
+        },
+        "description": "Категория меню."
+      },
+      "MenuItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "price": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "description": "Цена.",
+            "format": "double"
+          }
+        },
+        "description": "Элемент меню."
+      },
       "ReservationRequestDto": {
         "type": "object",
         "properties": {
@@ -329,6 +759,26 @@
           }
         },
         "description": "Данные запроса на бронирование стола."
+      },
+      "ReservationSlotDto": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "description": "Время начала.",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Время конца.",
+            "format": "date-time"
+          },
+          "isReserved": {
+            "type": "boolean",
+            "description": "true - слот зарезервирован, иначе - false."
+          }
+        },
+        "description": "Данные слота для резервирования."
       },
       "SpaceStateDto": {
         "required": [
@@ -364,6 +814,57 @@
           }
         },
         "description": "Данные о состоянии пространства."
+      },
+      "TableDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор.",
+            "format": "int32"
+          },
+          "seatsCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Количество мест.",
+            "format": "uint8"
+          }
+        },
+        "description": "Данные о столе."
+      },
+      "TableReservationDto": {
+        "type": "object",
+        "properties": {
+          "tableId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
       }
     }
   },
@@ -373,6 +874,18 @@
     },
     {
       "name": "SpaceStateRouteGroup"
+    },
+    {
+      "name": "TableReservationRouteGroup"
+    },
+    {
+      "name": "TableRouteGroup"
+    },
+    {
+      "name": "BookReservationRouteGroup"
+    },
+    {
+      "name": "MenuRouteGroup"
     }
   ]
 }
