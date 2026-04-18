@@ -8,13 +8,16 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-rest-api": "openapi-generator-cli generate -i src/api/swagger.json -g typescript-axios -o src/api/api-client"
+    "generate-rest-api": "openapi-generator-cli generate -i src/api/swagger.json -g typescript-axios -o src/api/api-client",
+    "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.9",
     "@hookform/resolvers": "^5.2.2",
     "@internationalized/date": "^3.12.0",
     "axios": "^1.15.0",
     "classnames": "^2.5.1",
+    "graphql": "^16.13.2",
     "react": "^19.2.4",
     "react-aria-components": "^1.16.0",
     "react-dom": "^19.2.4",
@@ -27,6 +30,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@graphql-codegen/cli": "^6.3.0",
+    "@graphql-codegen/typescript": "^5.0.10",
+    "@graphql-codegen/typescript-operations": "^5.1.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.4.1",
     "@openapitools/openapi-generator-cli": "^2.31.1",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^24.12.0",

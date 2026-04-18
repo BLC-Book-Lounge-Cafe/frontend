@@ -1,0 +1,18 @@
+overwrite: true
+schema: "src/api/graphql/schema.graphql"
+# Операции рядом с кодом (FSD): сущности, фичи; при желании добавьте свои glob'ы.
+documents:
+  - "src/entities/**/*.graphql"
+  - "src/features/**/*.graphql"
+generates:
+  src/api/graphql/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+      enumsAsTypes: true
+      apolloReactVersion: 3
