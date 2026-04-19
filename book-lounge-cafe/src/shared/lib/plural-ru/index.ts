@@ -1,0 +1,1 @@
+export { formatSeatsCount, pluralRu } from "./plural-ru"
