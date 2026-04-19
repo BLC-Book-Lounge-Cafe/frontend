@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
 import { useBooksPageQuery } from "api/graphql/generated/graphql"
-import { useDebounce } from "shared/lib/useDebounce"
+import { useDebounce } from "shared/lib/use-debounce"
 import { mapBookDtoToBook } from "./map-book-dto"
 import type { Book, BookFilterField, BookSortField } from "../model/types"
 
