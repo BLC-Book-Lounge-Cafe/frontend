@@ -12,7 +12,7 @@ import { parseUserFromResponse, type User } from "../model/user"
 // }
 
 const MOCK_RESPONSE = {
-  isAdmin: true,
+  isAdmin: false,
 } as const
 
 const MOCK_DELAY_MS = 300
