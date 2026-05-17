@@ -1,6 +1,7 @@
 import React from "react"
 import Icon from "shared/ui/Icon"
 import { ReservationLeaveRequestButton } from "entities/reservation"
+import { LogoutButton, useCurrentUser } from "entities/user"
 import { Container } from "shared/ui/container"
 import { HeaderMenu } from "./header-menu"
 import { HeaderMobileMenu } from "./header-mobile-menu"
@@ -14,6 +15,7 @@ type HeaderProps = {
 export function Header(props: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const media = useMediaQuery()
+  const { isAdmin } = useCurrentUser()
 
 
   return (
@@ -29,10 +31,14 @@ export function Header(props: HeaderProps) {
 
         <div className="flex items-center gap-4">
           <div className="flex-end md:hidden lg:flex shrink-0">
-            <ReservationLeaveRequestButton
-              placement="header"
-              onPress={props.onReservationPress}
-            />
+            {isAdmin ? (
+              <LogoutButton placement="header" />
+            ) : (
+              <ReservationLeaveRequestButton
+                placement="header"
+                onPress={props.onReservationPress}
+              />
+            )}
           </div>
 
           <HeaderBurgerButton onClick={() => setIsMobileMenuOpen(v => !v)} isOpen={isMobileMenuOpen} UNSAFE_className="lg:hidden" />

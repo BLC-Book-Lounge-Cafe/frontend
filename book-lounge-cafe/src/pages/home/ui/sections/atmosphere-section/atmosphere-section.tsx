@@ -2,10 +2,13 @@ import { Container } from "shared/ui/container"
 import { Progress } from "shared/ui/progress"
 import { Notice } from "shared/ui/notice"
 import { getNoiseLevelLabel, getWorkloadLevelLabel, useAtmosphere } from "entities/atmosphere"
+import { useCurrentUser } from "entities/user"
 import { Card } from "shared/ui/card"
+import { CardActionButton } from "shared/ui/card-action-button"
 
 export function AtmosphereSection() {
   const {data,loading,error} = useAtmosphere()
+  const { isAdmin } = useCurrentUser()
 
   return (
     <section id="atmosphere" className="py-section-mobile md:py-section bg-surface-secondary">
@@ -41,8 +44,16 @@ export function AtmosphereSection() {
                   </div>
 
                   <div>
-                    <div className="flex flex-wrap justify-between items-center mb-3">
-                      <p className="text-body font-medium">Уровень шума {typeof data?.noiseLevel === "number" ? `${data.noiseLevel}%` : ""}</p>
+                    <div className="flex flex-wrap justify-between items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2">
+                        <p className="text-body font-medium">Уровень шума {typeof data?.noiseLevel === "number" ? `${data.noiseLevel}%` : ""}</p>
+                        {isAdmin && (
+                          <CardActionButton
+                            icon="pencil"
+                            label="Редактировать уровень шума"
+                          />
+                        )}
+                      </div>
                       <span className="text-body-small text-accent font-semibold">
                         {typeof data?.noiseLevel === "number" ? getNoiseLevelLabel(data.noiseLevel) : "Не определена"}
                       </span>

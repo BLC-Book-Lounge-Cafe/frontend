@@ -1,15 +1,18 @@
 import { useState } from "react"
 import { VenueAddressLine, WorkingHoursList, yandexMapWidgetSrc } from "entities/cafe-venue"
+import { useCurrentUser } from "entities/user"
 import { Container } from "shared/ui/container"
 import { Button } from "shared/ui/button"
 
 type CafeSectionProps = {
   onOpenReservation?: () => void
+  onOpenAdminRequests?: () => void
 }
 
 
 export function CafeSection(props: CafeSectionProps) {
   const [showMap, setShowMap] = useState(true)
+  const { isAdmin } = useCurrentUser()
 
   return (
     <section id="cafe" className="py-section-mobile md:py-section bg-surface-secondary">
@@ -33,14 +36,25 @@ export function CafeSection(props: CafeSectionProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              size="lg"
-              rounded
-              fullWidth
-              onPress={() => props.onOpenReservation?.()}
-            >
-              Связаться с администратором
-            </Button>
+            {isAdmin ? (
+              <Button
+                size="lg"
+                rounded
+                fullWidth
+                onPress={() => props.onOpenAdminRequests?.()}
+              >
+                Посмотреть заявки
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                rounded
+                fullWidth
+                onPress={() => props.onOpenReservation?.()}
+              >
+                Связаться с администратором
+              </Button>
+            )}
             <Button
               variant="tinted"
               size="lg"

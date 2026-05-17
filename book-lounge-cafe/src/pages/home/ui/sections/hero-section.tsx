@@ -1,8 +1,16 @@
 import { Container } from "shared/ui/container"
 import { heroImage } from "entities/hero"
+import { useCurrentUser } from "entities/user"
 import { BookPlaceButton } from "features/booking/booking-place"
+import { Button } from "shared/ui/button"
 
-export function HeroSection() {
+type HeroSectionProps = {
+  onOpenAdminRequests?: () => void
+}
+
+export function HeroSection(props: HeroSectionProps) {
+  const { isAdmin } = useCurrentUser()
+
   return (
     <section
       id="hero"
@@ -22,7 +30,18 @@ export function HeroSection() {
             Атмосфера, где можно читать, работать и пить отличный кофе
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2 animate-slide-up">
-            <BookPlaceButton />
+            {isAdmin ? (
+              <Button
+                variant="filled"
+                tone="accent"
+                size="lg"
+                onPress={() => props.onOpenAdminRequests?.()}
+              >
+                Посмотреть заявки
+              </Button>
+            ) : (
+              <BookPlaceButton />
+            )}
           </div>
         </div>
       </Container>

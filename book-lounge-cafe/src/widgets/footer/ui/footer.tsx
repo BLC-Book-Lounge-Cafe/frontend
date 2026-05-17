@@ -1,13 +1,17 @@
 import { VenueContactsFooter, WorkingHoursList } from "entities/cafe-venue"
 import { ReservationLeaveRequestButton } from "entities/reservation"
+import { useCurrentUser } from "entities/user"
 import { Container } from "shared/ui/container"
+import { Button } from "shared/ui/button"
 
 type FooterProps = {
   onReservationPress?: () => void
+  onOpenAdminRequests?: () => void
 }
 
 export function Footer(props: FooterProps) {
   const currentYear = new Date().getFullYear()
+  const { isAdmin } = useCurrentUser()
 
   return (
     <footer id="contacts" className="bg-surface-tertiary text-white py-16">
@@ -38,10 +42,22 @@ export function Footer(props: FooterProps) {
                 📷
               </a>
             </div>
-            <ReservationLeaveRequestButton
-              placement="footer"
-              onPress={props.onReservationPress}
-            />
+            {isAdmin ? (
+              <Button
+                variant="filled"
+                tone="accent"
+                size="md"
+                rounded
+                onPress={() => props.onOpenAdminRequests?.()}
+              >
+                Посмотреть заявки
+              </Button>
+            ) : (
+              <ReservationLeaveRequestButton
+                placement="footer"
+                onPress={props.onReservationPress}
+              />
+            )}
           </div>
         </div>
 

@@ -6,9 +6,11 @@ import { Pagination } from "shared/ui/pagination"
 import { Select } from "shared/ui/pickers/select"
 import type { Book, BookFilterField, BookSortField } from "entities/book"
 import { useBooksPage, sortOptions, searchFieldOptions } from "entities/book"
+import { useCurrentUser } from "entities/user"
 import { BookCard } from "./ui/book-card"
 import { BookingBookModal, useBookingBookModal } from "features/booking/booking-book"
 import { SearchField } from "shared/ui/search-field"
+import { Button } from "shared/ui/button"
 import { Progress } from "shared/ui/progress"
 
 const LOADING_EXTRA_DELAY_MS = 150
@@ -32,6 +34,7 @@ export function LibrarySection() {
 
   const bookingModal = useBookingBookModal()
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+  const { isAdmin } = useCurrentUser()
 
   /** Держим спиннер ещё 2 с после того, как `loading` стал `false` (искусственная задержка). */
   const [lingerSpinner, setLingerSpinner] = useState(false)
@@ -68,7 +71,17 @@ export function LibrarySection() {
   return (
     <section id="library" className="py-section-mobile md:py-section">
       <Container>
-        <h2 className="text-title-1 text-center mb-8">Библиотека</h2>
+        <h2 className={isAdmin ? "text-title-1 text-center mb-4" : "text-title-1 text-center mb-8"}>
+          Библиотека
+        </h2>
+
+        {isAdmin && (
+          <div className="flex justify-center mb-8">
+            <Button variant="filled" tone="accent" size="lg" rounded>
+              Посмотреть забронированные книги
+            </Button>
+          </div>
+        )}
 
         <div className="max-w-4xl mx-auto mb-8">
           <div className="flex flex-col md:flex-row gap-4 flex-wrap items-end">
@@ -133,7 +146,12 @@ export function LibrarySection() {
                   <>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                       {books.map((book) => (
-                        <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />
+                        <BookCard
+                          key={book.id}
+                          book={book}
+                          onClick={() => handleBookClick(book)}
+                          isAdmin={isAdmin}
+                        />
                       ))}
                     </div>
 
@@ -153,6 +171,14 @@ export function LibrarySection() {
                         onChange={setCurrentPage}
                       />
                     </div>
+
+                    {isAdmin && (
+                      <div className="mt-8 flex justify-center">
+                        <Button variant="filled" tone="accent" size="lg" rounded>
+                          Добавить книгу
+                        </Button>
+                      </div>
+                    )}
                   </>
                 ) : null}
             </>

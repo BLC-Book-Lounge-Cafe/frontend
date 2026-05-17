@@ -1,12 +1,16 @@
 import type { Book } from "entities/book"
+import { CardActionButton } from "shared/ui/card-action-button"
 
 type BookCardProps = {
   book: Book
   onClick: () => void
+  isAdmin?: boolean
+  onEdit?: (book: Book) => void
+  onDelete?: (book: Book) => void
 }
 
 export function BookCard(props: BookCardProps) {
-  const { book, onClick } = props
+  const { book, onClick, isAdmin = false, onEdit, onDelete } = props
 
   return (
     <article
@@ -28,8 +32,27 @@ export function BookCard(props: BookCardProps) {
           </div>
         )}
       </div>
-      <h3 className="text-body-small font-bold mt-3 line-clamp-2">{book.title}</h3>
-      <p className="text-caption text-secondary mt-1">{book.author}</p>
+      <div className="mt-3 flex items-end gap-2">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-body-small font-bold line-clamp-2">{book.title}</h3>
+          <p className="text-caption text-secondary mt-1 truncate">{book.author}</p>
+        </div>
+
+        {isAdmin && (
+          <div className="flex shrink-0 items-center gap-3">
+            <CardActionButton
+              icon="pencil"
+              label={`Редактировать книгу ${book.title}`}
+              onClick={() => onEdit?.(book)}
+            />
+            <CardActionButton
+              icon="trash"
+              label={`Удалить книгу ${book.title}`}
+              onClick={() => onDelete?.(book)}
+            />
+          </div>
+        )}
+      </div>
     </article>
   )
 }
