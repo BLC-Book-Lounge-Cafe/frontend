@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { fetchCurrentUser } from "../api/get-current-user"
+import { signInAdmin, type AdminSignInPayload } from "../api/sign-in-admin"
 import type { User } from "./user"
 
 type UserStoreState = {
@@ -7,6 +8,7 @@ type UserStoreState = {
   loading: boolean
   error: string | null
   loadUser: () => Promise<void>
+  signInAdmin: (payload: AdminSignInPayload) => Promise<User>
   setUser: (user: User | null) => void
   reset: () => void
 }
@@ -43,6 +45,18 @@ export const useUserStore = create<UserStoreState>((set, get) => ({
     })()
 
     return inFlight
+  },
+
+  signInAdmin: async (payload) => {
+    set({ loading: true, error: null })
+    try {
+      const user = await signInAdmin(payload)
+      set({ user, loading: false, error: null })
+      return user
+    } catch (err) {
+      set({ loading: false })
+      throw err
+    }
   },
 
   setUser: (user) => set({ user, error: null }),
