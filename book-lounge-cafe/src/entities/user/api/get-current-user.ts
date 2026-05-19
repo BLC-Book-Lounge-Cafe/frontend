@@ -1,12 +1,12 @@
+import { ADMIN_JWT_COOKIE_NAME } from "shared/lib/auth"
+import { hasCookie } from "shared/lib/cookies"
 import { parseUserFromResponse, type User } from "../model/user"
 
-const MOCK_RESPONSE = {
-  isAdmin: false,
-} as const
-
-const MOCK_DELAY_MS = 300
-
+/**
+ * В API нет ручки "/me", признак админа определяем по наличию JWT-куки,
+ * которую бэкенд выставляет после успешного /admin/login.
+ */
 export async function fetchCurrentUser(): Promise<User> {
-  await new Promise((resolve) => setTimeout(resolve, MOCK_DELAY_MS))
-  return parseUserFromResponse(MOCK_RESPONSE)
+  const isAdmin = hasCookie(ADMIN_JWT_COOKIE_NAME)
+  return parseUserFromResponse({ isAdmin })
 }

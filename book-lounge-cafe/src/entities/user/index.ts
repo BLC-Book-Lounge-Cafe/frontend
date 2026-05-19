@@ -6,6 +6,7 @@ export {
   AdminSignInInvalidCredentialsError,
   type AdminSignInPayload,
 } from "./api/sign-in-admin"
+export { signOutAdmin } from "./api/sign-out-admin"
 export { parseUserFromResponse } from "./model/user"
 export type { User, UserDtoLike } from "./model/user"
 export {

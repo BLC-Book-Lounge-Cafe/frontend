@@ -99,7 +99,7 @@ export function AdminRequestsModal(props: AdminRequestsModalProps) {
 
   return (
     <Modal isOpen={props.isOpen} onOpenChange={props.onOpenChange}>
-      <Dialog UNSAFE_className="w-full max-w-xl">
+      <Dialog UNSAFE_className="w-full max-w-md">
         <Dialog.Header>
           <div className="flex justify-between items-start gap-2">
             <Dialog.Header.Title>Просмотр заявок</Dialog.Header.Title>
@@ -150,20 +150,22 @@ export function AdminRequestsModal(props: AdminRequestsModalProps) {
         <Dialog.Footer>
           <div className="flex flex-col-reverse sm:flex-row gap-3 w-full">
             <Button
-              variant="tinted"
-              fullWidth
-              isDisabled={!selected || cancelling}
-              onPress={handleCancel}
-            >
-              {cancelling ? "Отмена…" : "Отменить заявку"}
-            </Button>
-            <Button
               variant="filled"
+              tone="accent"
               fullWidth
               isDisabled={!selected || cancelling}
               onPress={handleBookForCustomer}
             >
               Забронировать столик для клиента
+            </Button>
+            <Button
+              variant="filled"
+              tone="accent"
+              fullWidth
+              isDisabled={!selected || cancelling}
+              onPress={handleCancel}
+            >
+              {cancelling ? "Отмена…" : "Отменить заявку"}
             </Button>
           </div>
         </Dialog.Footer>

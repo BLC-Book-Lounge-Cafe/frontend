@@ -42,6 +42,8 @@ type BookingTableFormProps = {
   tablesLoading: boolean
   /** Зафиксированный стол (модалка после выбора карточки) — поле выбора стола скрыто. */
   lockedTable?: CafeTable | null
+  /** Предзаполнить контакт клиента (например, при бронировании по заявке). */
+  initialCustomer?: { customerName?: string; customerPhone?: string } | null
   onSuccess?: () => void
 }
 
@@ -52,11 +54,19 @@ export function BookingTableForm(props: BookingTableFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const locked = props.lockedTable ?? null
+  const initialCustomer = props.initialCustomer ?? null
 
   const form = useForm<BookingTableFormValues>({
-    defaultValues: locked
-      ? { ...emptyBookingTableValues, tableId: locked.id }
-      : emptyBookingTableValues,
+    defaultValues: {
+      ...emptyBookingTableValues,
+      ...(locked ? { tableId: locked.id } : {}),
+      ...(initialCustomer?.customerName
+        ? { customerName: initialCustomer.customerName }
+        : {}),
+      ...(initialCustomer?.customerPhone
+        ? { customerPhone: initialCustomer.customerPhone }
+        : {}),
+    },
     resolver: zodResolver(bookingTableFormSchema),
   })
 
@@ -148,6 +158,12 @@ export function BookingTableForm(props: BookingTableFormProps) {
       form.reset({
         ...emptyBookingTableValues,
         ...(locked ? { tableId: locked.id } : {}),
+        ...(initialCustomer?.customerName
+          ? { customerName: initialCustomer.customerName }
+          : {}),
+        ...(initialCustomer?.customerPhone
+          ? { customerPhone: initialCustomer.customerPhone }
+          : {}),
       })
       props.onSuccess?.()
     } catch (err) {

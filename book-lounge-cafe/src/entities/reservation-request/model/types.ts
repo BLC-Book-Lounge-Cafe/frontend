@@ -5,6 +5,14 @@ export type ReservationRequest = {
   status: ReservationRequestStatus
   customerName: string
   customerPhone: string
+  /**
+   * ISO-строка с датой создания заявки.
+   * На момент разработки бэк её не возвращает (поля нет ни в свагере,
+   * ни в реальном ответе), поэтому здесь обычно `null`.
+   * Парсер уже умеет читать поля `createdAt` / `createdDate`,
+   * чтобы при появлении на сервере ничего больше не править.
+   */
+  createdAt: string | null
 }
 
 const KNOWN_STATUSES: ReservationRequestStatus[] = [
@@ -33,6 +41,14 @@ function coerceId(value: unknown): number | null {
   return null
 }
 
+function coerceIsoString(value: unknown): string | null {
+  if (typeof value !== "string") return null
+  const trimmed = value.trim()
+  if (!trimmed) return null
+  const parsed = new Date(trimmed)
+  return Number.isNaN(parsed.getTime()) ? null : trimmed
+}
+
 export function parseReservationRequest(raw: unknown): ReservationRequest | null {
   if (!raw || typeof raw !== "object") return null
   const obj = raw as {
@@ -40,10 +56,18 @@ export function parseReservationRequest(raw: unknown): ReservationRequest | null
     status?: unknown
     customerName?: unknown
     customerPhone?: unknown
+    createdAt?: unknown
+    createdDate?: unknown
+    created_at?: unknown
   }
 
   const id = coerceId(obj.id)
   if (id == null) return null
+
+  const createdAt =
+    coerceIsoString(obj.createdAt) ??
+    coerceIsoString(obj.createdDate) ??
+    coerceIsoString(obj.created_at)
 
   return {
     id,
@@ -52,5 +76,6 @@ export function parseReservationRequest(raw: unknown): ReservationRequest | null
       typeof obj.customerName === "string" ? obj.customerName : "",
     customerPhone:
       typeof obj.customerPhone === "string" ? obj.customerPhone : "",
+    createdAt,
   }
 }

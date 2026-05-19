@@ -1,8 +1,8 @@
-import { useTables, tablesImage } from "entities/table"
+import { tablesImage, type CafeTable } from "entities/table"
 import { ReservationLeaveRequestButton } from "entities/reservation"
 import { useCurrentUser } from "entities/user"
 import { TABLE_BOOKING_SECTION_ID } from "features/booking/booking-place"
-import { BookingTableModal, BookingTablesGrid, useBookingTableModal } from "features/booking/booking-table"
+import { BookingTablesGrid } from "features/booking/booking-table"
 import { Container } from "shared/ui/container"
 import { Card } from "shared/ui/card"
 import { Button } from "shared/ui/button"
@@ -11,11 +11,13 @@ type ReservationSectionProps = {
   onOpenReservation: () => void
   onOpenBookedTables?: () => void
   onOpenAdminRequests?: () => void
+  onBookTable: (table: CafeTable) => void
+  tables: CafeTable[]
+  tablesLoading: boolean
+  tablesError: string | null
 }
 
 export function ReservationSection(props: ReservationSectionProps) {
-  const { tables, loading, error } = useTables()
-  const bookingModal = useBookingTableModal()
   const { isAdmin } = useCurrentUser()
 
   return (
@@ -42,10 +44,10 @@ export function ReservationSection(props: ReservationSectionProps) {
 
         <Card rounded={2} UNSAFE_className="p-6 md:p-8 max-w-4xl mx-auto space-y-8">
           <BookingTablesGrid
-            tables={tables}
-            loading={loading}
-            error={error}
-            onTablePress={bookingModal.open}
+            tables={props.tables}
+            loading={props.tablesLoading}
+            error={props.tablesError}
+            onTablePress={props.onBookTable}
           />
 
           <img src={tablesImage} alt="Столики для бронирования" className="w-full h-auto rounded-2 object-cover" />
@@ -72,13 +74,7 @@ export function ReservationSection(props: ReservationSectionProps) {
           </div>
         </Card>
       </Container>
-
-      <BookingTableModal
-        isOpen={bookingModal.isOpen}
-        onOpenChange={bookingModal.onOpenChange}
-        table={bookingModal.table}
-        tables={tables}
-      />
     </section>
   )
 }
+

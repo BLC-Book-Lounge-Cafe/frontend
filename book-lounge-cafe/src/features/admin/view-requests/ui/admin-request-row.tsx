@@ -1,4 +1,5 @@
 import { classes } from "shared/lib/classes"
+import { dateFormatter } from "shared/lib/formatters/date-formatter"
 import type { ReservationRequest } from "entities/reservation-request"
 
 type AdminRequestRowProps = {
@@ -7,8 +8,20 @@ type AdminRequestRowProps = {
   onSelect: (id: number) => void
 }
 
+const CREATED_AT_OPTIONS: Intl.DateTimeFormatOptions = {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+}
+
 export function AdminRequestRow(props: AdminRequestRowProps) {
   const { request, isSelected } = props
+
+  const createdAtLabel = request.createdAt
+    ? dateFormatter.formatIso(request.createdAt, CREATED_AT_OPTIONS)
+    : null
 
   return (
     <button
@@ -24,7 +37,7 @@ export function AdminRequestRow(props: AdminRequestRowProps) {
           : "border-transparent hover:bg-surface-secondary/60",
       )}
     >
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <p className="text-body font-medium truncate">
             {request.customerName || "Без имени"}
@@ -33,6 +46,11 @@ export function AdminRequestRow(props: AdminRequestRowProps) {
             {request.customerPhone || "Без номера"}
           </p>
         </div>
+        {createdAtLabel ? (
+          <span className="text-body-small text-secondary shrink-0 whitespace-nowrap">
+            {createdAtLabel}
+          </span>
+        ) : null}
       </div>
     </button>
   )

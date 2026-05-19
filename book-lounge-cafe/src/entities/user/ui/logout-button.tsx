@@ -19,7 +19,7 @@ export type LogoutButtonProps = Omit<ButtonProps, "children"> & {
 
 export function LogoutButton(props: LogoutButtonProps) {
   const { placement, onPress, ...rest } = props
-  const reset = useUserStore((s) => s.reset)
+  const signOut = useUserStore((s) => s.signOut)
 
   return (
     <Button
@@ -27,7 +27,7 @@ export function LogoutButton(props: LogoutButtonProps) {
       {...rest}
       onPress={(event) => {
         onPress?.(event)
-        reset()
+        signOut()
       }}
     >
       {LOGOUT_LABEL}

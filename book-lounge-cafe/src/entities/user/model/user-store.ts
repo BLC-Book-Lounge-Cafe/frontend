@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { fetchCurrentUser } from "../api/get-current-user"
 import { signInAdmin, type AdminSignInPayload } from "../api/sign-in-admin"
+import { signOutAdmin } from "../api/sign-out-admin"
 import type { User } from "./user"
 
 type UserStoreState = {
@@ -9,6 +10,7 @@ type UserStoreState = {
   error: string | null
   loadUser: () => Promise<void>
   signInAdmin: (payload: AdminSignInPayload) => Promise<User>
+  signOut: () => void
   setUser: (user: User | null) => void
   reset: () => void
 }
@@ -57,6 +59,12 @@ export const useUserStore = create<UserStoreState>((set, get) => ({
       set({ loading: false })
       throw err
     }
+  },
+
+  signOut: () => {
+    signOutAdmin()
+    inFlight = null
+    set({ user: { isAdmin: false }, loading: false, error: null })
   },
 
   setUser: (user) => set({ user, error: null }),

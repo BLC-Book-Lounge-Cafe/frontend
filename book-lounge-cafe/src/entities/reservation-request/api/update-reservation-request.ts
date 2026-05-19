@@ -21,5 +21,6 @@ export async function updateReservationRequestStatus(
     status,
     customerName: "",
     customerPhone: "",
+    createdAt: null,
   }
 }

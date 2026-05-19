@@ -9,12 +9,16 @@ type BookingTableModalProps = {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   table: CafeTable | null
-  /** Все столы зала (для согласованности запросов; при брони из модалки используется только `table`). */
+  /** Все столы зала. Если `table` не передан, в форме появится выбор стола. */
   tables: CafeTable[]
+  /** Предзаполнить контакты клиента (используется при бронировании по заявке). */
+  initialCustomer?: { customerName?: string; customerPhone?: string } | null
 }
 
 export function BookingTableModal(props: BookingTableModalProps) {
   const table = props.table
+  const initialCustomer = props.initialCustomer ?? null
+  const formKey = `${table?.id ?? "free"}-${initialCustomer?.customerName ?? ""}-${initialCustomer?.customerPhone ?? ""}`
 
   return (
     <Modal
@@ -26,11 +30,9 @@ export function BookingTableModal(props: BookingTableModalProps) {
           <div className="flex justify-between items-start gap-2">
             <div className="flex flex-col gap-2 pr-2">
               <Dialog.Header.Title>Бронирование стола</Dialog.Header.Title>
-              {table ? (
-                <p className="text-body-small text-secondary">
-                  Выберите дату, удобное время и контакты — бронь сразу попадёт в систему.
-                </p>
-              ) : null}
+              <p className="text-body-small text-secondary">
+                Выберите дату, удобное время и контакты — бронь сразу попадёт в систему.
+              </p>
             </div>
             <Button
               variant="plain"
@@ -44,15 +46,14 @@ export function BookingTableModal(props: BookingTableModalProps) {
         </Dialog.Header>
 
         <Dialog.Content UNSAFE_className="overflow-y-auto max-h-[min(85vh,560px)]">
-          {table ? (
-            <BookingTableForm
-              key={table.id}
-              tables={props.tables}
-              tablesLoading={false}
-              lockedTable={table}
-              onSuccess={() => props.onOpenChange(false)}
-            />
-          ) : null}
+          <BookingTableForm
+            key={formKey}
+            tables={props.tables}
+            tablesLoading={false}
+            lockedTable={table}
+            initialCustomer={initialCustomer}
+            onSuccess={() => props.onOpenChange(false)}
+          />
         </Dialog.Content>
       </Dialog>
     </Modal>
