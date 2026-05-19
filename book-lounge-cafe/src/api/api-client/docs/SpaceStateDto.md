@@ -6,7 +6,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**noiseLevel** | [**SpaceStateDtoNoiseLevel**](SpaceStateDtoNoiseLevel.md) |  | [optional] [default to undefined]
+**noiseLevel** | [**NoiseLevelType**](NoiseLevelType.md) | Уровень шума. | [optional] [default to undefined]
 **workloadLevel** | [**SpaceStateDtoWorkloadLevel**](SpaceStateDtoWorkloadLevel.md) |  | [optional] [default to undefined]
 **description** | **string** | Описание от администратора. | [default to undefined]
 **currentTrack** | [**CurrentTrackDto**](CurrentTrackDto.md) | Текущий трек. | [optional] [default to undefined]

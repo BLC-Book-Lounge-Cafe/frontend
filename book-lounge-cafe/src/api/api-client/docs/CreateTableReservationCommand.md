@@ -1,12 +1,11 @@
-# TableReservationDto
+# CreateTableReservationCommand
 
-Информация о бронировании стола.
+Команда создания бронирования стола.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**ReservationRequestDtoId**](ReservationRequestDtoId.md) |  | [optional] [default to undefined]
 **tableId** | [**CreateTableReservationCommandTableId**](CreateTableReservationCommandTableId.md) |  | [optional] [default to undefined]
 **customerName** | **string** | Имя клиента. | [optional] [default to undefined]
 **customerPhone** | **string** | Номер телефона клиента. | [optional] [default to undefined]
@@ -16,10 +15,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { TableReservationDto } from './api';
+import { CreateTableReservationCommand } from './api';
 
-const instance: TableReservationDto = {
-    id,
+const instance: CreateTableReservationCommand = {
     tableId,
     customerName,
     customerPhone,

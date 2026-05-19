@@ -1,22 +1,18 @@
-# TableDto
+# GetReservationRequestsResponseTotalPages
 
-Данные о столе.
+Общее количество страниц.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**BookDtoId**](BookDtoId.md) |  | [optional] [default to undefined]
-**seatsCount** | [**TableDtoSeatsCount**](TableDtoSeatsCount.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { TableDto } from './api';
+import { GetReservationRequestsResponseTotalPages } from './api';
 
-const instance: TableDto = {
-    id,
-    seatsCount,
+const instance: GetReservationRequestsResponseTotalPages = {
 };
 ```
 

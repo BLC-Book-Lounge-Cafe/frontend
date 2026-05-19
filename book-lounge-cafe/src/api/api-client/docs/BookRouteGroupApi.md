@@ -1,35 +1,34 @@
-# MenuRouteGroupApi
+# BookRouteGroupApi
 
 All URIs are relative to *http://0.0.0.0:5251*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**createMenuCategory**](#createmenucategory) | **POST** /menu | |
-|[**deleteMenuCategory**](#deletemenucategory) | **DELETE** /menu/category/{id} | |
-|[**getMenu**](#getmenu) | **GET** /menu | |
-|[**updateMenuCategory**](#updatemenucategory) | **PUT** /menu | |
+|[**createBook**](#createbook) | **POST** /books | |
+|[**deleteBook**](#deletebook) | **DELETE** /books/{id} | |
+|[**updateBook**](#updatebook) | **PUT** /books/{id} | |
 
-# **createMenuCategory**
-> MenuCategoryDto createMenuCategory(menuCategoryForCreateDto)
+# **createBook**
+> BookDto createBook(createBookCommand)
 
-Создает категорию меню с элементами.
+Создает книгу.
 
 ### Example
 
 ```typescript
 import {
-    MenuRouteGroupApi,
+    BookRouteGroupApi,
     Configuration,
-    MenuCategoryForCreateDto
+    CreateBookCommand
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new MenuRouteGroupApi(configuration);
+const apiInstance = new BookRouteGroupApi(configuration);
 
-let menuCategoryForCreateDto: MenuCategoryForCreateDto; //
+let createBookCommand: CreateBookCommand; //
 
-const { status, data } = await apiInstance.createMenuCategory(
-    menuCategoryForCreateDto
+const { status, data } = await apiInstance.createBook(
+    createBookCommand
 );
 ```
 
@@ -37,12 +36,12 @@ const { status, data } = await apiInstance.createMenuCategory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **menuCategoryForCreateDto** | **MenuCategoryForCreateDto**|  | |
+| **createBookCommand** | **CreateBookCommand**|  | |
 
 
 ### Return type
 
-**MenuCategoryDto**
+**BookDto**
 
 ### Authorization
 
@@ -62,30 +61,30 @@ No authorization required
 |**400** | В случае некорректно составленного запроса. |  -  |
 |**404** | В случае, если запрашиваемая сущность не найдена. |  -  |
 |**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**422** | В случае если имя, автор или адрес картинки пустые. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **deleteMenuCategory**
-> deleteMenuCategory()
+# **deleteBook**
+> deleteBook()
 
-Удаляет категорию меню.
+Удаляет книгу.
 
 ### Example
 
 ```typescript
 import {
-    MenuRouteGroupApi,
+    BookRouteGroupApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new MenuRouteGroupApi(configuration);
+const apiInstance = new BookRouteGroupApi(configuration);
 
-let id: number; //Идентификатор категории меню. (default to undefined)
+let id: number; //Идентификатор книги. (default to undefined)
 
-const { status, data } = await apiInstance.deleteMenuCategory(
+const { status, data } = await apiInstance.deleteBook(
     id
 );
 ```
@@ -94,7 +93,7 @@ const { status, data } = await apiInstance.deleteMenuCategory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **id** | [**number**] | Идентификатор категории меню. | defaults to undefined|
+| **id** | [**number**] | Идентификатор книги. | defaults to undefined|
 
 
 ### Return type
@@ -117,83 +116,36 @@ No authorization required
 |**200** | OK |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если не удалось найти категорию меню. |  -  |
+|**404** | В случае, если не удалось найти книгу. |  -  |
 |**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
 |**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getMenu**
-> GetMenuResponse getMenu()
+# **updateBook**
+> updateBook(updateBookCommand)
 
-Возвращает информацию о меню.
-
-### Example
-
-```typescript
-import {
-    MenuRouteGroupApi,
-    Configuration
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new MenuRouteGroupApi(configuration);
-
-const { status, data } = await apiInstance.getMenu();
-```
-
-### Parameters
-This endpoint does not have any parameters.
-
-
-### Return type
-
-**GetMenuResponse**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-|**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если запрашиваемая сущность не найдена. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
-|**500** | В случае внутренней ошибки сервера. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **updateMenuCategory**
-> updateMenuCategory(menuCategoryDto)
-
-Обновляет категорию меню с элементами.
+Обновляет книгу.
 
 ### Example
 
 ```typescript
 import {
-    MenuRouteGroupApi,
+    BookRouteGroupApi,
     Configuration,
-    MenuCategoryDto
+    UpdateBookCommand
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new MenuRouteGroupApi(configuration);
+const apiInstance = new BookRouteGroupApi(configuration);
 
-let menuCategoryDto: MenuCategoryDto; //
+let id: number; //Идентификатор книги. (default to undefined)
+let updateBookCommand: UpdateBookCommand; //
 
-const { status, data } = await apiInstance.updateMenuCategory(
-    menuCategoryDto
+const { status, data } = await apiInstance.updateBook(
+    id,
+    updateBookCommand
 );
 ```
 
@@ -201,7 +153,8 @@ const { status, data } = await apiInstance.updateMenuCategory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **menuCategoryDto** | **MenuCategoryDto**|  | |
+| **updateBookCommand** | **UpdateBookCommand**|  | |
+| **id** | [**number**] | Идентификатор книги. | defaults to undefined|
 
 
 ### Return type
@@ -224,9 +177,9 @@ No authorization required
 |**200** | OK |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если категория меню не найдена. |  -  |
+|**404** | В случае, если не удалось найти книгу. |  -  |
 |**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**422** | В случае если имя, автор или адрес картинки пустые. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

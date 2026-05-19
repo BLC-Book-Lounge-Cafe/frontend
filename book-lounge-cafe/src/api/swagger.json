@@ -15,7 +15,7 @@
         "tags": [
           "ReservationRequestRouteGroup"
         ],
-        "description": "Создает запрос на бронирование стола.",
+        "description": "Создаёт новую заявку на быстрое бронирование. Заявка создаётся в статусе pending и требует подтверждения администратором.",
         "operationId": "CreateReservationRequest",
         "requestBody": {
           "content": {
@@ -28,8 +28,18 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "Запрос на бронирование успешно создан."
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "В случае, если телефон указан в неверном формате.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "В случае, если запрашиваемая сущность не найдена.",
@@ -42,7 +52,17 @@
             }
           },
           "409": {
-            "description": "Если номер клиента не соответствует формату или имя клиента слишком длинное.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -60,9 +80,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
       },
@@ -70,11 +87,55 @@
         "tags": [
           "ReservationRequestRouteGroup"
         ],
-        "description": "Возвращает запросы на бронирование стола.",
+        "description": "Возвращает список заявок на быстрое бронирование (имя + телефон) с пагинацией. Поддерживает фильтрацию по статусу.",
         "operationId": "GetReservationRequests",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Фильтр по статусу заявки.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdDate",
+            "in": "query",
+            "description": "Фильтр по дате создания заявки (YYYY-MM-DD) — возвращает заявки, созданные в указанный день.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Номер страницы.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Количество записей на странице.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Запрос на бронирование успешно удален.",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -83,6 +144,19 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае, если дата создания указана в неверном формате.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "В случае, если запрашиваемая сущность не найдена.",
             "content": {
@@ -94,7 +168,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -112,25 +196,25 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
-        }
+        },
+        "security": [
+          { }
+        ]
       }
     },
     "/reservation-requests/{id}": {
-      "delete": {
+      "put": {
         "tags": [
           "ReservationRequestRouteGroup"
         ],
-        "description": "Удаляет запрос на бронирование стола.",
-        "operationId": "DeleteReservationRequest",
+        "description": "Переводит заявку из статуса pending в confirmed или cancelled.",
+        "operationId": "UpdateReservationRequest",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Идентификатор запроса на бронирование стола.",
+            "description": "Идентификатор заявки на бронирование.",
             "required": true,
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -139,12 +223,42 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReservationRequestCommand"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Запрос на бронирование успешно удален."
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationRequestDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Если запрос на бронирование не найден.",
+            "description": "В случае, если заявка на быстрое бронирование не найдена.",
             "content": {
               "application/json": {
                 "schema": {
@@ -154,7 +268,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае, если статус заявки уже изменен и недоступен для редактирования.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -172,11 +296,11 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
-        }
+        },
+        "security": [
+          { }
+        ]
       }
     },
     "/space-state": {
@@ -197,6 +321,16 @@
               }
             }
           },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "В случае, если запрашиваемая сущность не найдена.",
             "content": {
@@ -208,7 +342,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -226,25 +370,20 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
-      }
-    },
-    "/table-reservations": {
-      "post": {
+      },
+      "patch": {
         "tags": [
-          "TableReservationRouteGroup"
+          "SpaceStateRouteGroup"
         ],
-        "description": "Бронирует стол.",
-        "operationId": "CreateTableReservation",
+        "description": "Обновляет уровень шума и описание текущего состояния пространства.",
+        "operationId": "UpdateSpaceState",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TableReservationDto"
+                "$ref": "#/components/schemas/UpdateSpaceStateCommand"
               }
             }
           },
@@ -253,6 +392,96 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае, если уровень шума находится вне диапазона от 0 до 5, либо описание пустое.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      }
+    },
+    "/table-reservations": {
+      "post": {
+        "tags": [
+          "TableReservationRouteGroup"
+        ],
+        "description": "Создаёт новое бронирование стола.",
+        "operationId": "CreateTableReservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTableReservationCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "В случае, если телефон не соответствует формату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "В случае, если не найден стол по указанному идентификатору.",
@@ -265,7 +494,17 @@
             }
           },
           "409": {
-            "description": "В случае, если данные для бронирования указаны неверно или стол уже был забронирован на указанное время.",
+            "description": "В случае, если стол уже был забронирован на указанное время, либо продолжительность бронирования меньше лимита.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -283,11 +522,132 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
+      },
+      "get": {
+        "tags": [
+          "TableReservationRouteGroup"
+        ],
+        "description": "Возвращает список бронирований столов с пагинацией.",
+        "operationId": "GetTableReservations",
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "query",
+            "description": "Фильтр по ID стола.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "activeAt",
+            "in": "query",
+            "description": "Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Номер страницы.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Количество записей на странице.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTableReservationsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае, если дата или время не соответствует формату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не найден стол по указанному идентификатору.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
       }
     },
     "/table-reservations/slots": {
@@ -318,6 +678,16 @@
               }
             }
           },
+          "400": {
+            "description": "В случае, если дата не соответствует формату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "В случае, если не найден стол по указанному идентификатору.",
             "content": {
@@ -329,7 +699,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -347,11 +727,91 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
+      }
+    },
+    "/table-reservations/{id}": {
+      "delete": {
+        "tags": [
+          "TableReservationRouteGroup"
+        ],
+        "description": "Возвращает список бронирований столов с пагинацией.",
+        "operationId": "DeleteTableReservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор брони стола.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если бронирование стола не найдено.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
       }
     },
     "/tables": {
@@ -372,6 +832,16 @@
               }
             }
           },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "В случае, если запрашиваемая сущность не найдена.",
             "content": {
@@ -383,7 +853,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -401,9 +881,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
       }
@@ -419,15 +896,25 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BookReservationDto"
+                "$ref": "#/components/schemas/CreateBookReservationCommand"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "В случае, если не найдена книга по указанному идентификатору.",
@@ -440,7 +927,17 @@
             }
           },
           "409": {
-            "description": "В случае, если данные для бронирования указаны неверно или книга уже была забронирована на указанную дату.",
+            "description": "В случае, если книга уже была забронирована на указанную дату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае, если данные для бронирования указаны неверно.",
             "content": {
               "application/json": {
                 "schema": {
@@ -458,11 +955,217 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса."
           }
         }
+      },
+      "get": {
+        "tags": [
+          "BookReservationRouteGroup"
+        ],
+        "description": "Возвращает список бронирований книг с пагинацией.",
+        "operationId": "GetBookReservations",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "query",
+            "description": "Фильтр по ID книги.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Фильтр по дате бронирования.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Номер страницы.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Количество записей на странице.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBookReservationsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае, если дата или номер телефона не соответствуют формату.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не найдена книга по указанному идентификатору.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "BookReservationRouteGroup"
+        ],
+        "description": "Удаляет бронирование книги по его ID.",
+        "operationId": "DeleteBookReservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID бронирования книги.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если бронь книги не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
       }
     },
     "/menu": {
@@ -483,6 +1186,16 @@
               }
             }
           },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "В случае, если запрашиваемая сущность не найдена.",
             "content": {
@@ -494,7 +1207,17 @@
             }
           },
           "409": {
-            "description": "В случае нарушения доменных правил.",
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -512,9 +1235,540 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MenuRouteGroup"
+        ],
+        "description": "Создает категорию меню с элементами.",
+        "operationId": "CreateMenuCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuCategoryForCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuCategoryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "400": {
-            "description": "В случае некорректно составленного запроса."
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      },
+      "put": {
+        "tags": [
+          "MenuRouteGroup"
+        ],
+        "description": "Обновляет категорию меню с элементами.",
+        "operationId": "UpdateMenuCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если категория меню не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      }
+    },
+    "/menu/category/{id}": {
+      "delete": {
+        "tags": [
+          "MenuRouteGroup"
+        ],
+        "description": "Удаляет категорию меню.",
+        "operationId": "DeleteMenuCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор категории меню.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не удалось найти категорию меню.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      }
+    },
+    "/books": {
+      "post": {
+        "tags": [
+          "BookRouteGroup"
+        ],
+        "description": "Создает книгу.",
+        "operationId": "CreateBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если запрашиваемая сущность не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае если имя, автор или адрес картинки пустые.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      }
+    },
+    "/books/{id}": {
+      "put": {
+        "tags": [
+          "BookRouteGroup"
+        ],
+        "description": "Обновляет книгу.",
+        "operationId": "UpdateBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор книги.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не удалось найти книгу.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае если имя, автор или адрес картинки пустые.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "BookRouteGroup"
+        ],
+        "description": "Удаляет книгу.",
+        "operationId": "DeleteBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор книги.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если не удалось найти книгу.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "В случае конфликта данных с текущем состоянием сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "AdminLoginRouteGroup"
+        ],
+        "description": "Вход для админа.",
+        "operationId": "Login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -522,7 +1776,98 @@
   },
   "components": {
     "schemas": {
+      "BookDto": {
+        "required": [
+          "name",
+          "author",
+          "imageUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "author": {
+            "type": "string",
+            "description": "Автор."
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Ссылка на картинку."
+          },
+          "isReserved": {
+            "type": "boolean",
+            "description": "Признак резервирования книги."
+          }
+        },
+        "description": "Данные о книге."
+      },
       "BookReservationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор бронирования.",
+            "format": "int32"
+          },
+          "bookId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор книги.",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата бронирования.",
+            "format": "date-time"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customerPhone": {
+            "type": "string",
+            "description": "Телефон клиента."
+          }
+        },
+        "description": "Данные бронирования книги."
+      },
+      "CreateBookCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "author": {
+            "type": "string",
+            "description": "Автор."
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Адрес картинки."
+          }
+        },
+        "description": "Команда на создание книги."
+      },
+      "CreateBookReservationCommand": {
         "type": "object",
         "properties": {
           "bookId": {
@@ -564,6 +1909,39 @@
         },
         "description": "Команда на создание запроса на бронирование стола."
       },
+      "CreateTableReservationCommand": {
+        "type": "object",
+        "properties": {
+          "tableId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор стола.",
+            "format": "int32"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента."
+          },
+          "customerPhone": {
+            "type": "string",
+            "description": "Номер телефона клиента."
+          },
+          "startTime": {
+            "type": "string",
+            "description": "Время начала.",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Время конца.",
+            "format": "date-time"
+          }
+        },
+        "description": "Команда создания бронирования стола."
+      },
       "CurrentTrackDto": {
         "type": "object",
         "properties": {
@@ -598,6 +1976,55 @@
         },
         "description": "Описывает ошибку, возникшую в процессе обработки команды."
       },
+      "GetBookReservationsResponse": {
+        "type": "object",
+        "properties": {
+          "bookReservations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookReservationDto"
+            },
+            "description": "Брони книг."
+          },
+          "pageNumber": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Номер страницы.",
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Количество сущностей на странице.",
+            "format": "int32"
+          },
+          "totalEntries": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество сущностей.",
+            "format": "int32"
+          },
+          "totalPages": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество страниц.",
+            "format": "int32"
+          }
+        },
+        "description": "Ответ на запрос получения броней книг"
+      },
       "GetMenuResponse": {
         "type": "object",
         "properties": {
@@ -620,6 +2047,45 @@
               "$ref": "#/components/schemas/ReservationRequestDto"
             },
             "description": "Коллекция запросов на бронирование столов."
+          },
+          "pageNumber": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "Номер страницы.",
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "Размер страницы.",
+            "format": "int32"
+          },
+          "totalEntries": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество заявок на бронирование.",
+            "format": "int32"
+          },
+          "totalPages": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество страниц.",
+            "format": "int32"
           }
         },
         "description": "Ответ на запрос запросов на бронирование столов."
@@ -667,6 +2133,55 @@
         },
         "description": "Ответ на запрос получения слотов для резервирования стола."
       },
+      "GetTableReservationsResponse": {
+        "type": "object",
+        "properties": {
+          "tableReservations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TableReservationDto"
+            },
+            "description": "Список бронирований столов."
+          },
+          "pageNumber": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Номер страницы.",
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Размер страницы.",
+            "format": "int32"
+          },
+          "totalEntries": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество сущностей.",
+            "format": "int32"
+          },
+          "totalPages": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Общее количество страниц.",
+            "format": "int32"
+          }
+        },
+        "description": "Ответ на запрос бронирований столов."
+      },
       "GetTablesResponse": {
         "type": "object",
         "properties": {
@@ -679,6 +2194,24 @@
           }
         },
         "description": "Ответ на запрос получения информации о столах."
+      },
+      "LoginRequest": {
+        "required": [
+          "login",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "Логин."
+          },
+          "password": {
+            "type": "string",
+            "description": "Пароль."
+          }
+        },
+        "description": "Данные для входа в админку."
       },
       "MenuCategoryDto": {
         "required": [
@@ -709,6 +2242,23 @@
         },
         "description": "Категория меню."
       },
+      "MenuCategoryForCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название категории меню."
+          },
+          "menuItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItemForCreateDto"
+            },
+            "description": "Элементы категории меню."
+          }
+        },
+        "description": "Данные категории меню при создании и обновлении."
+      },
       "MenuItemDto": {
         "type": "object",
         "properties": {
@@ -737,6 +2287,61 @@
         },
         "description": "Элемент меню."
       },
+      "MenuItemForCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название элемента."
+          },
+          "price": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "description": "Цена элемента.",
+            "format": "double"
+          }
+        },
+        "description": "Данные об элементе категории меню при создании или обновлении категории."
+      },
+      "NoiseLevelType": {
+        "type": "integer",
+        "oneOf": [
+          {
+            "const": "0",
+            "title": "VeryQuiet",
+            "description": "Очень тихо."
+          },
+          {
+            "const": "1",
+            "title": "CalmEnvironment",
+            "description": "Спокойная обстановка."
+          },
+          {
+            "const": "2",
+            "title": "ModerateNoise",
+            "description": "Умеренный шум."
+          },
+          {
+            "const": "3",
+            "title": "Lively",
+            "description": "Оживленно."
+          },
+          {
+            "const": "4",
+            "title": "NoticeablyLively",
+            "description": "Заметно оживленно."
+          },
+          {
+            "const": "5",
+            "title": "LiveMusicConcert",
+            "description": "Концерт с живой музыкой"
+          }
+        ],
+        "description": "Тип уровня шума."
+      },
       "ReservationRequestDto": {
         "type": "object",
         "properties": {
@@ -748,6 +2353,10 @@
             ],
             "description": "Идентификатор брони.",
             "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "Статус заявки на бронирование."
           },
           "customerName": {
             "type": "string",
@@ -787,13 +2396,8 @@
         "type": "object",
         "properties": {
           "noiseLevel": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "description": "Уровень шума в процентах.",
-            "format": "uint8"
+            "description": "Уровень шума.",
+            "$ref": "#/components/schemas/NoiseLevelType"
           },
           "workloadLevel": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -842,29 +2446,99 @@
       "TableReservationDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Идентификатор брони.",
+            "format": "int32"
+          },
           "tableId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",
               "string"
             ],
+            "description": "Идентификатор стола.",
             "format": "int32"
           },
           "customerName": {
-            "type": "string"
+            "type": "string",
+            "description": "Имя клиента."
           },
           "customerPhone": {
-            "type": "string"
+            "type": "string",
+            "description": "Номер телефона клиента."
           },
           "startTime": {
             "type": "string",
+            "description": "Время начала.",
             "format": "date-time"
           },
           "endTime": {
             "type": "string",
+            "description": "Время конца.",
             "format": "date-time"
           }
-        }
+        },
+        "description": "Информация о бронировании стола."
+      },
+      "UpdateBookCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название."
+          },
+          "author": {
+            "type": "string",
+            "description": "Автор."
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Адрес картинки."
+          }
+        },
+        "description": "Команда на обновление книги."
+      },
+      "UpdateReservationRequestCommand": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Статус."
+          }
+        },
+        "description": "Команда на обновление статуса заявки на бронирование стола."
+      },
+      "UpdateSpaceStateCommand": {
+        "type": "object",
+        "properties": {
+          "noiseLevel": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Уровень шума.",
+            "format": "uint8"
+          },
+          "description": {
+            "type": "string",
+            "description": "Описание."
+          }
+        },
+        "description": "Команда на обновление уровня шума и описания пространства."
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Введите ваш JWT токен",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
@@ -886,6 +2560,12 @@
     },
     {
       "name": "MenuRouteGroup"
+    },
+    {
+      "name": "BookRouteGroup"
+    },
+    {
+      "name": "AdminLoginRouteGroup"
     }
   ]
 }

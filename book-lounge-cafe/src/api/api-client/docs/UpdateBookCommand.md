@@ -1,24 +1,24 @@
-# MenuItemDto
+# UpdateBookCommand
 
-Элемент меню.
+Команда на обновление книги.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**BookDtoId**](BookDtoId.md) |  | [optional] [default to undefined]
 **name** | **string** | Название. | [optional] [default to undefined]
-**price** | [**MenuItemDtoPrice**](MenuItemDtoPrice.md) |  | [optional] [default to undefined]
+**author** | **string** | Автор. | [optional] [default to undefined]
+**imageUrl** | **string** | Адрес картинки. | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { MenuItemDto } from './api';
+import { UpdateBookCommand } from './api';
 
-const instance: MenuItemDto = {
-    id,
+const instance: UpdateBookCommand = {
     name,
-    price,
+    author,
+    imageUrl,
 };
 ```
 

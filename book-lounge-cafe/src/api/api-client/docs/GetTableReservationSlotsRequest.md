@@ -6,7 +6,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tableId** | [**GetTableReservationSlotsRequestTableId**](GetTableReservationSlotsRequestTableId.md) |  | [optional] [default to undefined]
+**tableId** | [**CreateTableReservationCommandTableId**](CreateTableReservationCommandTableId.md) |  | [optional] [default to undefined]
 **date** | **string** | Дата бронирования. | [optional] [default to undefined]
 
 ## Example

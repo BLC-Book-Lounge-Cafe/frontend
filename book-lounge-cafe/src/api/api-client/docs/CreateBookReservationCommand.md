@@ -1,12 +1,11 @@
-# BookReservationDto
+# CreateBookReservationCommand
 
-Данные бронирования книги.
+Данные для бронирования книги.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**BookReservationDtoId**](BookReservationDtoId.md) |  | [optional] [default to undefined]
 **bookId** | [**BookReservationDtoBookId**](BookReservationDtoBookId.md) |  | [optional] [default to undefined]
 **date** | **string** | Дата бронирования. | [optional] [default to undefined]
 **customerName** | **string** | Имя клиента. | [optional] [default to undefined]
@@ -15,10 +14,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { BookReservationDto } from './api';
+import { CreateBookReservationCommand } from './api';
 
-const instance: BookReservationDto = {
-    id,
+const instance: CreateBookReservationCommand = {
     bookId,
     date,
     customerName,

@@ -1,6 +1,6 @@
-# MenuCategoryDto
+# BookDto
 
-Категория меню.
+Данные о книге.
 
 ## Properties
 
@@ -8,17 +8,21 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | [**BookDtoId**](BookDtoId.md) |  | [optional] [default to undefined]
 **name** | **string** | Название. | [default to undefined]
-**menuItems** | [**Array&lt;MenuItemDto&gt;**](MenuItemDto.md) | Элементы категории. | [optional] [default to undefined]
+**author** | **string** | Автор. | [default to undefined]
+**imageUrl** | **string** | Ссылка на картинку. | [default to undefined]
+**isReserved** | **boolean** | Признак резервирования книги. | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { MenuCategoryDto } from './api';
+import { BookDto } from './api';
 
-const instance: MenuCategoryDto = {
+const instance: BookDto = {
     id,
     name,
-    menuItems,
+    author,
+    imageUrl,
+    isReserved,
 };
 ```
 

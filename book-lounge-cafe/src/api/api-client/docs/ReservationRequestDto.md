@@ -7,6 +7,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | [**ReservationRequestDtoId**](ReservationRequestDtoId.md) |  | [optional] [default to undefined]
+**status** | **string** | Статус заявки на бронирование. | [optional] [default to undefined]
 **customerName** | **string** | Имя клиента. | [optional] [default to undefined]
 **customerPhone** | **string** | Номер телефона клиента. | [optional] [default to undefined]
 
@@ -17,6 +18,7 @@ import { ReservationRequestDto } from './api';
 
 const instance: ReservationRequestDto = {
     id,
+    status,
     customerName,
     customerPhone,
 };

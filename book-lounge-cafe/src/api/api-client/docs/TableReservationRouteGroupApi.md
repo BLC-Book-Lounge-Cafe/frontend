@@ -5,12 +5,14 @@ All URIs are relative to *http://0.0.0.0:5251*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**createTableReservation**](#createtablereservation) | **POST** /table-reservations | |
+|[**deleteTableReservation**](#deletetablereservation) | **DELETE** /table-reservations/{id} | |
 |[**getTableReservationSlots**](#gettablereservationslots) | **POST** /table-reservations/slots | |
+|[**getTableReservations**](#gettablereservations) | **GET** /table-reservations | |
 
 # **createTableReservation**
-> createTableReservation(tableReservationDto)
+> createTableReservation(createTableReservationCommand)
 
-Бронирует стол.
+Создаёт новое бронирование стола.
 
 ### Example
 
@@ -18,16 +20,16 @@ All URIs are relative to *http://0.0.0.0:5251*
 import {
     TableReservationRouteGroupApi,
     Configuration,
-    TableReservationDto
+    CreateTableReservationCommand
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new TableReservationRouteGroupApi(configuration);
 
-let tableReservationDto: TableReservationDto; //
+let createTableReservationCommand: CreateTableReservationCommand; //
 
 const { status, data } = await apiInstance.createTableReservation(
-    tableReservationDto
+    createTableReservationCommand
 );
 ```
 
@@ -35,7 +37,7 @@ const { status, data } = await apiInstance.createTableReservation(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **tableReservationDto** | **TableReservationDto**|  | |
+| **createTableReservationCommand** | **CreateTableReservationCommand**|  | |
 
 
 ### Return type
@@ -55,11 +57,69 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | OK |  -  |
+|**201** | Created |  -  |
+|**400** | В случае, если телефон не соответствует формату. |  -  |
 |**404** | В случае, если не найден стол по указанному идентификатору. |  -  |
-|**409** | В случае, если данные для бронирования указаны неверно или стол уже был забронирован на указанное время. |  -  |
+|**409** | В случае, если стол уже был забронирован на указанное время, либо продолжительность бронирования меньше лимита. |  -  |
+|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteTableReservation**
+> deleteTableReservation()
+
+Возвращает список бронирований столов с пагинацией.
+
+### Example
+
+```typescript
+import {
+    TableReservationRouteGroupApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new TableReservationRouteGroupApi(configuration);
+
+let id: number; //Идентификатор брони стола. (default to undefined)
+
+const { status, data } = await apiInstance.deleteTableReservation(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**number**] | Идентификатор брони стола. | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**204** | No Content |  -  |
+|**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
+|**404** | В случае, если бронирование стола не найдено. |  -  |
+|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
+|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -112,10 +172,80 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**400** | В случае, если дата не соответствует формату. |  -  |
 |**404** | В случае, если не найден стол по указанному идентификатору. |  -  |
-|**409** | В случае нарушения доменных правил. |  -  |
+|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
+|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
-|**400** | В случае некорректно составленного запроса. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getTableReservations**
+> GetTableReservationsResponse getTableReservations()
+
+Возвращает список бронирований столов с пагинацией.
+
+### Example
+
+```typescript
+import {
+    TableReservationRouteGroupApi,
+    Configuration,
+    GetReservationRequestsPageNumberParameter,
+    GetReservationRequestsPageNumberParameter,
+    GetReservationRequestsPageNumberParameter
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new TableReservationRouteGroupApi(configuration);
+
+let tableId: GetReservationRequestsPageNumberParameter; //Фильтр по ID стола. (optional) (default to undefined)
+let activeAt: string; //Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени. (optional) (default to undefined)
+let pageNumber: GetReservationRequestsPageNumberParameter; //Номер страницы. (optional) (default to undefined)
+let pageSize: GetReservationRequestsPageNumberParameter; //Количество записей на странице. (optional) (default to undefined)
+
+const { status, data } = await apiInstance.getTableReservations(
+    tableId,
+    activeAt,
+    pageNumber,
+    pageSize
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **tableId** | [**GetReservationRequestsPageNumberParameter**] | Фильтр по ID стола. | (optional) defaults to undefined|
+| **activeAt** | [**string**] | Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени. | (optional) defaults to undefined|
+| **pageNumber** | [**GetReservationRequestsPageNumberParameter**] | Номер страницы. | (optional) defaults to undefined|
+| **pageSize** | [**GetReservationRequestsPageNumberParameter**] | Количество записей на странице. | (optional) defaults to undefined|
+
+
+### Return type
+
+**GetTableReservationsResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Unauthorized |  -  |
+|**400** | В случае, если дата или время не соответствует формату. |  -  |
+|**404** | В случае, если не найден стол по указанному идентификатору. |  -  |
+|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
+|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

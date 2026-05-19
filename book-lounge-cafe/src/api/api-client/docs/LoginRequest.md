@@ -1,22 +1,22 @@
-# TableDto
+# LoginRequest
 
-Данные о столе.
+Данные для входа в админку.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**BookDtoId**](BookDtoId.md) |  | [optional] [default to undefined]
-**seatsCount** | [**TableDtoSeatsCount**](TableDtoSeatsCount.md) |  | [optional] [default to undefined]
+**login** | **string** | Логин. | [default to undefined]
+**password** | **string** | Пароль. | [default to undefined]
 
 ## Example
 
 ```typescript
-import { TableDto } from './api';
+import { LoginRequest } from './api';
 
-const instance: TableDto = {
-    id,
-    seatsCount,
+const instance: LoginRequest = {
+    login,
+    password,
 };
 ```
 

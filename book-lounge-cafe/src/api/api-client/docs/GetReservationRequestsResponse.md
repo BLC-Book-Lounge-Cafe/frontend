@@ -7,6 +7,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **reservationRequests** | [**Array&lt;ReservationRequestDto&gt;**](ReservationRequestDto.md) | Коллекция запросов на бронирование столов. | [optional] [default to undefined]
+**pageNumber** | [**GetReservationRequestsResponsePageNumber**](GetReservationRequestsResponsePageNumber.md) |  | [optional] [default to undefined]
+**pageSize** | [**GetReservationRequestsResponsePageSize**](GetReservationRequestsResponsePageSize.md) |  | [optional] [default to undefined]
+**totalEntries** | [**GetReservationRequestsResponseTotalEntries**](GetReservationRequestsResponseTotalEntries.md) |  | [optional] [default to undefined]
+**totalPages** | [**GetReservationRequestsResponseTotalPages**](GetReservationRequestsResponseTotalPages.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -15,6 +19,10 @@ import { GetReservationRequestsResponse } from './api';
 
 const instance: GetReservationRequestsResponse = {
     reservationRequests,
+    pageNumber,
+    pageSize,
+    totalEntries,
+    totalPages,
 };
 ```
 

@@ -1,22 +1,18 @@
-# TableDto
+# CreateTableReservationCommandTableId
 
-Данные о столе.
+Идентификатор стола.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**BookDtoId**](BookDtoId.md) |  | [optional] [default to undefined]
-**seatsCount** | [**TableDtoSeatsCount**](TableDtoSeatsCount.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { TableDto } from './api';
+import { CreateTableReservationCommandTableId } from './api';
 
-const instance: TableDto = {
-    id,
-    seatsCount,
+const instance: CreateTableReservationCommandTableId = {
 };
 ```
 
