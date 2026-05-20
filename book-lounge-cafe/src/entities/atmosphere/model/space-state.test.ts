@@ -24,7 +24,7 @@ describe("parseAtmosphereFromResponse", () => {
     const patch = parseAtmosphereFromResponse({
       spaceState: {
         workloadLevel: 40,
-        noiseLevel: 30,
+        noiseLevel: 3,
         description: "  Уютно  ",
         currentTrack: {
           name: " Track ",
@@ -35,11 +35,20 @@ describe("parseAtmosphereFromResponse", () => {
     })
     expect(patch).toEqual({
       crowdLevel: 40,
-      noiseLevel: 30,
+      noiseLevel: 3,
       description: "Уютно",
       trackTitle: "Track",
       trackAuthors: "A, B",
       trackImage: "https://img",
     })
+  })
+
+  it("читает noiseLevel как строку NoiseLevelType", () => {
+    const patch = parseAtmosphereFromResponse({
+      spaceState: {
+        noiseLevel: "4",
+      },
+    })
+    expect(patch?.noiseLevel).toBe(4)
   })
 })

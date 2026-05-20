@@ -82,15 +82,22 @@ export function BookingTableForm(props: BookingTableFormProps) {
     [props.tables],
   )
 
-  const freeSlots = useMemo(() => slots.filter((s) => !s.isReserved), [slots])
+  const availableSlots = useMemo(
+    () => slots.filter((s) => s.isReserved === false),
+    [slots],
+  )
+  const hasAvailableSlot = useMemo(
+    () => slots.some((s) => s.isReserved === false),
+    [slots],
+  )
 
   const slotItems = useMemo(
     () =>
-      freeSlots.map((s) => ({
+      availableSlots.map((s) => ({
         id: s.startTime,
         label: formatSlotLabel(s.startTime, s.endTime),
       })),
-    [freeSlots],
+    [availableSlots],
   )
 
   useEffect(() => {
@@ -98,20 +105,23 @@ export function BookingTableForm(props: BookingTableFormProps) {
   }, [tableId, reservationDate, form])
 
   useEffect(() => {
-    if (!tableId || tableId <= 0 || !reservationDate || !calendarDateStringFromField(reservationDate)) {
+    const tableIdNum = Number(tableId)
+    if (!tableIdNum || tableIdNum <= 0 || !reservationDate || !calendarDateStringFromField(reservationDate)) {
       setSlots([])
       setSlotsError(null)
+      setSlotsLoading(false)
       return
     }
 
     let cancelled = false
+    setSlots([])
     setSlotsLoading(true)
     setSlotsError(null)
 
     ;(async () => {
       try {
         const iso = reservationDayToIsoStart(reservationDate)
-        const next = await fetchTableReservationSlots(tableId, iso)
+        const next = await fetchTableReservationSlots(tableIdNum, iso)
         if (cancelled) return
         setSlots(next)
       } catch (err) {
@@ -135,7 +145,7 @@ export function BookingTableForm(props: BookingTableFormProps) {
 
   const onSubmit: SubmitHandler<BookingTableFormValues> = async (values) => {
     setSubmitError(null)
-    const slot = freeSlots.find((s) => s.startTime === values.slotStart)
+    const slot = availableSlots.find((s) => s.startTime === values.slotStart)
     if (!slot) {
       setSubmitError("Выберите доступный интервал времени.")
       return
@@ -171,13 +181,16 @@ export function BookingTableForm(props: BookingTableFormProps) {
     }
   }
 
+  const tableSelected = Number(tableId) > 0
+  const dateSelected = Boolean(reservationDate)
+  const slotsReady = !slotsLoading && !slotsError && tableSelected && dateSelected
+
+  console.log("slotsReady", slotsReady)
+  console.log("slots", slots)
+
   const slotsHint =
-    !slotsLoading && !slotsError && tableId > 0 && reservationDate
-      ? freeSlots.length === 0
-        ? slots.length > 0
-          ? "На эту дату все интервалы заняты. Выберите другую дату."
-          : "Нет доступных интервалов на выбранную дату."
-        : null
+    slotsReady && !hasAvailableSlot
+      ? "На выбранную дату нет свободных интервалов. Попробуйте другую дату."
       : null
 
   return (
@@ -268,13 +281,13 @@ export function BookingTableForm(props: BookingTableFormProps) {
             placeholder={
               slotsLoading
                 ? "Загрузка интервалов…"
-                : tableId <= 0 || !reservationDate
+                : !tableSelected || !dateSelected
                   ? "Сначала выберите стол и дату"
                   : "Выберите время"
             }
             items={slotItems}
             isRequired
-            isDisabled={slotsLoading || slotItems.length === 0 || tableId <= 0 || !reservationDate}
+            isDisabled={slotsLoading || !tableSelected || !dateSelected || !hasAvailableSlot}
             isLoading={slotsLoading}
             fullWidth
             value={field.value ? field.value : null}

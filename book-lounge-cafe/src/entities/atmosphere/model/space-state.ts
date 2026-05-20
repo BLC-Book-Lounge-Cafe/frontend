@@ -1,4 +1,5 @@
 import type { GetSpaceStateResponse } from "api/api-client/api"
+import { parseNoiseLevel } from "./noise-level"
 
 export type SpaceStatePayload = NonNullable<GetSpaceStateResponse["spaceState"]> & {
   noiseLevel?: number
@@ -14,8 +15,25 @@ export function readPercent(value: unknown): number | undefined {
   return undefined
 }
 
+function pickObject(obj: Record<string, unknown>, keys: string[]): Record<string, unknown> | undefined {
+  for (const key of keys) {
+    const value = obj[key]
+    if (value && typeof value === "object") return value as Record<string, unknown>
+  }
+  return undefined
+}
+
+function pickString(obj: Record<string, unknown>, keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = obj[key]
+    if (typeof value === "string" && value.trim()) return value.trim()
+  }
+  return undefined
+}
+
 export type ParsedAtmospherePatch = {
   crowdLevel?: number
+  /** NoiseLevelType: 0–5. */
   noiseLevel?: number
   trackTitle?: string
   trackAuthors?: string
@@ -24,24 +42,37 @@ export type ParsedAtmospherePatch = {
 }
 
 export function parseAtmosphereFromResponse(
-  data: GetSpaceStateResponse,
+  data: GetSpaceStateResponse | unknown,
 ): ParsedAtmospherePatch | null {
-  const raw = data.spaceState as SpaceStatePayload | undefined
+  const root = (data && typeof data === "object" ? data : {}) as Record<string, unknown>
+  const raw = pickObject(root, ["spaceState", "SpaceState"])
   if (!raw) return null
 
   const patch: ParsedAtmospherePatch = {}
 
-  const wl = readPercent(raw.workloadLevel)
-  const nl = readPercent(raw.noiseLevel)
+  const wl = readPercent(raw.workloadLevel ?? raw.WorkloadLevel)
+  const nl = parseNoiseLevel(raw.noiseLevel ?? raw.NoiseLevel)
   if (wl !== undefined) patch.crowdLevel = wl
   if (nl !== undefined) patch.noiseLevel = nl
 
-  if (raw.description?.trim()) patch.description = raw.description.trim()
+  const description = pickString(raw, ["description", "Description"])
+  if (description) patch.description = description
 
-  const track = raw.currentTrack
-  if (track?.name?.trim()) patch.trackTitle = track.name.trim()
-  if (track?.authors?.length) patch.trackAuthors = track.authors.join(", ")
-  if (track?.imageUrl?.trim()) patch.trackImage = track.imageUrl.trim()
+  const track = pickObject(raw, ["currentTrack", "CurrentTrack"])
+  if (track) {
+    const trackTitle = pickString(track, ["name", "Name"])
+    if (trackTitle) patch.trackTitle = trackTitle
+
+    const authorsRaw = track.authors ?? track.Authors
+    if (Array.isArray(authorsRaw) && authorsRaw.length) {
+      patch.trackAuthors = authorsRaw
+        .filter((a): a is string => typeof a === "string" && a.trim() !== "")
+        .join(", ")
+    }
+
+    const trackImage = pickString(track, ["imageUrl", "ImageUrl"])
+    if (trackImage) patch.trackImage = trackImage
+  }
 
   return patch
 }

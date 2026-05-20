@@ -65,7 +65,7 @@ export function useBooksPage() {
     [pageForQuery, debouncedSearchTrimmed, searchField, sortBy],
   )
 
-  const { data, loading, error } = useBooksPageQuery({
+  const { data, loading, error, refetch } = useBooksPageQuery({
     variables,
     fetchPolicy: "network-only",
   })
@@ -96,5 +96,6 @@ export function useBooksPage() {
     totalPages,
     totalBooks: totalCount,
     pageSize: BOOKS_PAGE_SIZE,
+    refetch,
   }
 }

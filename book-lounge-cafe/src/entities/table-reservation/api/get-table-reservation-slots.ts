@@ -1,5 +1,5 @@
 import { axiosInstance } from "api/axios-instance"
-import type { GetTableReservationSlotsResponse, ReservationSlotDto } from "api/api-client/api"
+import type { ReservationSlotDto } from "api/api-client/api"
 
 export type TableReservationSlot = {
   startTime: string
@@ -19,11 +19,14 @@ function normalizeSlot(raw: ReservationSlotDto): TableReservationSlot | null {
 }
 
 export async function fetchTableReservationSlots(tableId: number, dateIso: string) {
-  const { data } = await axiosInstance.post<GetTableReservationSlotsResponse>("/table-reservations/slots", {
+  const { data } = await axiosInstance.post<TableReservationSlot[]>("/table-reservations/slots", {
     tableId,
     date: dateIso,
   })
-  const list = data.reservationSlots ?? []
+
+  console.log("data", data)
+
+  const list = data ?? []
   return list
     .map((s) => normalizeSlot(s))
     .filter((s): s is TableReservationSlot => s !== null)

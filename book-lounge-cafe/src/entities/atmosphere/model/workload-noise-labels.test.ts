@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getNoiseLevelLabel, getWorkloadLevelLabel } from "./workload-noise-labels"
+import { getWorkloadLevelLabel } from "./workload-noise-labels"
 
 describe("getWorkloadLevelLabel", () => {
   it("возвращает подписи по диапазонам", () => {
@@ -12,13 +12,5 @@ describe("getWorkloadLevelLabel", () => {
 
   it("обрабатывает не-число", () => {
     expect(getWorkloadLevelLabel("x" as unknown as number)).toBe("Не определена")
-  })
-})
-
-describe("getNoiseLevelLabel", () => {
-  it("возвращает подписи по диапазонам", () => {
-    expect(getNoiseLevelLabel(0)).toBe("Очень тихо")
-    expect(getNoiseLevelLabel(50)).toBe("Привычный кафе-фон")
-    expect(getNoiseLevelLabel(90)).toBe("Очень шумно")
   })
 })

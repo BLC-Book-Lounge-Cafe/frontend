@@ -9,6 +9,13 @@ import { useBooksPage, sortOptions, searchFieldOptions } from "entities/book"
 import { useCurrentUser } from "entities/user"
 import { BookCard } from "./ui/book-card"
 import { BookingBookModal, useBookingBookModal } from "features/booking/booking-book"
+import { AddBookModal, useAddBookModal } from "features/admin/add-book"
+import { EditBookModal, useEditBookModal } from "features/admin/edit-book"
+import { DeleteBookModal, useDeleteBookModal } from "features/admin/delete-book"
+import {
+  AdminBookedBooksModal,
+  useAdminBookedBooksModal,
+} from "features/admin/view-booked-books"
 import { SearchField } from "shared/ui/search-field"
 import { Button } from "shared/ui/button"
 import { Progress } from "shared/ui/progress"
@@ -30,9 +37,14 @@ export function LibrarySection() {
     setCurrentPage,
     totalPages,
     totalBooks,
+    refetch,
   } = useBooksPage()
 
   const bookingModal = useBookingBookModal()
+  const addBookModal = useAddBookModal()
+  const editBookModal = useEditBookModal()
+  const deleteBookModal = useDeleteBookModal()
+  const bookedBooksModal = useAdminBookedBooksModal()
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
   const { isAdmin } = useCurrentUser()
 
@@ -77,7 +89,13 @@ export function LibrarySection() {
 
         {isAdmin && (
           <div className="flex justify-center mb-8">
-            <Button variant="filled" tone="accent" size="lg" rounded>
+            <Button
+              variant="filled"
+              tone="accent"
+              size="lg"
+              rounded
+              onPress={bookedBooksModal.open}
+            >
               Посмотреть забронированные книги
             </Button>
           </div>
@@ -151,6 +169,8 @@ export function LibrarySection() {
                           book={book}
                           onClick={() => handleBookClick(book)}
                           isAdmin={isAdmin}
+                          onEdit={editBookModal.open}
+                          onDelete={deleteBookModal.open}
                         />
                       ))}
                     </div>
@@ -172,13 +192,19 @@ export function LibrarySection() {
                       />
                     </div>
 
-                    {isAdmin && (
+                    {isAdmin ? (
                       <div className="mt-8 flex justify-center">
-                        <Button variant="filled" tone="accent" size="lg" rounded>
+                        <Button
+                          variant="filled"
+                          tone="accent"
+                          size="lg"
+                          rounded
+                          onPress={addBookModal.open}
+                        >
                           Добавить книгу
                         </Button>
                       </div>
-                    )}
+                    ) : null}
                   </>
                 ) : null}
             </>
@@ -188,6 +214,34 @@ export function LibrarySection() {
           <Notice tone="negative" variant="tinted" UNSAFE_className="max-w-xl mx-auto">
             {error.message || "Не удалось загрузить книги."}
           </Notice>
+        ) : null}
+
+        {isAdmin ? (
+          <>
+            <AddBookModal
+              isOpen={addBookModal.isOpen}
+              onOpenChange={addBookModal.onOpenChange}
+              onSaved={() => void refetch()}
+            />
+            <EditBookModal
+              isOpen={editBookModal.isOpen}
+              onOpenChange={editBookModal.onOpenChange}
+              book={editBookModal.book}
+              onSaved={() => void refetch()}
+            />
+            <DeleteBookModal
+              isOpen={deleteBookModal.isOpen}
+              onOpenChange={deleteBookModal.onOpenChange}
+              book={deleteBookModal.book}
+              onDeleted={() => void refetch()}
+            />
+            <AdminBookedBooksModal
+              isOpen={bookedBooksModal.isOpen}
+              onOpenChange={bookedBooksModal.onOpenChange}
+              books={books}
+              onChanged={() => void refetch()}
+            />
+          </>
         ) : null}
 
       </Container>

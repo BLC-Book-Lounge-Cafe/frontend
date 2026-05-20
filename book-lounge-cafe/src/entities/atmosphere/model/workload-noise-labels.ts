@@ -25,20 +25,3 @@ export function getWorkloadLevelLabel(value: number) {
 
   return "Зал заполнен почти полностью"
 }
-
-/** Подпись к шкале шума, 0–100. */
-export function getNoiseLevelLabel(value: number) {
-  if (value < 20) {
-    return "Очень тихо"
-  }
-  if (value < 40) {
-    return "Тихий фон"
-  }
-  if (value < 60) {
-    return "Привычный кафе-фон"
-  }
-  if (value < 80) {
-    return "Заметно оживлённо"
-  }
-  return "Очень шумно"
-}

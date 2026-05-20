@@ -8,6 +8,10 @@ import {
   AdminRequestsModal,
   useAdminRequestsModal,
 } from "features/admin/view-requests"
+import {
+  AdminBookedTablesModal,
+  useAdminBookedTablesModal,
+} from "features/admin/view-booked-tables"
 import { Footer } from "widgets/footer"
 import { Header } from "widgets/header"
 import { HeroSection } from "./ui/sections/hero-section"
@@ -21,6 +25,7 @@ export function HomePage() {
   const reservationModal = useReservationModal()
   const bookingModal = useBookingTableModal()
   const adminRequestsModal = useAdminRequestsModal()
+  const adminBookedTablesModal = useAdminBookedTablesModal()
   const { tables, loading: tablesLoading, error: tablesError } = useTables()
 
   return (
@@ -38,6 +43,7 @@ export function HomePage() {
         <ReservationSection
           onOpenReservation={reservationModal.open}
           onOpenAdminRequests={adminRequestsModal.open}
+          onOpenBookedTables={adminBookedTablesModal.open}
           onBookTable={bookingModal.open}
           tables={tables}
           tablesLoading={tablesLoading}
@@ -71,6 +77,12 @@ export function HomePage() {
             customerPhone: request.customerPhone,
           })
         }
+      />
+
+      <AdminBookedTablesModal
+        isOpen={adminBookedTablesModal.isOpen}
+        onOpenChange={adminBookedTablesModal.onOpenChange}
+        tables={tables}
       />
     </>
   )
