@@ -1,4 +1,4 @@
-import { AxiosError } from "axios"
+import { AxiosError, type InternalAxiosRequestConfig } from "axios"
 import { describe, expect, it } from "vitest"
 
 import { parseBookingBookSubmitError } from "./booking/booking-book/lib/parse-submit-error"
@@ -8,6 +8,9 @@ import { parseReservationSubmitError } from "./reservation/lib/parse-submit-erro
 function axiosErr(message: string, data?: { message?: string }) {
   return new AxiosError(message, "ERR", undefined, undefined, {
     status: 400,
+    statusText: "Bad Request",
+    headers: {},
+    config: {} as InternalAxiosRequestConfig,
     data,
   })
 }

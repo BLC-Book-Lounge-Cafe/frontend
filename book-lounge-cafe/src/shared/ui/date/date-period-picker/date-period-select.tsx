@@ -1,8 +1,7 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import type { DateRange } from "react-aria-components"
 import { DateRangePickerStateContext as AriaDateRangePickerStateContext, Collection, useSlottedContext } from "react-aria-components"
-// shared
-import type { Nullable } from "shared/model/types/nullable"
 import { Popover } from "shared/ui/overlays/popover"
 import type { SelectProps } from "shared/ui/pickers/select"
 import { Select } from "shared/ui/pickers/select"
@@ -25,7 +24,8 @@ export function DatePeriodSelect(props: DatePeriodSelectProps) {
   const datePeriodState = React.useContext(DatePeriodStateContext)
   const popoverContext = useSlottedContext(Popover.Context)
 
-  const handleSelectionChange = (key: Nullable<Key>) => {
+  const handleSelectionChange = (key: Key | Key[] | null) => {
+    if (key == null || Array.isArray(key)) return
     const period = key as DatePeriod
     if (period !== DatePeriod.custom) {
       datePeriodState?.setPeriod(period)
@@ -83,7 +83,7 @@ export function DatePeriodSelect(props: DatePeriodSelectProps) {
         )}
       />
       <Button
-        ref={popoverContext?.triggerRef}
+        ref={popoverContext?.triggerRef as React.Ref<HTMLButtonElement>}
         variant="tinted"
         tone={props.isInvalid ? "negative" : "accent"}
         size="md"

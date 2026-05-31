@@ -33,11 +33,11 @@ describe("responsive", () => {
     })
 
     it("при value === null не подставляет fallback", () => {
-      expect(responsive.resolve(matchedSet("md"), null, { base: 1 })).toBeNull()
+      expect(responsive.resolve(matchedSet("md"), null, { base: 1 } as never)).toBeNull()
     })
 
     it("при value === undefined использует fallback и base", () => {
-      expect(responsive.resolve(matchedSet("md"), undefined, { base: 2 })).toBe(2)
+      expect(responsive.resolve(matchedSet("md"), undefined, { base: 2 } as never)).toBe(2)
     })
 
     it("выбирает последнее совпадение по порядку matched (с конца)", () => {

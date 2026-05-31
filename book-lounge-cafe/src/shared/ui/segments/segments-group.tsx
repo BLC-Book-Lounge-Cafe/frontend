@@ -1,5 +1,5 @@
 import React from "react"
-import type { AriaLabelingProps } from "@react-types/shared"
+import type { AriaLabelingProps, Key } from "@react-types/shared"
 import type { ContextValue } from "react-aria-components"
 import { ToggleButtonGroup, ToggleButtonGroupContext, useContextProps, Provider } from "react-aria-components"
 // shared

@@ -1,15 +1,19 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import * as Aria from "react-aria-components"
+import type { CalendarDate } from "@internationalized/date"
 // shared
 import type { SelectProps } from "shared/ui/pickers/select"
 import { Select } from "shared/ui/pickers/select"
 import { dateFormatter } from "shared/lib/formatters/date-formatter"
 
-type CalendarYearPickerProps<T extends object> = (
-  Omit<SelectProps<T>, "children" | "items"> & {}
+type YearItem = { key: number; date: CalendarDate }
+
+type CalendarYearPickerProps = (
+  Omit<SelectProps<YearItem>, "children" | "items"> & {}
 )
 
-export function CalendarYearPicker<T extends object>(props: CalendarYearPickerProps<T>) {
+export function CalendarYearPicker(props: CalendarYearPickerProps) {
   const state = React.useContext(Aria.CalendarStateContext)!
   const range = 50
 
@@ -31,7 +35,8 @@ export function CalendarYearPicker<T extends object>(props: CalendarYearPickerPr
     })
   }, [endDate, startDate.year]) // FIXME: лишний ререндер
 
-  const handleSelectionChange = (key: Key | null) => {
+  const handleSelectionChange = (key: Key | Key[] | null) => {
+    if (key == null || Array.isArray(key)) return
     state?.setFocusedDate(state.focusedDate.set({ year: Number(key) }))
   }
 
@@ -43,11 +48,14 @@ export function CalendarYearPicker<T extends object>(props: CalendarYearPickerPr
       onChange={handleSelectionChange}
       placeholder="Выберите год"
     >
-      {(item) => (
-        <Select.Item id={item.key}>
-          {dateFormatter.formatYear(item.date.toDate(state.timeZone))}
+      {(item) => {
+        const year = item as YearItem
+        return (
+        <Select.Item id={year.key}>
+          {dateFormatter.formatYear(year.date.toDate(state.timeZone))}
         </Select.Item>
-      )}
+        )
+      }}
     </Select>
   )
 }

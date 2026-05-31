@@ -35,8 +35,12 @@ export interface RequestArgs {
 
 export class BaseAPI {
     protected configuration: Configuration | undefined;
+    protected basePath: string;
+    protected axios: AxiosInstance;
 
-    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected axios: AxiosInstance = globalAxios) {
+    constructor(configuration?: Configuration, basePath: string = BASE_PATH, axios: AxiosInstance = globalAxios) {
+        this.basePath = basePath;
+        this.axios = axios;
         if (configuration) {
             this.configuration = configuration;
             this.basePath = configuration.basePath ?? basePath;
@@ -45,8 +49,11 @@ export class BaseAPI {
 };
 
 export class RequiredError extends Error {
-    constructor(public field: string, msg?: string) {
+    field: string;
+
+    constructor(field: string, msg?: string) {
         super(msg);
+        this.field = field;
         this.name = "RequiredError"
     }
 }

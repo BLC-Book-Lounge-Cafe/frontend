@@ -67,7 +67,7 @@ export const dateFormatter = new class {
   public toIsoLocal = (isoDate: string): string => {
     const date = new Date(isoDate)
     const offset = date.getTimezoneOffset() * this.milisecondsInOneMinute
-    const localIsoTime = new Date(date - offset).toISOString().slice(0, -1)
+    const localIsoTime = new Date(date.getTime() - offset).toISOString().slice(0, -1)
     return localIsoTime
   }
 

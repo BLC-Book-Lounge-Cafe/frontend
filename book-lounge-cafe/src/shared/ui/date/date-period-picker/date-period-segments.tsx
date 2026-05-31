@@ -1,4 +1,5 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import {
   DateRangePickerStateContext as AriaDateRangePickerStateContext,
   PopoverContext,
@@ -50,7 +51,7 @@ export function DatePeriodSegments() {
 
               <Segments.Item
                 key={option.id}
-                ref={popoverContext?.triggerRef}
+                ref={popoverContext?.triggerRef as React.Ref<HTMLButtonElement>}
                 id={option.id}
                 UNSAFE_className="!flex-[unset]"
               >

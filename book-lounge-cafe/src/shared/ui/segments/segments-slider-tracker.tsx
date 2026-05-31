@@ -11,7 +11,7 @@ import { ToggleGroupStateContext, Provider } from "react-aria-components"
 )
 
 /** @private */ type SegmentSliderTrackerProps = {
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
   children: React.ReactNode
 }
 

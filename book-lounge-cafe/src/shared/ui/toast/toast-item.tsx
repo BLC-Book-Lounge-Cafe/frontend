@@ -23,7 +23,7 @@ export function ToastItem(props: ToastItemProps) {
   const [progress, setProgress] = React.useState(0)
   const [isVisible, setIsVisible] = React.useState(false)
 
-  const progressIntervalRef = React.useRef<Nullable<NodeJS.Timeout>>(null)
+  const progressIntervalRef = React.useRef<Nullable<ReturnType<typeof setInterval>>>(null)
   const startTimeRef = React.useRef<number>(Date.now())
   const pausedTimeRef = React.useRef<number>(0)
 

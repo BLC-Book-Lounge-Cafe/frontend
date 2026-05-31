@@ -8,13 +8,16 @@ import Icon from "shared/ui/Icon"
 
 export type AppFieldGroupProps = (
   Omit<GroupProps, "className" | "style">
-  & UnsafeStyles<GroupRenderProps> & {}
+  & UnsafeStyles<GroupRenderProps> & {
+    isActive?: boolean
+  }
 )
 
 function AppFieldGroup(props: AppFieldGroupProps, ref: React.ForwardedRef<HTMLDivElement>) {
   const {
     UNSAFE_className,
     UNSAFE_style,
+    isActive,
     ...groupProps
   } = props
 
@@ -53,6 +56,7 @@ function AppFieldGroup(props: AppFieldGroupProps, ref: React.ForwardedRef<HTMLDi
               "bg-accent/10",
               state.isHovered && "bg-accent/20",
               state.isFocusVisible && "ring",
+              isActive && "ring",
             ],
           ],
           className,
@@ -64,7 +68,6 @@ function AppFieldGroup(props: AppFieldGroupProps, ref: React.ForwardedRef<HTMLDi
         (children, state) => (
           <Provider values={[
             [Icon.Context, {
-              tone: null,
               UNSAFE_className: classes(
                 "text-accent",
                 state.isInvalid && "text-negative",

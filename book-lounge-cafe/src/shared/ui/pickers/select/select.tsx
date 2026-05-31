@@ -13,7 +13,7 @@ import { Popover } from "shared/ui/overlays/popover"
 import { Card } from "shared/ui/card"
 import { Progress } from "shared/ui/progress"
 
-export type AppSelectProps<T extends object, M extends SelectionMode> = (
+export type AppSelectProps<T extends object, M extends SelectionMode = "single"> = (
   UnsafeStyles &
   LabelableProps &
   Omit<SelectProps<T, M>, "children" | "style" | "className" | "validate" | "validationBehavior"> &
@@ -30,7 +30,7 @@ export type AppSelectProps<T extends object, M extends SelectionMode> = (
 )
 
 const AppSelectContext = SelectContext as React.Context<
-  ContextValue<Partial<AppSelectProps<any>>, HTMLDivElement>
+  ContextValue<Partial<AppSelectProps<any, "single">>, HTMLDivElement>
 >
 
 function AppSelect<T extends object, M extends SelectionMode = "single">(props: AppSelectProps<T, M>, ref: React.ForwardedRef<HTMLDivElement>) {

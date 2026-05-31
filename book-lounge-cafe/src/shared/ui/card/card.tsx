@@ -42,7 +42,7 @@ function Card<E extends React.ElementType = "div">(props: CardProps<E>, ref: Rea
         "--rounded": typeof rounded === "number" ?
           `calc(${rounded} * 0.25rem)` :
           undefined,
-      }}
+      } as React.CSSProperties}
       className={classes(
         "flex flex-col p-2 bg-surface-primary shadow-sm relative",
         hasHoverEffect && "hover:scale-[1.010] transition",

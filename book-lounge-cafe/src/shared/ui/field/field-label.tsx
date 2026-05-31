@@ -57,7 +57,7 @@ function AppFieldLabel(props: AppFieldLabelProps, ref: React.ForwardedRef<HTMLLa
       </Label>
 
       {contextualHelp && (
-        <div className={classes("flex items-end whitespace-nowrap", props.children && "h-0")}>
+        <div className={classes("flex items-end whitespace-nowrap", props.children != null && "h-0")}>
           &nbsp;
           <div className="inline-flex">
             {contextualHelp}

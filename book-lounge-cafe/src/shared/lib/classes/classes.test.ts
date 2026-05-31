@@ -18,11 +18,11 @@ describe("classes", () => {
 
 describe("classes.match", () => {
   it("возвращает значение по ключу", () => {
-    expect(classes.match("sm", { sm: "w-4", md: "w-8" })).toBe("w-4")
+    expect(classes.match("sm" as "sm" | "md", { sm: "w-4", md: "w-8" })).toBe("w-4")
   })
 
   it("возвращает пустую строку при отсутствии ключа", () => {
     expect(classes.match(null, { sm: "w-4" })).toBe("")
-    expect(classes.match("lg", { sm: "w-4" })).toBe("")
+    expect(classes.match("lg" as "sm" | "lg", { sm: "w-4" })).toBe("")
   })
 })

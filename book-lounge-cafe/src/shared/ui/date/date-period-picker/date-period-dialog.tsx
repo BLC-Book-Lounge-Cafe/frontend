@@ -26,7 +26,7 @@ export function DatePeriodPickerDialog() {
   const [dateRange, setDateRange] = React.useState<Nullable<DateRange>>(rangePickerState?.value as Nullable<DateRange>)
 
   const handleChange = (key: keyof DateRange, value: Nullable<DateValue>) => {
-    setDateRange((prev) => ({ ...prev, [key]: value }))
+    setDateRange((prev) => ({ ...(prev ?? {}), [key]: value }) as Nullable<DateRange>)
   }
 
   const handleReset = () => {

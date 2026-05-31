@@ -1,4 +1,5 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import { useObjectRef } from "@react-aria/utils"
 import type { AriaLabelingProps } from "@react-types/shared"
 import type { ContextValue } from "react-aria-components"

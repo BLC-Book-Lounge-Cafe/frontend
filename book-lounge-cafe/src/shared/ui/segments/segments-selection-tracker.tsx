@@ -1,4 +1,5 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import { Provider, ToggleGroupStateContext } from "react-aria-components"
 
 /** @private */ type InternalSegmentsSelectionTrackerContextValue = {

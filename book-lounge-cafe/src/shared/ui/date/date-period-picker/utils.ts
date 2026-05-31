@@ -178,7 +178,7 @@ const datePeriodHandlers: Record<DatePeriod, DatePeriodHandler> = {
     end(date) {
       return date.set(endFields)
     },
-    same(dateRange) {
+    same(_dateRange) {
       return true
     },
     range() {

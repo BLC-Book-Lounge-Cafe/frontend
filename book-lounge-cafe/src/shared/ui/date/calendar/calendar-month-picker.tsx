@@ -1,16 +1,20 @@
 import React from "react"
+import type { Key } from "@react-types/shared"
 import * as Aria from "react-aria-components"
 import { startOfYear, isSameYear, endOfYear } from "@internationalized/date"
+import type { CalendarDate } from "@internationalized/date"
 // shared
 import { dateFormatter } from "shared/lib/formatters/date-formatter"
 import type { SelectProps } from "shared/ui/pickers/select"
 import { Select } from "shared/ui/pickers/select"
 
-type CalendarMonthPickerProps<T extends object> = (
-  Omit<SelectProps<T>, "children" | "items"> & {}
+type MonthItem = { key: number; date: CalendarDate }
+
+type CalendarMonthPickerProps = (
+  Omit<SelectProps<MonthItem>, "children" | "items"> & {}
 )
 
-export function CalendarMonthPicker<T extends object>(props: CalendarMonthPickerProps<T>) {
+export function CalendarMonthPicker(props: CalendarMonthPickerProps) {
   const state = React.useContext(Aria.CalendarStateContext)!
 
   const startDate = React.useMemo(() => {
@@ -35,7 +39,8 @@ export function CalendarMonthPicker<T extends object>(props: CalendarMonthPicker
     })
   }, [endDate.month, startDate])
 
-  const handleSelectionChange = React.useCallback((key: Key | null) => {
+  const handleSelectionChange = React.useCallback((key: Key | Key[] | null) => {
+    if (key == null || Array.isArray(key)) return
     state?.setFocusedDate(state.focusedDate.set({ month: Number(key) }))
   }, [state])
 
@@ -48,13 +53,16 @@ export function CalendarMonthPicker<T extends object>(props: CalendarMonthPicker
       aria-label="Месяц"
       placeholder="Выберите месяц"
     >
-      {(item) => (
-        <Select.Item key={item.key}>
+      {(item) => {
+        const month = item as MonthItem
+        return (
+        <Select.Item key={month.key}>
           <span className="capitalize">
-            {dateFormatter.formatMonth(item.date.toDate(state.timeZone))}
+            {dateFormatter.formatMonth(month.date.toDate(state.timeZone))}
           </span>
         </Select.Item>
-      )}
+        )
+      }}
     </Select>
   )
 }
