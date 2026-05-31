@@ -59,9 +59,7 @@ No authorization required
 |**201** | Created |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если запрашиваемая сущность не найдена. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае если имя, автор или адрес картинки пустые. |  -  |
+|**422** | В случае если имя, автор или адрес картинки пустые, имя или автор больше 255 символов, либо адрес картинки не соответствует формату URL. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -113,12 +111,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | OK |  -  |
+|**204** | No Content |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
 |**404** | В случае, если не удалось найти книгу. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -174,12 +170,11 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | OK |  -  |
+|**204** | No Content |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
 |**404** | В случае, если не удалось найти книгу. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае если имя, автор или адрес картинки пустые. |  -  |
+|**422** | В случае если имя, автор или адрес картинки пустые, имя или автор больше 255 символов, либо адрес картинки не соответствует формату URL. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

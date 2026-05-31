@@ -4,13 +4,13 @@ All URIs are relative to *http://0.0.0.0:5251*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**createMenuCategory**](#createmenucategory) | **POST** /menu | |
+|[**createMenuCategory**](#createmenucategory) | **POST** /menu/category | |
 |[**deleteMenuCategory**](#deletemenucategory) | **DELETE** /menu/category/{id} | |
 |[**getMenu**](#getmenu) | **GET** /menu | |
-|[**updateMenuCategory**](#updatemenucategory) | **PUT** /menu | |
+|[**updateMenuCategory**](#updatemenucategory) | **PUT** /menu/category/{id} | |
 
 # **createMenuCategory**
-> MenuCategoryDto createMenuCategory(menuCategoryForCreateDto)
+> MenuCategoryDto createMenuCategory(createMenuCategoryCommand)
 
 Создает категорию меню с элементами.
 
@@ -20,16 +20,16 @@ All URIs are relative to *http://0.0.0.0:5251*
 import {
     MenuRouteGroupApi,
     Configuration,
-    MenuCategoryForCreateDto
+    CreateMenuCategoryCommand
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new MenuRouteGroupApi(configuration);
 
-let menuCategoryForCreateDto: MenuCategoryForCreateDto; //
+let createMenuCategoryCommand: CreateMenuCategoryCommand; //
 
 const { status, data } = await apiInstance.createMenuCategory(
-    menuCategoryForCreateDto
+    createMenuCategoryCommand
 );
 ```
 
@@ -37,7 +37,7 @@ const { status, data } = await apiInstance.createMenuCategory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **menuCategoryForCreateDto** | **MenuCategoryForCreateDto**|  | |
+| **createMenuCategoryCommand** | **CreateMenuCategoryCommand**|  | |
 
 
 ### Return type
@@ -60,9 +60,7 @@ No authorization required
 |**201** | Created |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если запрашиваемая сущность не найдена. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**422** | В случае, если название категории меню или элемента категории меню пустое или длина превышает 255 символов, либо цена элемента категории меню ниже 0. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -114,12 +112,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | OK |  -  |
+|**204** | No Content |  -  |
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
 |**404** | В случае, если не удалось найти категорию меню. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -166,15 +162,12 @@ No authorization required
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
-|**404** | В случае, если запрашиваемая сущность не найдена. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateMenuCategory**
-> updateMenuCategory(menuCategoryDto)
+> MenuCategoryDto updateMenuCategory(updateMenuCategoryCommand)
 
 Обновляет категорию меню с элементами.
 
@@ -184,16 +177,18 @@ No authorization required
 import {
     MenuRouteGroupApi,
     Configuration,
-    MenuCategoryDto
+    UpdateMenuCategoryCommand
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new MenuRouteGroupApi(configuration);
 
-let menuCategoryDto: MenuCategoryDto; //
+let id: number; //Идентификатор категории меню. (default to undefined)
+let updateMenuCategoryCommand: UpdateMenuCategoryCommand; //
 
 const { status, data } = await apiInstance.updateMenuCategory(
-    menuCategoryDto
+    id,
+    updateMenuCategoryCommand
 );
 ```
 
@@ -201,12 +196,13 @@ const { status, data } = await apiInstance.updateMenuCategory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **menuCategoryDto** | **MenuCategoryDto**|  | |
+| **updateMenuCategoryCommand** | **UpdateMenuCategoryCommand**|  | |
+| **id** | [**number**] | Идентификатор категории меню. | defaults to undefined|
 
 
 ### Return type
 
-void (empty response body)
+**MenuCategoryDto**
 
 ### Authorization
 
@@ -225,8 +221,7 @@ No authorization required
 |**401** | Unauthorized |  -  |
 |**400** | В случае некорректно составленного запроса. |  -  |
 |**404** | В случае, если категория меню не найдена. |  -  |
-|**409** | В случае конфликта данных с текущем состоянием сервера. |  -  |
-|**422** | В случае нарушения доменных инвариантов в запросе. |  -  |
+|**422** | В случае, если название категории меню или элемента категории меню пустое или длина превышает 255 символов, либо цена элемента категории меню ниже 0. |  -  |
 |**500** | В случае внутренней ошибки сервера. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

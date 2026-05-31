@@ -41,36 +41,6 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -157,36 +127,6 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -219,7 +159,7 @@
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -277,16 +217,6 @@
               }
             }
           },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -323,36 +253,6 @@
           },
           "400": {
             "description": "В случае некорректно составленного запроса.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -406,28 +306,8 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "В случае, если уровень шума находится вне диапазона от 0 до 5, либо описание пустое.",
+            "description": "В случае, если уровень шума находится вне диапазона от 0 до 5.",
             "content": {
               "application/json": {
                 "schema": {
@@ -503,16 +383,6 @@
               }
             }
           },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -542,7 +412,7 @@
                 "integer",
                 "string"
               ],
-              "format": "int32"
+              "format": "int64"
             }
           },
           {
@@ -606,26 +476,6 @@
           },
           "404": {
             "description": "В случае, если не найден стол по указанному идентификатору.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -698,26 +548,6 @@
               }
             }
           },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -736,7 +566,7 @@
         "tags": [
           "TableReservationRouteGroup"
         ],
-        "description": "Возвращает список бронирований столов с пагинацией.",
+        "description": "Удаляет бронирование стола.",
         "operationId": "DeleteTableReservation",
         "parameters": [
           {
@@ -747,7 +577,7 @@
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -770,26 +600,6 @@
           },
           "404": {
             "description": "В случае, если бронирование стола не найдено.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -834,36 +644,6 @@
           },
           "400": {
             "description": "В случае некорректно составленного запроса.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -975,7 +755,7 @@
                 "integer",
                 "string"
               ],
-              "format": "int32"
+              "format": "int64"
             }
           },
           {
@@ -1048,26 +828,6 @@
               }
             }
           },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -1082,7 +842,9 @@
         "security": [
           { }
         ]
-      },
+      }
+    },
+    "/book-reservations/{id}": {
       "delete": {
         "tags": [
           "BookReservationRouteGroup"
@@ -1092,16 +854,13 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID бронирования книги.",
             "required": true,
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
+              "type": "integer",
+              "format": "int64"
             }
           }
         ],
@@ -1124,26 +883,6 @@
           },
           "404": {
             "description": "В случае, если бронь книги не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1196,36 +935,6 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "В случае внутренней ошибки сервера.",
             "content": {
@@ -1237,7 +946,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/menu/category": {
       "post": {
         "tags": [
           "MenuRouteGroup"
@@ -1248,7 +959,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MenuCategoryForCreateDto"
+                "$ref": "#/components/schemas/CreateMenuCategoryCommand"
               }
             }
           },
@@ -1278,106 +989,8 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "В случае внутренней ошибки сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          { }
-        ]
-      },
-      "put": {
-        "tags": [
-          "MenuRouteGroup"
-        ],
-        "description": "Обновляет категорию меню с элементами.",
-        "operationId": "UpdateMenuCategory",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MenuCategoryDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "В случае некорректно составленного запроса.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "В случае, если категория меню не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
+            "description": "В случае, если название категории меню или элемента категории меню пустое или длина превышает 255 символов, либо цена элемента категории меню ниже 0.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1403,6 +1016,94 @@
       }
     },
     "/menu/category/{id}": {
+      "put": {
+        "tags": [
+          "MenuRouteGroup"
+        ],
+        "description": "Обновляет категорию меню с элементами.",
+        "operationId": "UpdateMenuCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор категории меню.",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMenuCategoryCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuCategoryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "В случае некорректно составленного запроса.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "В случае, если категория меню не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "В случае, если название категории меню или элемента категории меню пустое или длина превышает 255 символов, либо цена элемента категории меню ниже 0.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "В случае внутренней ошибки сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          { }
+        ]
+      },
       "delete": {
         "tags": [
           "MenuRouteGroup"
@@ -1418,13 +1119,13 @@
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"
@@ -1441,26 +1142,6 @@
           },
           "404": {
             "description": "В случае, если не удалось найти категорию меню.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1526,28 +1207,8 @@
               }
             }
           },
-          "404": {
-            "description": "В случае, если запрашиваемая сущность не найдена.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "В случае если имя, автор или адрес картинки пустые.",
+            "description": "В случае если имя, автор или адрес картинки пустые, имя или автор больше 255 символов, либо адрес картинки не соответствует формату URL.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1603,8 +1264,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"
@@ -1629,18 +1290,8 @@
               }
             }
           },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "В случае если имя, автор или адрес картинки пустые.",
+            "description": "В случае если имя, автор или адрес картинки пустые, имя или автор больше 255 символов, либо адрес картинки не соответствует формату URL.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1684,8 +1335,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"
@@ -1702,26 +1353,6 @@
           },
           "404": {
             "description": "В случае, если не удалось найти книгу.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "В случае конфликта данных с текущем состоянием сервера.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "В случае нарушения доменных инвариантов в запросе.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1751,7 +1382,7 @@
         "tags": [
           "AdminLoginRouteGroup"
         ],
-        "description": "Вход для админа.",
+        "description": "Вход для администратора.",
         "operationId": "Login",
         "requestBody": {
           "content": {
@@ -1765,10 +1396,17 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResult"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "В случае, если не найден логин или не совпадает пароль."
           }
         }
       }
@@ -1791,7 +1429,7 @@
               "string"
             ],
             "description": "Идентификатор.",
-            "format": "int32"
+            "format": "int64"
           },
           "name": {
             "type": "string",
@@ -1822,7 +1460,7 @@
               "string"
             ],
             "description": "Идентификатор бронирования.",
-            "format": "int32"
+            "format": "int64"
           },
           "bookId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -1831,7 +1469,7 @@
               "string"
             ],
             "description": "Идентификатор книги.",
-            "format": "int32"
+            "format": "int64"
           },
           "date": {
             "type": "string",
@@ -1877,7 +1515,7 @@
               "string"
             ],
             "description": "Идентификатор книги.",
-            "format": "int32"
+            "format": "int64"
           },
           "date": {
             "type": "string",
@@ -1894,6 +1532,23 @@
           }
         },
         "description": "Данные для бронирования книги."
+      },
+      "CreateMenuCategoryCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название категории меню."
+          },
+          "menuItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItemForCreateDto"
+            },
+            "description": "Элементы категории меню."
+          }
+        },
+        "description": "Команда создания категории меню."
       },
       "CreateReservationRequestCommand": {
         "type": "object",
@@ -1919,7 +1574,7 @@
               "string"
             ],
             "description": "Идентификатор стола.",
-            "format": "int32"
+            "format": "int64"
           },
           "customerName": {
             "type": "string",
@@ -2110,7 +1765,7 @@
               "string"
             ],
             "description": "Идентификатор стола.",
-            "format": "int32"
+            "format": "int64"
           },
           "date": {
             "type": "string",
@@ -2196,10 +1851,6 @@
         "description": "Ответ на запрос получения информации о столах."
       },
       "LoginRequest": {
-        "required": [
-          "login",
-          "password"
-        ],
         "type": "object",
         "properties": {
           "login": {
@@ -2211,7 +1862,17 @@
             "description": "Пароль."
           }
         },
-        "description": "Данные для входа в админку."
+        "description": "Данные для входа для администратора."
+      },
+      "LoginResult": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Токен."
+          }
+        },
+        "description": "Результат входа администратора."
       },
       "MenuCategoryDto": {
         "required": [
@@ -2226,7 +1887,7 @@
               "string"
             ],
             "description": "Идентификатор.",
-            "format": "int32"
+            "format": "int64"
           },
           "name": {
             "type": "string",
@@ -2242,23 +1903,6 @@
         },
         "description": "Категория меню."
       },
-      "MenuCategoryForCreateDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Название категории меню."
-          },
-          "menuItems": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MenuItemForCreateDto"
-            },
-            "description": "Элементы категории меню."
-          }
-        },
-        "description": "Данные категории меню при создании и обновлении."
-      },
       "MenuItemDto": {
         "type": "object",
         "properties": {
@@ -2269,7 +1913,7 @@
               "string"
             ],
             "description": "Идентификатор.",
-            "format": "int32"
+            "format": "int64"
           },
           "name": {
             "type": "string",
@@ -2352,7 +1996,7 @@
               "string"
             ],
             "description": "Идентификатор брони.",
-            "format": "int32"
+            "format": "int64"
           },
           "status": {
             "type": "string",
@@ -2429,7 +2073,7 @@
               "string"
             ],
             "description": "Идентификатор.",
-            "format": "int32"
+            "format": "int64"
           },
           "seatsCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -2453,7 +2097,7 @@
               "string"
             ],
             "description": "Идентификатор брони.",
-            "format": "int32"
+            "format": "int64"
           },
           "tableId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -2462,7 +2106,7 @@
               "string"
             ],
             "description": "Идентификатор стола.",
-            "format": "int32"
+            "format": "int64"
           },
           "customerName": {
             "type": "string",
@@ -2503,6 +2147,23 @@
         },
         "description": "Команда на обновление книги."
       },
+      "UpdateMenuCategoryCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Название категории."
+          },
+          "menuItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItemDto"
+            },
+            "description": "Элементы категории."
+          }
+        },
+        "description": "Команда обновления категории меню."
+      },
       "UpdateReservationRequestCommand": {
         "type": "object",
         "properties": {
@@ -2526,7 +2187,10 @@
             "format": "uint8"
           },
           "description": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "Описание."
           }
         },

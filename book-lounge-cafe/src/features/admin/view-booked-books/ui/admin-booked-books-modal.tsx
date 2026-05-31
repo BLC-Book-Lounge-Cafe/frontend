@@ -52,7 +52,6 @@ export function AdminBookedBooksModal(props: AdminBookedBooksModalProps) {
       const reservationsResult = await fetchBookReservations({
         pageNumber: 1,
         pageSize: 100,
-        bookId: 19
       })
       setItems(reservationsResult.items)
       setPendingDelete((prev) => {

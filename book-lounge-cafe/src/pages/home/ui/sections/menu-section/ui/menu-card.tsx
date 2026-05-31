@@ -17,7 +17,10 @@ export function MenuCard(props: MenuCardProps) {
       </h3>
       <ul className="mt-6 space-y-3">
         {items.map((item, index) => (
-          <li key={`${item.name}-${index}`} className="flex items-end justify-between gap-2">
+          <li
+            key={item.id != null ? String(item.id) : `${item.name}-${index}`}
+            className="flex items-end justify-between gap-2"
+          >
             <span className="shrink-0 text-body">{item.name}</span>
             <span className="mb-1 flex-1 border-b border-dotted border-accent/30" aria-hidden />
             <span className="shrink-0 text-body font-semibold text-accent">{item.price} ₽</span>

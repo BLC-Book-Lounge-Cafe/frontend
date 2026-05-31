@@ -1,2 +1,8 @@
 export { useMenu } from "./lib/use-menu"
+export { parseMenuCategoryId } from "./lib/parse-menu-category-id"
+export { createMenuCategory } from "./api/create-menu-category"
+export type { MenuCategoryForCreatePayload } from "./api/create-menu-category"
+export { updateMenuCategory } from "./api/update-menu-category"
+export type { UpdateMenuCategoryPayload } from "./api/update-menu-category"
+export { deleteMenuCategory } from "./api/delete-menu-category"
 export type { MenuViewCategory, MenuViewItem } from "./model/menu-view"

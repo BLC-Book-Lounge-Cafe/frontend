@@ -14,6 +14,7 @@ docs/BookReservationRouteGroupApi.md
 docs/BookRouteGroupApi.md
 docs/CreateBookCommand.md
 docs/CreateBookReservationCommand.md
+docs/CreateMenuCategoryCommand.md
 docs/CreateReservationRequestCommand.md
 docs/CreateTableReservationCommand.md
 docs/CreateTableReservationCommandTableId.md
@@ -36,10 +37,11 @@ docs/GetTableReservationSlotsRequest.md
 docs/GetTableReservationSlotsResponse.md
 docs/GetTableReservationsResponse.md
 docs/GetTableReservationsResponsePageSize.md
+docs/GetTableReservationsTableIdParameter.md
 docs/GetTablesResponse.md
 docs/LoginRequest.md
+docs/LoginResult.md
 docs/MenuCategoryDto.md
-docs/MenuCategoryForCreateDto.md
 docs/MenuItemDto.md
 docs/MenuItemDtoPrice.md
 docs/MenuItemForCreateDto.md
@@ -59,6 +61,7 @@ docs/TableReservationDto.md
 docs/TableReservationRouteGroupApi.md
 docs/TableRouteGroupApi.md
 docs/UpdateBookCommand.md
+docs/UpdateMenuCategoryCommand.md
 docs/UpdateReservationRequestCommand.md
 docs/UpdateSpaceStateCommand.md
 docs/UpdateSpaceStateCommandNoiseLevel.md

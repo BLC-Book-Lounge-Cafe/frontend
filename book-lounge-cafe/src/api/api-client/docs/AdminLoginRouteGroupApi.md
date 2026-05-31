@@ -7,9 +7,9 @@ All URIs are relative to *http://0.0.0.0:5251*
 |[**login**](#login) | **POST** /admin/login | |
 
 # **login**
-> login(loginRequest)
+> LoginResult login(loginRequest)
 
-Вход для админа.
+Вход для администратора.
 
 ### Example
 
@@ -39,7 +39,7 @@ const { status, data } = await apiInstance.login(
 
 ### Return type
 
-void (empty response body)
+**LoginResult**
 
 ### Authorization
 
@@ -48,14 +48,14 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
-|**401** | Unauthorized |  -  |
+|**401** | В случае, если не найден логин или не совпадает пароль. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

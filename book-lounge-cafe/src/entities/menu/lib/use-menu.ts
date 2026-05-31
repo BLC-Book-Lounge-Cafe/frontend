@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { fetchMenu } from "../api/get-menu"
 import { parseMenuFromResponse, type MenuViewCategory } from "../model/menu-view"
 
@@ -7,16 +7,34 @@ export function useMenu() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const load = useCallback(async () => {
+    const data = await fetchMenu()
+    setCategories(parseMenuFromResponse(data))
+    setError(null)
+  }, [])
+
+  const refetch = useCallback(async () => {
+    setLoading(true)
+    try {
+      await load()
+    } catch (err) {
+      setCategories([])
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Не удалось загрузить меню.",
+      )
+    } finally {
+      setLoading(false)
+    }
+  }, [load])
+
   useEffect(() => {
     let cancelled = false
 
     ;(async () => {
       try {
-        const data = await fetchMenu()
-        if (cancelled) return
-
-        setCategories(parseMenuFromResponse(data))
-        setError(null)
+        await load()
       } catch (err) {
         if (!cancelled) {
           setCategories([])
@@ -34,11 +52,12 @@ export function useMenu() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [load])
 
   return {
     categories,
     loading,
     error,
+    refetch,
   }
 }

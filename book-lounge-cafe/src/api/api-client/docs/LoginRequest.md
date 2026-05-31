@@ -1,13 +1,13 @@
 # LoginRequest
 
-Данные для входа в админку.
+Данные для входа для администратора.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**login** | **string** | Логин. | [default to undefined]
-**password** | **string** | Пароль. | [default to undefined]
+**login** | **string** | Логин. | [optional] [default to undefined]
+**password** | **string** | Пароль. | [optional] [default to undefined]
 
 ## Example
 

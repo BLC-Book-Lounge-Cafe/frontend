@@ -115,6 +115,19 @@ export interface CreateBookReservationCommand {
     'customerPhone'?: string;
 }
 /**
+ * Команда создания категории меню.
+ */
+export interface CreateMenuCategoryCommand {
+    /**
+     * Название категории меню.
+     */
+    'name'?: string;
+    /**
+     * Элементы категории меню.
+     */
+    'menuItems'?: Array<MenuItemForCreateDto>;
+}
+/**
  * Команда на создание запроса на бронирование стола.
  */
 export interface CreateReservationRequestCommand {
@@ -303,6 +316,8 @@ export interface GetTableReservationsResponse {
  */
 export interface GetTableReservationsResponsePageSize {
 }
+export interface GetTableReservationsTableIdParameter {
+}
 /**
  * Ответ на запрос получения информации о столах.
  */
@@ -313,17 +328,26 @@ export interface GetTablesResponse {
     'tables'?: Array<TableDto>;
 }
 /**
- * Данные для входа в админку.
+ * Данные для входа для администратора.
  */
 export interface LoginRequest {
     /**
      * Логин.
      */
-    'login': string;
+    'login'?: string;
     /**
      * Пароль.
      */
-    'password': string;
+    'password'?: string;
+}
+/**
+ * Результат входа администратора.
+ */
+export interface LoginResult {
+    /**
+     * Токен.
+     */
+    'token'?: string;
 }
 /**
  * Категория меню.
@@ -338,19 +362,6 @@ export interface MenuCategoryDto {
      * Элементы категории.
      */
     'menuItems'?: Array<MenuItemDto>;
-}
-/**
- * Данные категории меню при создании и обновлении.
- */
-export interface MenuCategoryForCreateDto {
-    /**
-     * Название категории меню.
-     */
-    'name'?: string;
-    /**
-     * Элементы категории меню.
-     */
-    'menuItems'?: Array<MenuItemForCreateDto>;
 }
 /**
  * Элемент меню.
@@ -505,6 +516,19 @@ export interface UpdateBookCommand {
     'imageUrl'?: string;
 }
 /**
+ * Команда обновления категории меню.
+ */
+export interface UpdateMenuCategoryCommand {
+    /**
+     * Название категории.
+     */
+    'name'?: string;
+    /**
+     * Элементы категории.
+     */
+    'menuItems'?: Array<MenuItemDto>;
+}
+/**
  * Команда на обновление статуса заявки на бронирование стола.
  */
 export interface UpdateReservationRequestCommand {
@@ -521,7 +545,7 @@ export interface UpdateSpaceStateCommand {
     /**
      * Описание.
      */
-    'description'?: string;
+    'description'?: string | null;
 }
 /**
  * Уровень шума.
@@ -535,7 +559,7 @@ export interface UpdateSpaceStateCommandNoiseLevel {
 export const AdminLoginRouteGroupApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Вход для админа.
+         * Вход для администратора.
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -556,6 +580,7 @@ export const AdminLoginRouteGroupApiAxiosParamCreator = function (configuration?
             const localVarQueryParameter = {} as any;
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -577,12 +602,12 @@ export const AdminLoginRouteGroupApiFp = function(configuration?: Configuration)
     const localVarAxiosParamCreator = AdminLoginRouteGroupApiAxiosParamCreator(configuration)
     return {
         /**
-         * Вход для админа.
+         * Вход для администратора.
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResult>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminLoginRouteGroupApi.login']?.[localVarOperationServerIndex]?.url;
@@ -598,12 +623,12 @@ export const AdminLoginRouteGroupApiFactory = function (configuration?: Configur
     const localVarFp = AdminLoginRouteGroupApiFp(configuration)
     return {
         /**
-         * Вход для админа.
+         * Вход для администратора.
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginResult> {
             return localVarFp.login(loginRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -614,7 +639,7 @@ export const AdminLoginRouteGroupApiFactory = function (configuration?: Configur
  */
 export class AdminLoginRouteGroupApi extends BaseAPI {
     /**
-     * Вход для админа.
+     * Вход для администратора.
      * @param {LoginRequest} loginRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -667,14 +692,15 @@ export const BookReservationRouteGroupApiAxiosParamCreator = function (configura
         },
         /**
          * Удаляет бронирование книги по его ID.
-         * @param {GetReservationRequestsPageNumberParameter} id ID бронирования книги.
+         * @param {number} id ID бронирования книги.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteBookReservation: async (id: GetReservationRequestsPageNumberParameter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteBookReservation: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteBookReservation', 'id', id)
-            const localVarPath = `/book-reservations`;
+            const localVarPath = `/book-reservations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -685,10 +711,6 @@ export const BookReservationRouteGroupApiAxiosParamCreator = function (configura
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            if (id !== undefined) {
-                localVarQueryParameter['id'] = id;
-            }
 
             localVarHeaderParameter['Accept'] = 'application/json';
 
@@ -703,14 +725,14 @@ export const BookReservationRouteGroupApiAxiosParamCreator = function (configura
         },
         /**
          * Возвращает список бронирований книг с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [bookId] Фильтр по ID книги.
+         * @param {GetTableReservationsTableIdParameter} [bookId] Фильтр по ID книги.
          * @param {string} [date] Фильтр по дате бронирования.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBookReservations: async (bookId?: GetReservationRequestsPageNumberParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getBookReservations: async (bookId?: GetTableReservationsTableIdParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/book-reservations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -775,11 +797,11 @@ export const BookReservationRouteGroupApiFp = function(configuration?: Configura
         },
         /**
          * Удаляет бронирование книги по его ID.
-         * @param {GetReservationRequestsPageNumberParameter} id ID бронирования книги.
+         * @param {number} id ID бронирования книги.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteBookReservation(id: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deleteBookReservation(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteBookReservation(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BookReservationRouteGroupApi.deleteBookReservation']?.[localVarOperationServerIndex]?.url;
@@ -787,14 +809,14 @@ export const BookReservationRouteGroupApiFp = function(configuration?: Configura
         },
         /**
          * Возвращает список бронирований книг с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [bookId] Фильтр по ID книги.
+         * @param {GetTableReservationsTableIdParameter} [bookId] Фильтр по ID книги.
          * @param {string} [date] Фильтр по дате бронирования.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBookReservations(bookId?: GetReservationRequestsPageNumberParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBookReservationsResponse>> {
+        async getBookReservations(bookId?: GetTableReservationsTableIdParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBookReservationsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBookReservations(bookId, date, pageNumber, pageSize, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BookReservationRouteGroupApi.getBookReservations']?.[localVarOperationServerIndex]?.url;
@@ -820,23 +842,23 @@ export const BookReservationRouteGroupApiFactory = function (configuration?: Con
         },
         /**
          * Удаляет бронирование книги по его ID.
-         * @param {GetReservationRequestsPageNumberParameter} id ID бронирования книги.
+         * @param {number} id ID бронирования книги.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteBookReservation(id: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        deleteBookReservation(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteBookReservation(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Возвращает список бронирований книг с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [bookId] Фильтр по ID книги.
+         * @param {GetTableReservationsTableIdParameter} [bookId] Фильтр по ID книги.
          * @param {string} [date] Фильтр по дате бронирования.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBookReservations(bookId?: GetReservationRequestsPageNumberParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): AxiosPromise<GetBookReservationsResponse> {
+        getBookReservations(bookId?: GetTableReservationsTableIdParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): AxiosPromise<GetBookReservationsResponse> {
             return localVarFp.getBookReservations(bookId, date, pageNumber, pageSize, options).then((request) => request(axios, basePath));
         },
     };
@@ -858,24 +880,24 @@ export class BookReservationRouteGroupApi extends BaseAPI {
 
     /**
      * Удаляет бронирование книги по его ID.
-     * @param {GetReservationRequestsPageNumberParameter} id ID бронирования книги.
+     * @param {number} id ID бронирования книги.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public deleteBookReservation(id: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig) {
+    public deleteBookReservation(id: number, options?: RawAxiosRequestConfig) {
         return BookReservationRouteGroupApiFp(this.configuration).deleteBookReservation(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Возвращает список бронирований книг с пагинацией.
-     * @param {GetReservationRequestsPageNumberParameter} [bookId] Фильтр по ID книги.
+     * @param {GetTableReservationsTableIdParameter} [bookId] Фильтр по ID книги.
      * @param {string} [date] Фильтр по дате бронирования.
      * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
      * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getBookReservations(bookId?: GetReservationRequestsPageNumberParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig) {
+    public getBookReservations(bookId?: GetTableReservationsTableIdParameter, date?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig) {
         return BookReservationRouteGroupApiFp(this.configuration).getBookReservations(bookId, date, pageNumber, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1123,14 +1145,14 @@ export const MenuRouteGroupApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * Создает категорию меню с элементами.
-         * @param {MenuCategoryForCreateDto} menuCategoryForCreateDto 
+         * @param {CreateMenuCategoryCommand} createMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMenuCategory: async (menuCategoryForCreateDto: MenuCategoryForCreateDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'menuCategoryForCreateDto' is not null or undefined
-            assertParamExists('createMenuCategory', 'menuCategoryForCreateDto', menuCategoryForCreateDto)
-            const localVarPath = `/menu`;
+        createMenuCategory: async (createMenuCategoryCommand: CreateMenuCategoryCommand, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createMenuCategoryCommand' is not null or undefined
+            assertParamExists('createMenuCategory', 'createMenuCategoryCommand', createMenuCategoryCommand)
+            const localVarPath = `/menu/category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1148,7 +1170,7 @@ export const MenuRouteGroupApiAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(menuCategoryForCreateDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createMenuCategoryCommand, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1219,14 +1241,18 @@ export const MenuRouteGroupApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * Обновляет категорию меню с элементами.
-         * @param {MenuCategoryDto} menuCategoryDto 
+         * @param {number} id Идентификатор категории меню.
+         * @param {UpdateMenuCategoryCommand} updateMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMenuCategory: async (menuCategoryDto: MenuCategoryDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'menuCategoryDto' is not null or undefined
-            assertParamExists('updateMenuCategory', 'menuCategoryDto', menuCategoryDto)
-            const localVarPath = `/menu`;
+        updateMenuCategory: async (id: number, updateMenuCategoryCommand: UpdateMenuCategoryCommand, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateMenuCategory', 'id', id)
+            // verify required parameter 'updateMenuCategoryCommand' is not null or undefined
+            assertParamExists('updateMenuCategory', 'updateMenuCategoryCommand', updateMenuCategoryCommand)
+            const localVarPath = `/menu/category/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1244,7 +1270,7 @@ export const MenuRouteGroupApiAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(menuCategoryDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateMenuCategoryCommand, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1262,12 +1288,12 @@ export const MenuRouteGroupApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Создает категорию меню с элементами.
-         * @param {MenuCategoryForCreateDto} menuCategoryForCreateDto 
+         * @param {CreateMenuCategoryCommand} createMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMenuCategory(menuCategoryForCreateDto: MenuCategoryForCreateDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MenuCategoryDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMenuCategory(menuCategoryForCreateDto, options);
+        async createMenuCategory(createMenuCategoryCommand: CreateMenuCategoryCommand, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MenuCategoryDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMenuCategory(createMenuCategoryCommand, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MenuRouteGroupApi.createMenuCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1297,12 +1323,13 @@ export const MenuRouteGroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * Обновляет категорию меню с элементами.
-         * @param {MenuCategoryDto} menuCategoryDto 
+         * @param {number} id Идентификатор категории меню.
+         * @param {UpdateMenuCategoryCommand} updateMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateMenuCategory(menuCategoryDto: MenuCategoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMenuCategory(menuCategoryDto, options);
+        async updateMenuCategory(id: number, updateMenuCategoryCommand: UpdateMenuCategoryCommand, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MenuCategoryDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMenuCategory(id, updateMenuCategoryCommand, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MenuRouteGroupApi.updateMenuCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1318,12 +1345,12 @@ export const MenuRouteGroupApiFactory = function (configuration?: Configuration,
     return {
         /**
          * Создает категорию меню с элементами.
-         * @param {MenuCategoryForCreateDto} menuCategoryForCreateDto 
+         * @param {CreateMenuCategoryCommand} createMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMenuCategory(menuCategoryForCreateDto: MenuCategoryForCreateDto, options?: RawAxiosRequestConfig): AxiosPromise<MenuCategoryDto> {
-            return localVarFp.createMenuCategory(menuCategoryForCreateDto, options).then((request) => request(axios, basePath));
+        createMenuCategory(createMenuCategoryCommand: CreateMenuCategoryCommand, options?: RawAxiosRequestConfig): AxiosPromise<MenuCategoryDto> {
+            return localVarFp.createMenuCategory(createMenuCategoryCommand, options).then((request) => request(axios, basePath));
         },
         /**
          * Удаляет категорию меню.
@@ -1344,12 +1371,13 @@ export const MenuRouteGroupApiFactory = function (configuration?: Configuration,
         },
         /**
          * Обновляет категорию меню с элементами.
-         * @param {MenuCategoryDto} menuCategoryDto 
+         * @param {number} id Идентификатор категории меню.
+         * @param {UpdateMenuCategoryCommand} updateMenuCategoryCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMenuCategory(menuCategoryDto: MenuCategoryDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.updateMenuCategory(menuCategoryDto, options).then((request) => request(axios, basePath));
+        updateMenuCategory(id: number, updateMenuCategoryCommand: UpdateMenuCategoryCommand, options?: RawAxiosRequestConfig): AxiosPromise<MenuCategoryDto> {
+            return localVarFp.updateMenuCategory(id, updateMenuCategoryCommand, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1360,12 +1388,12 @@ export const MenuRouteGroupApiFactory = function (configuration?: Configuration,
 export class MenuRouteGroupApi extends BaseAPI {
     /**
      * Создает категорию меню с элементами.
-     * @param {MenuCategoryForCreateDto} menuCategoryForCreateDto 
+     * @param {CreateMenuCategoryCommand} createMenuCategoryCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createMenuCategory(menuCategoryForCreateDto: MenuCategoryForCreateDto, options?: RawAxiosRequestConfig) {
-        return MenuRouteGroupApiFp(this.configuration).createMenuCategory(menuCategoryForCreateDto, options).then((request) => request(this.axios, this.basePath));
+    public createMenuCategory(createMenuCategoryCommand: CreateMenuCategoryCommand, options?: RawAxiosRequestConfig) {
+        return MenuRouteGroupApiFp(this.configuration).createMenuCategory(createMenuCategoryCommand, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1389,12 +1417,13 @@ export class MenuRouteGroupApi extends BaseAPI {
 
     /**
      * Обновляет категорию меню с элементами.
-     * @param {MenuCategoryDto} menuCategoryDto 
+     * @param {number} id Идентификатор категории меню.
+     * @param {UpdateMenuCategoryCommand} updateMenuCategoryCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateMenuCategory(menuCategoryDto: MenuCategoryDto, options?: RawAxiosRequestConfig) {
-        return MenuRouteGroupApiFp(this.configuration).updateMenuCategory(menuCategoryDto, options).then((request) => request(this.axios, this.basePath));
+    public updateMenuCategory(id: number, updateMenuCategoryCommand: UpdateMenuCategoryCommand, options?: RawAxiosRequestConfig) {
+        return MenuRouteGroupApiFp(this.configuration).updateMenuCategory(id, updateMenuCategoryCommand, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1854,7 +1883,7 @@ export const TableReservationRouteGroupApiAxiosParamCreator = function (configur
             };
         },
         /**
-         * Возвращает список бронирований столов с пагинацией.
+         * Удаляет бронирование стола.
          * @param {number} id Идентификатор брони стола.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1922,14 +1951,14 @@ export const TableReservationRouteGroupApiAxiosParamCreator = function (configur
         },
         /**
          * Возвращает список бронирований столов с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [tableId] Фильтр по ID стола.
+         * @param {GetTableReservationsTableIdParameter} [tableId] Фильтр по ID стола.
          * @param {string} [activeAt] Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTableReservations: async (tableId?: GetReservationRequestsPageNumberParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTableReservations: async (tableId?: GetTableReservationsTableIdParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/table-reservations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1991,7 +2020,7 @@ export const TableReservationRouteGroupApiFp = function(configuration?: Configur
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Возвращает список бронирований столов с пагинацией.
+         * Удаляет бронирование стола.
          * @param {number} id Идентификатор брони стола.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2016,14 +2045,14 @@ export const TableReservationRouteGroupApiFp = function(configuration?: Configur
         },
         /**
          * Возвращает список бронирований столов с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [tableId] Фильтр по ID стола.
+         * @param {GetTableReservationsTableIdParameter} [tableId] Фильтр по ID стола.
          * @param {string} [activeAt] Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTableReservations(tableId?: GetReservationRequestsPageNumberParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTableReservationsResponse>> {
+        async getTableReservations(tableId?: GetTableReservationsTableIdParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTableReservationsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTableReservations(tableId, activeAt, pageNumber, pageSize, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TableReservationRouteGroupApi.getTableReservations']?.[localVarOperationServerIndex]?.url;
@@ -2048,7 +2077,7 @@ export const TableReservationRouteGroupApiFactory = function (configuration?: Co
             return localVarFp.createTableReservation(createTableReservationCommand, options).then((request) => request(axios, basePath));
         },
         /**
-         * Возвращает список бронирований столов с пагинацией.
+         * Удаляет бронирование стола.
          * @param {number} id Идентификатор брони стола.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2067,14 +2096,14 @@ export const TableReservationRouteGroupApiFactory = function (configuration?: Co
         },
         /**
          * Возвращает список бронирований столов с пагинацией.
-         * @param {GetReservationRequestsPageNumberParameter} [tableId] Фильтр по ID стола.
+         * @param {GetTableReservationsTableIdParameter} [tableId] Фильтр по ID стола.
          * @param {string} [activeAt] Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени.
          * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
          * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTableReservations(tableId?: GetReservationRequestsPageNumberParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): AxiosPromise<GetTableReservationsResponse> {
+        getTableReservations(tableId?: GetTableReservationsTableIdParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig): AxiosPromise<GetTableReservationsResponse> {
             return localVarFp.getTableReservations(tableId, activeAt, pageNumber, pageSize, options).then((request) => request(axios, basePath));
         },
     };
@@ -2095,7 +2124,7 @@ export class TableReservationRouteGroupApi extends BaseAPI {
     }
 
     /**
-     * Возвращает список бронирований столов с пагинацией.
+     * Удаляет бронирование стола.
      * @param {number} id Идентификатор брони стола.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2116,14 +2145,14 @@ export class TableReservationRouteGroupApi extends BaseAPI {
 
     /**
      * Возвращает список бронирований столов с пагинацией.
-     * @param {GetReservationRequestsPageNumberParameter} [tableId] Фильтр по ID стола.
+     * @param {GetTableReservationsTableIdParameter} [tableId] Фильтр по ID стола.
      * @param {string} [activeAt] Фильтр по дате (UTC, ISO-8601). Принимает либо date YYYY-MM-DD — возвращает брони, активные в указанный день; либо date-time — возвращает брони, активные в указанный момент времени.
      * @param {GetReservationRequestsPageNumberParameter} [pageNumber] Номер страницы.
      * @param {GetReservationRequestsPageNumberParameter} [pageSize] Количество записей на странице.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getTableReservations(tableId?: GetReservationRequestsPageNumberParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig) {
+    public getTableReservations(tableId?: GetTableReservationsTableIdParameter, activeAt?: string, pageNumber?: GetReservationRequestsPageNumberParameter, pageSize?: GetReservationRequestsPageNumberParameter, options?: RawAxiosRequestConfig) {
         return TableReservationRouteGroupApiFp(this.configuration).getTableReservations(tableId, activeAt, pageNumber, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
