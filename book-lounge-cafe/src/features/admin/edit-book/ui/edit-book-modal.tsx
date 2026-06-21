@@ -8,6 +8,7 @@ import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { TextField } from "shared/ui/text-field"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseEditBookError } from "../lib/parse-edit-book-error"
 import {
@@ -24,6 +25,8 @@ type EditBookModalProps = {
 }
 
 export function EditBookModal(props: EditBookModalProps) {
+  useModalVitals("edit-book", props.isOpen)
+
   const form = useForm<EditBookFormValues>({
     defaultValues: bookToEditFormValues({
       title: "",

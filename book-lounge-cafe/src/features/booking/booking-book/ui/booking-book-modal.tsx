@@ -5,6 +5,7 @@ import { Button } from "shared/ui/button"
 import Icon from "shared/ui/Icon"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import { createBookReservation } from "entities/book-reservation"
 import { parseBookingBookSubmitError } from "../lib/parse-submit-error"
 import { reservationDateToIsoDateTime, type BookingBookFormValues } from "../model/validation"
@@ -18,6 +19,8 @@ type BookingBookModalProps = {
 }
 
 export function BookingBookModal(props: BookingBookModalProps) {
+  useModalVitals("booking-book", props.isOpen)
+
   const [isLoading, setIsLoading] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
   const [formNonce, setFormNonce] = useState(0)

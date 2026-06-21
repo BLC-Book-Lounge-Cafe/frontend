@@ -9,6 +9,7 @@ import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { TextField } from "shared/ui/text-field"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseEditMenuCategoryError } from "../lib/parse-edit-menu-category-error"
 import {
@@ -27,6 +28,8 @@ type EditMenuCategoryModalProps = {
 }
 
 export function EditMenuCategoryModal(props: EditMenuCategoryModalProps) {
+  useModalVitals("edit-menu-category", props.isOpen)
+
   const form = useForm<EditMenuCategoryFormValues>({
     defaultValues: categoryToEditFormValues({
       id: "",

@@ -10,6 +10,7 @@ import { Dialog } from "shared/ui/overlays/dialog"
 import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseBookedBooksError } from "../lib/parse-booked-books-error"
 import { AdminBookedBookRow } from "./admin-booked-book-row"
@@ -23,6 +24,8 @@ type AdminBookedBooksModalProps = {
 }
 
 export function AdminBookedBooksModal(props: AdminBookedBooksModalProps) {
+  useModalVitals("view-booked-books", props.isOpen)
+
   const [items, setItems] = useState<BookReservation[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

@@ -1,6 +1,7 @@
 import { Modal } from "shared/ui/overlays/modal"
 import { Dialog } from "shared/ui/overlays/dialog"
 import { Button } from "shared/ui/button"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import type { CafeTable } from "entities/table"
 import { BookingTableForm } from "./booking-table-form"
@@ -16,6 +17,8 @@ type BookingTableModalProps = {
 }
 
 export function BookingTableModal(props: BookingTableModalProps) {
+  useModalVitals("booking-table", props.isOpen)
+
   const table = props.table
   const initialCustomer = props.initialCustomer ?? null
   const formKey = `${table?.id ?? "free"}-${initialCustomer?.customerName ?? ""}-${initialCustomer?.customerPhone ?? ""}`
