@@ -3,7 +3,7 @@ import { useIsSSR } from "@react-aria/ssr"
 // local
 import type { Breakpoint } from "./types"
 import { breakpoints } from "./constants"
-import { BreakpointsContext, useBreakpoints, type BreakpointsContextValue } from "./context"
+import { BreakpointsContext, type BreakpointsContextValue } from "./context"
 
 type BreakpointsProviderProps = {
   children: React.ReactNode
@@ -82,11 +82,11 @@ export function BreakpointsProvider(props: BreakpointsProviderProps) {
   )
 }
 
-/** @private */ function BreakpointIndicator() {
-  const breakpoints = useBreakpoints()
-  return (
-    <div className="fixed z-[99999] top-1 left-1 px-1 text-white dark:text-black bg-black dark:bg-white rounded-1">
-      {breakpoints.current}
-    </div>
-  )
-}
+// /** @private */ function BreakpointIndicator() {
+//   const breakpoints = useBreakpoints()
+//   return (
+//     <div className="fixed z-[99999] top-1 left-1 px-1 text-white dark:text-black bg-black dark:bg-white rounded-1">
+//       {breakpoints.current}
+//     </div>
+//   )
+// }
