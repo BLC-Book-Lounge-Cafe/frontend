@@ -1,4 +1,4 @@
-import { getLocalTimeZone, parseDate, Time, today, toCalendarDateTime, toZoned } from "@internationalized/date"
+import { getLocalTimeZone, parseDate, Time, today, toCalendarDateTime } from "@internationalized/date"
 import { z } from "zod"
 
 
@@ -32,11 +32,14 @@ export function formatPhoneToMask(phone: string): string {
   return `+7 (${local.slice(0, 3)}) ${local.slice(3, 6)}-${local.slice(6, 8)}-${local.slice(8, 10)}`
 }
 
-/** Начало выбранного календарного дня в локальной таймзоне → ISO для API слотов. */
+/**
+ * Начало выбранного календарного дня как локальное (МСК) время стены —
+ * ISO без таймзоны и без сдвига в UTC. Так сервер получает именно выбранную
+ * дату (26.06, а не 25.06) и реальное местное время, а не 00:00 UTC.
+ */
 export function reservationDayToIsoStart(yyyyMmDd: string): string {
   const cal = parseDate(yyyyMmDd)
-  const zoned = toZoned(toCalendarDateTime(cal, new Time(0, 0)), getLocalTimeZone())
-  return zoned.toDate().toISOString()
+  return toCalendarDateTime(cal, new Time(0, 0)).toString()
 }
 
 export const bookingTableFormSchema = z.object({

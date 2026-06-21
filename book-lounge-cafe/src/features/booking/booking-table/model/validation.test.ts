@@ -19,11 +19,10 @@ describe("calendarDateStringFromField", () => {
 })
 
 describe("reservationDayToIsoStart", () => {
-  it("возвращает валидный ISO UTC для календарного дня", () => {
+  it("сохраняет выбранный день и местное время без сдвига в UTC", () => {
     const iso = reservationDayToIsoStart("2024-06-10")
-    expect(iso.endsWith("Z")).toBe(true)
-    expect(iso).toMatch(/^2024-06-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
-    expect(Number.isNaN(Date.parse(iso))).toBe(false)
+    expect(iso).toBe("2024-06-10T00:00:00")
+    expect(iso.endsWith("Z")).toBe(false)
   })
 })
 
