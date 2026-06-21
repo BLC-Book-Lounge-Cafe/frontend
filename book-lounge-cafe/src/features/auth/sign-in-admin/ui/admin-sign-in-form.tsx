@@ -1,6 +1,8 @@
+import { useState } from "react"
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "shared/ui/button"
+import Icon from "shared/ui/Icon"
 import { TextField } from "shared/ui/text-field"
 import {
   adminSignInFormSchema,
@@ -13,6 +15,8 @@ type AdminSignInFormProps = {
 }
 
 export function AdminSignInForm(props: AdminSignInFormProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
   const form = useForm<AdminSignInFormValues>({
     defaultValues: { login: "", password: "" },
     resolver: zodResolver(adminSignInFormSchema),
@@ -47,7 +51,7 @@ export function AdminSignInForm(props: AdminSignInFormProps) {
         render={({ field, fieldState }) => (
           <TextField
             {...field}
-            type="password"
+            type={isPasswordVisible ? "text" : "password"}
             label="Пароль"
             fullWidth
             placeholder="Введите пароль"
@@ -55,6 +59,16 @@ export function AdminSignInForm(props: AdminSignInFormProps) {
             isRequired
             isInvalid={Boolean(fieldState.invalid && fieldState.error)}
             errorMessage={fieldState.error?.message}
+            iconEnd={
+              <button
+                type="button"
+                className="inline-flex shrink-0 text-accent transition-colors hover:text-accent/80"
+                onClick={() => setIsPasswordVisible((visible) => !visible)}
+                aria-label={isPasswordVisible ? "Скрыть пароль" : "Показать пароль"}
+              >
+                <Icon name={isPasswordVisible ? "eyeOff" : "eye"} size="sm" />
+              </button>
+            }
           />
         )}
       />

@@ -11,6 +11,8 @@ import ChevronLeftWithStickIcon from "shared/assets/icons/chevronLeftWithStick.s
 import SearchIcon from "shared/assets/icons/search.svg?react"
 import PencilIcon from "shared/assets/icons/pencil.svg?react"
 import TrashIcon from "shared/assets/icons/trash.svg?react"
+import EyeIcon from "shared/assets/icons/eye.svg?react"
+import EyeOffIcon from "shared/assets/icons/eyeOff.svg?react"
 
 export const icons = {
   object: ObjectIcon,
@@ -26,4 +28,6 @@ export const icons = {
   search: SearchIcon,
   pencil: PencilIcon,
   trash: TrashIcon,
+  eye: EyeIcon,
+  eyeOff: EyeOffIcon,
 }
