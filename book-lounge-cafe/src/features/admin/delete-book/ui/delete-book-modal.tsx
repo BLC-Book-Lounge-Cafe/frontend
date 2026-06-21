@@ -5,6 +5,7 @@ import { Dialog } from "shared/ui/overlays/dialog"
 import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseDeleteBookError } from "../lib/parse-delete-book-error"
 
@@ -16,6 +17,8 @@ type DeleteBookModalProps = {
 }
 
 export function DeleteBookModal(props: DeleteBookModalProps) {
+  useModalVitals("delete-book", props.isOpen)
+
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

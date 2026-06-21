@@ -5,6 +5,7 @@ import { Button } from "shared/ui/button"
 import Icon from "shared/ui/Icon"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import { createReservation, RESERVATION_LEAVE_REQUEST_LABEL } from "entities/reservation"
 import { parseReservationSubmitError } from "../lib/parse-submit-error"
 import type { ReservationFormValues } from "../model/validation"
@@ -16,6 +17,8 @@ type ReservationModalProps = {
 }
 
 export function ReservationModal(props: ReservationModalProps) {
+  useModalVitals("reservation", props.isOpen)
+
   const [isLoading, setIsLoading] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
   const [formNonce, setFormNonce] = useState(0)

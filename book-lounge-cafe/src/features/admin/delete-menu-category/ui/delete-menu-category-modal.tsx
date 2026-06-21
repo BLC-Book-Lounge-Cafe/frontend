@@ -5,6 +5,7 @@ import { Dialog } from "shared/ui/overlays/dialog"
 import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseDeleteMenuCategoryError } from "../lib/parse-delete-menu-category-error"
 type DeleteMenuCategoryModalProps = {
@@ -15,6 +16,8 @@ type DeleteMenuCategoryModalProps = {
 }
 
 export function DeleteMenuCategoryModal(props: DeleteMenuCategoryModalProps) {
+  useModalVitals("delete-menu-category", props.isOpen)
+
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

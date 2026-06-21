@@ -9,6 +9,7 @@ import { Dialog } from "shared/ui/overlays/dialog"
 import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseAdminRequestsError } from "../lib/parse-admin-requests-error"
 import { AdminRequestRow } from "./admin-request-row"
@@ -20,6 +21,8 @@ type AdminRequestsModalProps = {
 }
 
 export function AdminRequestsModal(props: AdminRequestsModalProps) {
+  useModalVitals("view-requests", props.isOpen)
+
   const [items, setItems] = useState<ReservationRequest[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

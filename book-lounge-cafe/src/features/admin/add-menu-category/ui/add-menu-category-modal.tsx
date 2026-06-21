@@ -8,6 +8,7 @@ import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { TextField } from "shared/ui/text-field"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseAddMenuCategoryError } from "../lib/parse-add-menu-category-error"
 import {
@@ -26,6 +27,8 @@ type AddMenuCategoryModalProps = {
 }
 
 export function AddMenuCategoryModal(props: AddMenuCategoryModalProps) {
+  useModalVitals("add-menu-category", props.isOpen)
+
   const form = useForm<AddMenuCategoryFormValues>({
     defaultValues: emptyAddMenuCategoryValues,
     resolver: zodResolver(addMenuCategoryFormSchema),

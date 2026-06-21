@@ -12,6 +12,7 @@ import {
   AdminBookedTablesModal,
   useAdminBookedTablesModal,
 } from "features/admin/view-booked-tables"
+import { usePageVitals } from "shared/lib/observability"
 import { Footer } from "widgets/footer"
 import { Header } from "widgets/header"
 import { HeroSection } from "./ui/sections/hero-section"
@@ -22,6 +23,8 @@ import { AtmosphereSection } from "./ui/sections/atmosphere-section"
 import { ReservationSection } from "./ui/sections/reservation-section"
 
 export function HomePage() {
+  usePageVitals("home")
+
   const reservationModal = useReservationModal()
   const bookingModal = useBookingTableModal()
   const adminRequestsModal = useAdminRequestsModal()

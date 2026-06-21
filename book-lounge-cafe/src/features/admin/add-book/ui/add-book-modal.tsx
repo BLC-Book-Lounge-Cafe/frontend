@@ -8,6 +8,7 @@ import { Button } from "shared/ui/button"
 import { Notice } from "shared/ui/notice"
 import { TextField } from "shared/ui/text-field"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseAddBookError } from "../lib/parse-add-book-error"
 import {
@@ -23,6 +24,8 @@ type AddBookModalProps = {
 }
 
 export function AddBookModal(props: AddBookModalProps) {
+  useModalVitals("add-book", props.isOpen)
+
   const form = useForm<AddBookFormValues>({
     defaultValues: emptyAddBookValues,
     resolver: zodResolver(addBookFormSchema),

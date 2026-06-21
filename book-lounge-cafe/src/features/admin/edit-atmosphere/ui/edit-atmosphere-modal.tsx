@@ -12,6 +12,7 @@ import { Notice } from "shared/ui/notice"
 import { TextField } from "shared/ui/text-field"
 import { Select } from "shared/ui/pickers/select"
 import { toastManager } from "shared/ui/toast"
+import { useModalVitals } from "shared/lib/observability"
 import Icon from "shared/ui/Icon"
 import { parseEditAtmosphereError } from "../lib/parse-edit-atmosphere-error"
 
@@ -28,6 +29,8 @@ const noiseLevelItems = NOISE_LEVELS.map((entry) => ({
 }))
 
 export function EditAtmosphereModal(props: EditAtmosphereModalProps) {
+  useModalVitals("edit-atmosphere", props.isOpen)
+
   const [description, setDescription] = useState("")
   const [noiseLevel, setNoiseLevel] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
