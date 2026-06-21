@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Collection } from "react-aria-components"
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMask } from "@react-input/mask"
 import { getLocalTimeZone, now, parseDate } from "@internationalized/date"
 import { createTableReservation, fetchTableReservationSlots, type TableReservationSlot } from "entities/table-reservation"
 import type { CafeTable } from "entities/table"
@@ -16,6 +17,8 @@ import { parseBookingTableSubmitError } from "../lib/parse-submit-error"
 import {
   bookingTableFormSchema,
   calendarDateStringFromField,
+  formatPhoneToMask,
+  phoneMask,
   reservationDayToIsoStart,
   type BookingTableFormValues,
 } from "../model/validation"
@@ -57,6 +60,7 @@ export function BookingTableForm(props: BookingTableFormProps) {
   const initialCustomer = props.initialCustomer ?? null
 
   const form = useForm<BookingTableFormValues>({
+    mode: "onChange",
     defaultValues: {
       ...emptyBookingTableValues,
       ...(locked ? { tableId: locked.id } : {}),
@@ -64,10 +68,15 @@ export function BookingTableForm(props: BookingTableFormProps) {
         ? { customerName: initialCustomer.customerName }
         : {}),
       ...(initialCustomer?.customerPhone
-        ? { customerPhone: initialCustomer.customerPhone }
+        ? { customerPhone: formatPhoneToMask(initialCustomer.customerPhone) }
         : {}),
     },
     resolver: zodResolver(bookingTableFormSchema),
+  })
+
+  const phoneMaskRef = useMask({
+    mask: phoneMask,
+    replacement: { _: /\d/ },
   })
 
   const tableId = form.watch("tableId")
@@ -151,11 +160,13 @@ export function BookingTableForm(props: BookingTableFormProps) {
       return
     }
 
+    const formattedPhone = values.customerPhone.replace(/[^0-9+]/g, "")
+
     try {
       await createTableReservation({
         tableId: values.tableId,
         customerName: values.customerName,
-        customerPhone: values.customerPhone,
+        customerPhone: formattedPhone,
         startTime: slot.startTime,
         endTime: slot.endTime,
       })
@@ -172,7 +183,7 @@ export function BookingTableForm(props: BookingTableFormProps) {
           ? { customerName: initialCustomer.customerName }
           : {}),
         ...(initialCustomer?.customerPhone
-          ? { customerPhone: initialCustomer.customerPhone }
+          ? { customerPhone: formatPhoneToMask(initialCustomer.customerPhone) }
           : {}),
       })
       props.onSuccess?.()
@@ -184,9 +195,6 @@ export function BookingTableForm(props: BookingTableFormProps) {
   const tableSelected = Number(tableId) > 0
   const dateSelected = Boolean(reservationDate)
   const slotsReady = !slotsLoading && !slotsError && tableSelected && dateSelected
-
-  console.log("slotsReady", slotsReady)
-  console.log("slots", slots)
 
   const slotsHint =
     slotsReady && !hasAvailableSlot
@@ -328,9 +336,10 @@ export function BookingTableForm(props: BookingTableFormProps) {
         render={({ field, fieldState }) => (
           <TextField
             {...field}
+            inputRef={phoneMaskRef}
             label="Телефон"
             fullWidth
-            placeholder="+7 (999) 123-45-67"
+            placeholder={phoneMask}
             isRequired
             isInvalid={Boolean(fieldState.invalid && fieldState.error)}
             errorMessage={fieldState.error?.message}
@@ -343,6 +352,7 @@ export function BookingTableForm(props: BookingTableFormProps) {
           type="submit"
           isDisabled={
             form.formState.isSubmitting ||
+            !form.formState.isValid ||
             (!locked && (props.tables.length === 0 || props.tablesLoading))
           }
         >

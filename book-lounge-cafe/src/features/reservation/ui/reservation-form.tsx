@@ -1,8 +1,9 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMask } from "@react-input/mask"
 import { Button } from "shared/ui/button"
 import { TextField } from "shared/ui/text-field"
-import { reservationFormSchema, type ReservationFormValues } from "../model/validation"
+import { reservationFormSchema, phoneMask, type ReservationFormValues } from "../model/validation"
 
 type ReservationFormProps = {
   onSubmit: (data: ReservationFormValues) => void | Promise<void>
@@ -15,8 +16,17 @@ export function ReservationForm(props: ReservationFormProps) {
     resolver: zodResolver(reservationFormSchema),
   })
 
+  const phoneMaskRef = useMask({
+    mask: phoneMask,
+    replacement: { _: /\d/ },
+  })
+
   const onSubmit: SubmitHandler<ReservationFormValues> = async (values) => {
-    await props.onSubmit(values)
+    const { customerName, customerPhone } = values;
+
+    const formattedPhone = customerPhone.replace(/[^0-9+]/g, "")
+
+    await props.onSubmit({ customerName, customerPhone: formattedPhone })
   }
 
   return (
@@ -43,9 +53,10 @@ export function ReservationForm(props: ReservationFormProps) {
         render={({ field, fieldState }) => (
           <TextField
             {...field}
+            inputRef={phoneMaskRef}
             label="Телефон"
             fullWidth
-            placeholder="+7 (999) 123-45-67"
+            placeholder={phoneMask}
             isRequired
             isInvalid={Boolean(fieldState.invalid && fieldState.error)}
             errorMessage={fieldState.error?.message}

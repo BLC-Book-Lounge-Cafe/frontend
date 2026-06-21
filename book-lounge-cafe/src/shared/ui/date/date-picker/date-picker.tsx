@@ -77,29 +77,30 @@ function AppDatePicker<T extends DateValue>(
             <Button
               variant="plain"
               size="sm"
-              UNSAFE_className="p-0.5 shrink-0 ml-1.5"
+              UNSAFE_className="p-0.5 shrink-0 ml-1.5 w-full"
             >
               <Icon name="calendar" />
+              <DateField
+                className={(state) =>
+                  classes(
+                    "mr-auto",
+                    state.isDisabled &&
+                    "pointer-events-none",
+                  )}
+                isDisabled={isDisabledDateInput}
+              >
+                <DateInput UNSAFE_className="flex-1 flex items-center h-full pl-3">
+                  {(segment) => (
+                    <DateInput.Segment
+                      UNSAFE_className={classes(
+                        isDisabledDateInput && "pointer-events-none",
+                      )}
+                      segment={segment}
+                    />
+                  )}
+                </DateInput>
+              </DateField>
             </Button>
-            <DateField
-              className={(state) =>
-                classes(
-                  state.isDisabled &&
-                  "pointer-events-none",
-                )}
-              isDisabled={isDisabledDateInput}
-            >
-              <DateInput UNSAFE_className="flex-1 flex items-center h-full pl-3">
-                {(segment) => (
-                  <DateInput.Segment
-                    UNSAFE_className={classes(
-                      isDisabledDateInput && "pointer-events-none",
-                    )}
-                    segment={segment}
-                  />
-                )}
-              </DateInput>
-            </DateField>
           </Field.Group>
 
           {(errorMessage || description) && (

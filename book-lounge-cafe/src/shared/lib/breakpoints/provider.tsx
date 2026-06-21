@@ -77,7 +77,7 @@ export function BreakpointsProvider(props: BreakpointsProviderProps) {
   return (
     <BreakpointsContext.Provider value={value}>
       {children}
-      <BreakpointIndicator />
+      {/* <BreakpointIndicator /> */}
     </BreakpointsContext.Provider>
   )
 }

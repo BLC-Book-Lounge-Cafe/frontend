@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "shared/ui/button"
 import { TextField } from "shared/ui/text-field"
 import { DatePicker } from "shared/ui/date/date-picker"
-import { bookingBookFormSchema, bookingDateFromField, type BookingBookFormValues } from "../model/validation"
+import { bookingBookFormSchema, bookingDateFromField, phoneMask, type BookingBookFormValues } from "../model/validation"
+import { useMask } from "@react-input/mask"
 
 type BookingBookFormProps = {
   onSubmit: (data: BookingBookFormValues) => void | Promise<void>
@@ -18,8 +19,15 @@ export function BookingBookForm(props: BookingBookFormProps) {
   })
 
   const onSubmit: SubmitHandler<BookingBookFormValues> = async (values) => {
-    await props.onSubmit(values)
+    const formattedPhone = values.customerPhone.replace(/[^0-9+]/g, "")
+
+    await props.onSubmit({ ...values, customerPhone: formattedPhone })
   }
+
+  const phoneMaskRef = useMask({
+    mask: phoneMask,
+    replacement: { _: /\d/ },
+  })
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -45,9 +53,10 @@ export function BookingBookForm(props: BookingBookFormProps) {
         render={({ field, fieldState }) => (
           <TextField
             {...field}
+            inputRef={phoneMaskRef}
             label="Телефон"
             fullWidth
-            placeholder="+7 (999) 123-45-67"
+            placeholder={phoneMask}
             isRequired
             isInvalid={Boolean(fieldState.invalid && fieldState.error)}
             errorMessage={fieldState.error?.message}
@@ -62,7 +71,7 @@ export function BookingBookForm(props: BookingBookFormProps) {
           <DatePicker
             className="w-full"
             label="Дата бронирования"
-            granularity="minute"
+            granularity="day"
             isDisabledDateInput
             isRequired
             minValue={now(getLocalTimeZone())}

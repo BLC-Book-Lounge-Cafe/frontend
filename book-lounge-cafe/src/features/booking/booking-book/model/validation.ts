@@ -10,8 +10,7 @@ import {
 } from "@internationalized/date"
 import { z } from "zod"
 
-/** Согласовано с ReservationRequestService.CustomerNumberRegex в LRMS. */
-const customerPhoneRegex = /^((8|\+7)[- ]?)?(\(?\d{3}\)?[- ]?)?[\d- ]{7,10}$/
+export const phoneMask = "+7 (___) ___-__-__"
 
 /**
  * Строка из формы: ISO date+time без таймзоны (`CalendarDateTime#toString()`)
@@ -46,8 +45,7 @@ export const bookingBookFormSchema = z.object({
   customerPhone: z
     .string()
     .trim()
-    .min(1, "Укажите телефон")
-    .regex(customerPhoneRegex, "Номер не соответствует формату"),
+    .min(phoneMask.length, "Укажите телефон"),
   reservationDate: z
     .string()
     .min(1, "Укажите дату и время")

@@ -1,8 +1,6 @@
 import { getLocalTimeZone, parseDate, Time, today, toCalendarDateTime, toZoned } from "@internationalized/date"
 import { z } from "zod"
 
-/** Согласовано с TableReservationService.CustomerNumberRegex в LRMS. */
-const customerPhoneRegex = /^((8|\+7)[- ]?)?(\(?\d{3}\)?[- ]?)?[\d- ]{7,10}$/
 
 export function calendarDateStringFromField(value: string): string | null {
   if (!value) return null
@@ -11,6 +9,27 @@ export function calendarDateStringFromField(value: string): string | null {
   } catch {
     return null
   }
+}
+
+export const phoneMask = "+7 (___) ___-__-__"
+
+/**
+ * Форматирует сырой номер телефона (любой из форматов: +7…, 8…, 7…, 10 цифр)
+ * в строку, совместимую с маской phoneMask: «+7 (XXX) XXX-XX-XX».
+ * Если привести не получается — возвращает исходную строку.
+ */
+export function formatPhoneToMask(phone: string): string {
+  const digits = phone.replace(/[^0-9]/g, "")
+  const local =
+    digits.length === 11 && (digits[0] === "7" || digits[0] === "8")
+      ? digits.slice(1)
+      : digits.length === 10
+        ? digits
+        : null
+
+  if (!local) return phone
+
+  return `+7 (${local.slice(0, 3)}) ${local.slice(3, 6)}-${local.slice(6, 8)}-${local.slice(8, 10)}`
 }
 
 /** Начало выбранного календарного дня в локальной таймзоне → ISO для API слотов. */
@@ -39,8 +58,7 @@ export const bookingTableFormSchema = z.object({
   customerPhone: z
     .string()
     .trim()
-    .min(1, "Укажите телефон")
-    .regex(customerPhoneRegex, "Номер не соответствует формату"),
+    .min(phoneMask.length, "Укажите телефон")
 })
 
 export type BookingTableFormValues = z.infer<typeof bookingTableFormSchema>

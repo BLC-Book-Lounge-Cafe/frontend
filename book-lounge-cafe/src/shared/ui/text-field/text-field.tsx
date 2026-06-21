@@ -13,6 +13,7 @@ export type AppTextFieldProps = (
   & LabelableProps
   & Pick<FieldLabelProps, "necessityIndicator" | "contextualHelp" | "isBold">
   & Omit<TextFieldProps, "children" | "style" | "className" | "validate" | "validationBehavior"> & {
+    inputRef?: React.Ref<HTMLInputElement>
     inputСssStyles?: string
     fullWidth?: boolean
     placeholder?: string
@@ -44,6 +45,7 @@ function AppTextField(props: AppTextFieldProps, ref: React.ForwardedRef<HTMLInpu
     iconEnd,
     isMultiLine,
     rowsForMultiline = 8,
+    inputRef,
     ...textFieldProps
   } = props
 
@@ -86,6 +88,7 @@ function AppTextField(props: AppTextFieldProps, ref: React.ForwardedRef<HTMLInpu
               <>
                 {iconStart}
                 <Field.Input
+                  ref={inputRef}
                   UNSAFE_className={props.inputСssStyles}
                   placeholder={placeholder}
                 />

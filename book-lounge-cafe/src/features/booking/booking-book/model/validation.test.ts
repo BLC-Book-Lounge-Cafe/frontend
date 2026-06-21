@@ -7,18 +7,18 @@ import {
 } from "./validation"
 
 describe("bookingDateFromField", () => {
-  it("парсит день и дату-время", () => {
+  it("парсит только дату в формате YYYY-MM-DD", () => {
     expect(bookingDateFromField("")).toBeNull()
     expect(bookingDateFromField("2024-03-02")).not.toBeNull()
-    expect(bookingDateFromField("2024-03-02T14:30:00")).not.toBeNull()
+    expect(bookingDateFromField("2024-03-02T14:30:00")).toBeNull()
     expect(bookingDateFromField("невалид")).toBeNull()
   })
 })
 
 describe("reservationDateToIsoDateTime", () => {
-  it("конвертирует валидное значение в ISO", () => {
-    const iso = reservationDateToIsoDateTime("2099-06-15T12:30:00")
-    expect(iso).toContain("2099-06-15")
+  it("возвращает строку YYYY-MM-DD", () => {
+    const result = reservationDateToIsoDateTime("2099-06-15")
+    expect(result).toBe("2099-06-15")
     expect(() => reservationDateToIsoDateTime("")).toThrow("Invalid reservation date")
   })
 })
@@ -28,7 +28,7 @@ describe("bookingBookFormSchema", () => {
     const r = bookingBookFormSchema.safeParse({
       customerName: "Пётр",
       customerPhone: "+79991234567",
-      reservationDate: "2099-12-31T15:00:00",
+      reservationDate: "2099-12-31",
     })
     expect(r.success).toBe(true)
   })
@@ -38,14 +38,14 @@ describe("bookingBookFormSchema", () => {
       bookingBookFormSchema.safeParse({
         customerName: "",
         customerPhone: "+79991234567",
-        reservationDate: "2099-12-31T15:00:00",
+        reservationDate: "2099-12-31",
       }).success,
     ).toBe(false)
     expect(
       bookingBookFormSchema.safeParse({
         customerName: "A",
         customerPhone: "+79991234567",
-        reservationDate: "not-datetime",
+        reservationDate: "not-a-date",
       }).success,
     ).toBe(false)
   })
